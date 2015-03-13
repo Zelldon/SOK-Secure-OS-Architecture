@@ -1,10 +1,10 @@
 \documentclass[9pt,technote]{IEEEtran}
-
 \usepackage{cite}
 
 \title{SOK - A secure operating system architecture}
 \author{Christopher Zell\\
-        zell.christopher@fu-berlin.de}
+        zell.christopher@fu-berlin.de}       
+
 
 \begin{document}
 \maketitle
@@ -12,5 +12,85 @@
   \begin{abstract}
     Abstract...
   \end{abstract}
-Test
+  
+  \section{Einleitung} \label{sec:intro}
+    In folgendem Paper wird auf die Unterschiedlichen sicheren Betriebssysteme eingegangen ,
+    deren Vorgehen erkl\"art und die Unterschiede aufgezeigt. Zum gr\"o\ss ten Teil
+    wird auf den Kernel und die verschiedenen Zugriffsschutz Mechanismen eingegangen.
+  \section{Zugriffsschutz Mechanismen} \label{sec:protection}
+   \nocite{*}   
+  
+   \subsection{Multics}  
+   
+   Informationen werden in Segmente gespeichert und koennen geteilt werden sie beinhalten eigene Attribute 
+   ueber deren Groesse sowie die Zugriffsrechte.
+   
+   In Multiplexed Information and Computing Service - Multics  liefer Segmentierung eine allgemeine Basis fuer den direkten Zugriff
+   und das Teilen von online Informationen durch erfuellen zweier Desigin Ziele. : 1 direkt zugriff 2 Zugriffskontrolle
+   
+   Vorteil der direkten Adressierung ist das die Informationen nicht mehr kopiert werden muessen. Da alle instruktionen und Daten
+   im System vom Prozessor adressierbar sind. D.h. duplizierung von Prozeduren und Daten is unnoetig soll heissen Abbilder von Prozessen muessen
+   nicht vorher geladen werden die orginalen Prozeduren koennen direkt adressiert werden.
+   
+  Dies soll dem Programmierer eine attraktive reduktion der programm komplexitaet versprechen.
+  
+  In Multics Segemente sind Packete von Informationen welche direkt Adressiert und Kontrolliert Zugegriffen werden koennen.
+  Mit jedem Segement sind Zugriffsattribute fuer jeden User der auf dieses Segment evtl. zugreifen will assoziiert.
+  Diese Attribute werden von der Hardware ueberprueft. Jede Information kann direkt als Segment referenziert werden
+  in anderen Systemen meist online informationen als Dateien referenziert werden. (unix, plan9 etc.)
+  
+  %S. 31
+  In den meisten Systemen die Informationsteilung zur Verfuegung stellen sind die genannten beiden Kriterien nicht erfuellt.
+  Als Beispiel wird im Paper \cite{inproc:multics} das CTSS System genannt, welches Informationen die geteilt werden sollen in Dateien vorhaelt.
+  Das bedeutet das eine Kopie in den Buffer des Users kopiert werden muss damit der Benutzer darauf Zugreifen kann. (Benoetigt IO - Request)
+  
+  In nicht segmentierten Systemen das Benutzen von Kern Abbildern macht es sogut wie Unmoeglich den Zugriffskontrolle durchzusetzen.
+  
+ Die Hardware hat auf jedes Segment Zugriff mithilfe eines Segment descriptors, der die attribute beinhaltet.
+ 
+ Multics gibt dem nutzer grosse Menge an segment descriptoren sodass Buffering der Informationen nicht mehr notwendig ist und die Informationen nicht
+ ihre zugehoerigkeit verliert. Zudem heisst das ein Multics user keine Dateien benutzt sondern alle Informationen als Segmente referenziert., welche direkt vom Programm erreichbar sind.
+ 
+ Fuer Multics users ersjcheint Speicher als eingeschlossen grosser unabhaengiger linearer Kernspeicher, jeder mit einem eigenen descriptor assoziiert. 
+ Der Zugriff erfolgt durch [name, i] wobei name der symbolische Name des Segments und i ist die Wort Zahl im Linearen Speicher.
+ Jeder User kann auf [name, i] referenzieren jedoch hat er nur die Zugriffsrechte die er auch vom Ersteller des Segments zugewiesen bekommen hat
+ und die im Segment deskriptor eingetragen sind. Kombinationen von den folgenden Zugriffsrechten ''read'', ''write'', ''execute'' und ''append'' sind moeglich.
+ 
+ Segmente koennen zudem in gleich grosse Teile geteilt werden sogenannten Pages. Dies wird auch in heutigen Systemen noch benutzt.
+ Im Paper \cite{inproc:multics} wird auf die Vorteile drauf hingewiesen das die Allokierung durch die gleiche Groesse sehr vereinfacht wird,
+ das die Pages nur im Speicher sein muessen die auch benoetigt werden das bedeutet das Segment groessen keine Einschraenkungen mehr besitzen.
+ Sie weisen auch darauf hin das die Pages angefordert werden koennen die gebraucht werden und das keine anderen dann in den Speicher mit uebertragen werden muessen.
+ Das ist auch eine Sache die heutzutage in aktuellen Betriebssystemen noch betrieben wird sogenanntes Paging welches mithilfe von
+ verschieden Algorithmen wie FIFO (First In First Out), LRU (Last Recently used) oder anderen umgesetzt wird.
+ 
+ Was heutzutage der TLB (translation lookaside buffer) bzw. die MMU macht (Seitennummern in Speicheradressen um mappen) hat in Multics der supervisor gemacht
+ dieser transformierte den symbolischen Namen in eine passende Hardware Adresse, welche direkt vom Prozessor fuer weitere Referenzierungen benutzt wird.
+ 
+ In der Multics Implementierung sind alle Segmente gepaged und die Page size betraegt 1024 Woerter.
+ 
+ Prozesse sind Programme in der Ausfuehrung (definition \cite{inproc:multics}[S. 34]) Jeder Prozess in Multics besitzt ein privates Deskriptor Segement welches
+ Segmentnummern in Kernspeicher adressen umwandelt und eine Private Tabelle welches die symbolischen Segmentnamen in Segmentnummern mapped. Wird
+ auch als Known Segment Table KST bezeichnet. Supervisor in Multics ist im grunde wie der Kernel in heutigen Unix Systemen.
+ Nicht wie in anderen Systemen arbeitet er in eigenem Speicherraum oder Prozess sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess geteilt. 
+ Immer wenn ein neuer Prozess erstellt wird, wird das Deskriptor Segment mit den supervisor deskriptoren initialisiert. Dadurch muessen aber auch die Supervisor
+ Segmente vor unautorisierten Zugriffen geschuetzt werden. Multics unterstuetzt den Benutzer mit einem sogenannten ring protection Mechanismen,
+ welches die Segmente in dem Adressraum in einzelne Mengen mit verschiedenen Zugriffsrechten unterteilt. Dieser Mechanismus wird vom Supervisor zum
+ eigenen Schutz verwendet.
+ 
+ Name und Attribute eines Segments sind mit einem Katalog assoziiert. Im Grunde existiert eine Tabelle mit je einem Eintrag fuer ein Segment. 
+ Ein Eintrag beinhaltet den Namen sowie die Segment Attribute. In Multics ist dieser Katalog als mehrere
+ Segmente Implementiert und wird Verzeichnis bzw. directory genannt. Das Verzeichnis wird in einem Baum Strukturiert.
+ D.h. ein Segmentname besteht aus einer Liste von einzelnen Subnamen die die Position des Eintrags im Baum reflektieren. (Subname = Entryname, liste = pathname)
+ Pathname ist einzigartig in der ganzen Hierarchie und der Entryname nur im gegeben Directory.
+  
+  
+%  \section{Capability systeme}
+  
+   
+  \section{Kernel Unterschiede} \label{sec:kernel}
+    Um sichere Betriebssysteme zu erstellen haben sich auch einige Wissenschaftler bzw. Informatiker mit der Verbesserung bzw. Verkleinerung
+    des Kernels befasst. Sie haben diesen so strukturiert das dieser sicher ist und darauf aufbauend versucht ein sicheres Betriebssystem zu erzeugen.
+  
+\bibliographystyle{IEEEtran}
+\bibliography{masterbib}
 \end{document}
