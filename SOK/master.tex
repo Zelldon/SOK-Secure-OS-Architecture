@@ -165,7 +165,18 @@
     UNIX wurde laut den Autoren auch von Multics beeinflusst vorallem in dem Bereich I/O, Shell und deren Funktionalit\"at. (Siehe \cite[S. 374]{inproc:unix})
     UNIX hat sich bis heute stark durch gesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
     
-    
+   \subsection{CAP}
+     Wurde entwickelt um detaillierten Speicherschutz zu gew\"ahrleisten. Die Intention ist das jedes Modul eines Programms welches auf dem CAP ausgef\"uhrt wird
+     nur Zugriff auf genau die und nur die Daten besitzen soll welche sie auch wirklich f\"ur korrekte funktionalit\"at ben\"otigt.
+     
+     
+     Capabilities werden benutzt um in CAP den Zugang zu Segment zu gew\"ahrleisten. Capabilities besitzen base und limit des Segments sowie sogenannten access status. Dieser Status
+     besteht aus 5 bits, drei davon sind f\"ur den Datenzugriff also read, write und execute die anderen beiden sind f\"ur den capability Zugriff,
+     d.h. read capability und write capability. Es wird zwischen data typ und capability type capabilities unterschieden, der erste Typ besitzt bits in den ersten drei bits und
+     der zweite Typ in den letzten. Es existiert keine capability mit gesetzten data und capability access bits. Capabilities werden in Segmenten gespeichert die
+     capability type access besitzen. Zu jeder Lebenszeit eines Prozesses sind nur die Ressourcen erreichbar die von den capabilities definiert wurden die der Prozess
+     benutzen kann. Mit jedem Prozess ist ein fundamentales Segment assoziiert genannt Process Resource List (PRL). 
+     
     
     
 %  \section{Capability systeme}
