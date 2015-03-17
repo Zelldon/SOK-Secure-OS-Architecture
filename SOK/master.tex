@@ -142,6 +142,30 @@
     \end{itemize}
     
     
+  \subsection{Unix}
+    Unix wurde von den bekannten Informatikern Dennis Ritchie (C) und Ken Thompson (Unix, UTF8, Plan9 etc.) an den Bell Labs entwickelt.
+    Es ist ein Universal-, Mehrbenutzer- und interaktives Betriebssystem. Ein gro\ss er Teil von Unix ist in C geschrieben was vorallem Multiprogramming
+    und das Teilen von Code erm\"oglicht. Die wichtigste Aufgabe von UNIX ist ein Dateisystem bereitzustellen. Es gibt drei verschiedene Arten von Files:
+    gew\"ohnliche Datentr\"agerdateien, Verzeichnisse, und spezielle Dateien. Anders als in Multics ist das ganze System in Dateien aufgeteilt und nicht in
+    Segmente. Gew\"ohnliche Datentr\"agerdateien beinhalten die Information die der User in diese platziert. Die Struktur wird nicht vom System kontrolliert maximal
+    von den zu benutzenden Programmen. Verzeichnisse liefern das Mapping zwischen den Dateinamen und den Dateien selber, somit entsteht eine Baumstruktur.
+    Ein Verzeichnis ist im Grunde wie eine normale Datei nur das sie nicht von unprivilegierten Nutzern beschrieben werden kann. D.h. das System Kontrolliert den
+    Inhalt der Verzeichnisse. Das System besitzt eigene Verzeichnisse und Unterverzeichnisse ein wichtiges ist \textit{root}. Alle Dateien im System k\"onnen gefunden 
+    werden durch folgen eines Pfades von einer Kette von Verzeichnissen bis die Datei gefunden wurde. Der Startpunkt ist oft dabei \textit{root}.(Siehe \cite[S. 366]{inproc:unix})
+    
+    Das Zugriffskontrollschema ist in UNIX relativ simple. Jeder Nutzer besitzt eine eigene ID wird eine Datei erstellt vom Nutzer erh\"alt diese die ID sodass der Ersteller immer
+    erfasst werden kann. Zudem gibt es 7 Bits f\"ur die Dateien die den Zugriff kontrollieren. Die ersten drei geben f\"ur den Eigent\"umer die Rechte: read, write und execute an.
+    Die n\"achsten drei f\"ur alle anderen Nutzer diese Recht und das letzte Bit ist das sogenannte S-Bit. Ist dieses Bit gesetzt so wird die User ID tempor\"ar
+    mit der des Datei Eigent\"umers ersetzt bzw. das Programm mit der User ID des Eigent\"umers ausgef\"uhrt.
+    D.h. es werden deren Rechte benutzt f\"ur den Zeitraum der Programmausf\"uhrung. Dieses sollte erm\"oglichen das Programme
+    auf Dateien zugreifen k\"onnen f\"ur die der Nutzer im normal Fall keine Rechte besitzt. (Siehe \cite[S. 367]{inproc:unix}    
+    Mithilfe des S-Bits konnten jedoch einige Exploits geschrieben werden die es unautorisierten Nutzen erm\"oglichte
+    die Kontrolle \"uber das System zu erlangen. 
+    
+    UNIX wurde laut den Autoren auch von Multics beeinflusst vorallem in dem Bereich I/O, Shell und deren Funktionalit\"at. (Siehe \cite[S. 374]{inproc:unix})
+    UNIX hat sich bis heute stark durch gesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
+    
+    
     
     
 %  \section{Capability systeme}
