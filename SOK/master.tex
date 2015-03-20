@@ -180,8 +180,19 @@
      Das Programm welches in diesem Prozess l\"auft ist Verantwortlich f\"ur die Erstellung und Verwaltung von Level 2 Prozessen es wird Master Coordinator genannt (MC).
      Die PRL eines Level 2 Prozesses ist ein normales Daten Segment vom MC. Es ist m\"oglich die Hierarchie zur erweitern und weitere Junior bzw. Subprozesse zu erzeugen.
      Diese ben\"otigen nur eine capability f\"ur ein Segment um dies als PRL zu nutzen.
+  \subsection{MicroKernel}
+    Grundidee des Micro Kernels ist das der Kernel minimiert werden soll und das alles so gut es geht ausgelagert werden soll.
+    Die Vorteile dieser Herangehensweise ist das ein klares Mikro Kernel Interface die modularit\"at der Systemstruktur erh\"oht.
+    Das System ist flexibler und anpassbarer. Verschiedene Strategien und Schnittstellen k\"onnen gleichzeitig im System existieren.
     
+    Memory-Managment sowie Paging werden im Mikro Kernel ausserhalb platziert, nur grant, map und flash Operationen sind im Kernel enthalten. \cite[S. 238 f]{inproc:micro}
+    Threads, IPC sowie das generieren von UID's (unique identifiers) werden jedoch im Kernel behalten.
     
+    Ein Mikrokernel kann h\"ohere Schichten mit einem minimalen Satz von passenden Abstraktionen liefern.
+    Diese sind flexible genug um beliebige Implementierungen von Betriebssystemen sowie das weite ausnutzen der Hardware zu erlauben.
+    Multi-Level Sicherheitssysteme benutzen dazu noch sogenannte clans oder ein \"ahnliches Referenzmonitor Konzept.        
+    Liedtke zeigt das es mit seinem L4 Mikrokernel m\"oglich ist einen performanten Mikrokernel durch Prozessorspezifische Implementierung 
+    von Prozessor unabh\"angigen Abstraktionen zu erzeugen.\cite[S. 248]{inproc:micro}
 %  \section{Capability systeme}
   
    
