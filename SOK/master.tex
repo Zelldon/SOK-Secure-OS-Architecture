@@ -260,8 +260,23 @@
        als ein Nutzer mit einer liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren diese k\"onnen die
        besagte Gruppe dann Verwalten. Normalerweise geh\"ort eine Datei zu dem Nutzer der diese erstellt hat. Der Gruppenname wird vererbt von dem Verzeichnis in dem die neue Datei liegt.
     \subsection{Exokernel}       
-       
+       Betriebssysteme definieren die Schnittstelle zwischen den Anwendungen und den Physikalischen Ressourcen.
+       Ungl\"ucklicherweise kann diese Schnittstelle die Performanz sowie die Implementierung von Anwendungen einschr\"anken. \"Ublicherweise
+       abstrahieren Betriebssysteme Informationen \"uber die Hardware in Prozessen, Dateien, Adressr\"aumen und IPC. Diese Abstraktionen definieren eine 
+       Virtuelle Maschine in der die Anwendungen ausgef\"uhrt werden. Deren Implementierung kann nicht durch nicht vertrauensw\"urdige Anwendungen ersetzt werden.
+        Das f\"uhrt zu einigen Problemen: Es verweigert Anwendungen den Vorteil von Dom\"an spezifischen Optimierungen. Es schr\"ankt zudem die flexibilit\"at von
+        Anwendungserstellern ein da neue Abstraktionen nur durch sonderbare Emulationen zum System hinzugef\"ujgt werden k\"onnen.
         
+        Diese Probleme wollten die Entwickler des Exokernels bek\"ampfen deren Ziel es war ein minimalistischen Kernel genannt Exokernel zu erstellen.
+        Dieser Kernel vielf\"alltigt sicher die Verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht Vertrauensw\"urdigen Anwendungen die
+        z.B. IPC oder Ressource Management umsetzen. D.h. sogenannte \textit{library operating systems} arbeiten \"uber der Exokernel Schnittstelle. 
+        Diese Implementieren die Schnittstelle des h\"oheren Levels.
+        
+        Um Anwendungen die Kontrolle \"uber die Hardware zu erm\"oglichen definiert der Exokernel ein Low-Level Interface.
+        Der Exokernel exportiert Hardware Ressourcen was eine effiziente und einfache Implementierung erm\"oglicht.
+        Mithilfe von drei Techniken wird das Exportieren sicher umgesetzt. Zum einen mit sogenannten \textit{secure bindings}, 
+        dann mit \textit{visible resource revocation} und durch ein \textit{abort protocol}. 
+       
    
   \section{Kernel Unterschiede} \label{sec:kernel}
     Um sichere Betriebssysteme zu erstellen haben sich auch einige Wissenschaftler bzw. Informatiker mit der Verbesserung bzw. Verkleinerung
