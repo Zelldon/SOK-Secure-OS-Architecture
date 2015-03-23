@@ -1,4 +1,5 @@
 \documentclass[9pt,technote]{IEEEtran}
+%\documentclass[a4paper]{scrartcl}
 \usepackage{cite}
 
 \title{SOK - A secure operating system architecture}
@@ -14,11 +15,24 @@
   \end{abstract}
   
   \section{Einleitung} \label{sec:intro}
-    In folgendem Paper wird auf die Unterschiedlichen sicheren Betriebssysteme eingegangen ,
-    deren Vorgehen erkl\"art und die Unterschiede aufgezeigt. Zum gr\"o\ss ten Teil
-    wird auf den Kernel und die verschiedenen Zugriffsschutz Mechanismen eingegangen.
+    Das folgende Paper entstand innerhalb einer Seminararbeit IT-Sicherheit an der FU Berlin.
+    Es behandelt doe fr\"uhzeitlichen und neuer entwickelten Betriebssysteme und deren Ideen,
+    wobei vor allem auf deren Zugriffsschutzmechanismen eingegangen wird.
+    Bei dem Paper handelt es sich um ein sogenanntes Systematization of Knowledge (Sok),
+    welches grunds\"atzlich f\"ur die IEEE Symposium on Security and Privacy Konferenz entwickelt wurde.
+    
+%    In folgendem Paper wird auf die Unterschiedlichen sicheren Betriebssysteme eingegangen ,
+%    deren Vorgehen erkl\"art und die Unterschiede aufgezeigt. Zum gr\"o\ss ten Teil
+%    wird auf den Kernel und die verschiedenen Zugriffsschutz Mechanismen eingegangen.
+    \subsection{Motivation}
+      Die Entwicklung der Betriebssysteme hat gezeigt das es verschieden und gute L\"osungen gibt um ein sicheres Betriebssystem zu entwickeln.
+      Jedoch scheiterte es oft entweder an der Umsetzung oder an der Usability. In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen  zusammengetragen.
+      Falls m\"oglich wird versucht die Mechanismen zu vergleichen und zu zeigen welche sich evtl. sogar durchgesetzt haben.
+   \section{Betriebssysteme}
+     Seit dem die Idee existiert Mehrbenutzersysteme zu Entwickeln wurde auch dar\"uber nachgedacht wie man die einzelnen Benutzer isolieren kann.
+     Aber nicht nur \"uber die Isolierung wurde nachgedacht sondern auch grundlegend wie man die Daten der jeweiligen Nutzer vor unberechtigten Zugriffen sch\"utzen kann.
+     
   \section{Zugriffsschutz Mechanismen} \label{sec:protection}
-   \nocite{*}   
   
    \subsection{Multics}  
    
@@ -194,12 +208,66 @@
     Liedtke zeigt das es mit seinem L4 Mikrokernel m\"oglich ist einen performanten Mikrokernel durch Prozessorspezifische Implementierung 
     von Prozessor unabh\"angigen Abstraktionen zu erzeugen.\cite[S. 248]{inproc:micro}
 %  \section{Capability systeme}
-  
+    \subsection{Plan 9}
+        Laut den Autor von Plan 9 hatte UNIX einige Problem die zu tief lagen die dadurch nicht einfach gefixed werden konnte jedoch auch einige Ideen die \"ubernommen werden konnten
+        in dem neuen System von den Bell Labs. Das war zum einen das Dateisystem um Ressourcen erreichbar zu machen und zu benennen.
+    
+        Die Sicht auf das System ist auf drei Prinzipien aufgebaut.
+        Erstens die Ressourcen werden benannt und sind erreichbar genauso wie Dateien in einem Hierarchischem Dateisystem. Zweitens es existiert ein Standard Protokoll namens 9P um auf die 
+        Ressourcen zuzugreifen. Drittens die unterschiedlichen Hierarchien die von den verschiedenen Servicen geliefert werden sind Verbunden zu einem einzelnen Privaten
+        Hierarchischem Dateinamensraum. D.h. es existieren sogenannte lokale Namensr\"aume auf den nur die jeweiligen Nutzer Zugriff haben.
+        Dieses Feature wird vor allem durch den eigenen Fensterserver benutzt der aus bestimmten Dateien im lokalen Namensraum Daten liest die er dann dem Nutzer anzeigt.
+        
+        9P ist ein Netzwerkprotokoll welches Maschinen Zugriff zu entfernten Dateien erm\"oglicht.
+        Es als Menge von Transaktionen strukturiert das Anfragen von einem Client zu einem Server sendet und die Antwort zur\"uck. 9P kontrolliert Dateisystem nicht nur Dateien,
+        es beinhaltet Prozeduren um Dateinamen aufzul\"osen und die Namenshierarchie vom Dateisystem des Servers zu traversieren.
+        Datei Zugriff ist auf Byte und nicht auf Blockebene nicht wie bei NFS und RFS.
+        
+        Eine gro\ss e Plan 9 Installation hat eine Anzahl von Computer zusammen in einem Netzwerk, jeder liefert eine eigene Klasse von Anwendung. Geteilter Multiprozessorserver stellen
+        Berechnungszyklen bereit andere gro\ss e Machinen stellen Speicher zur Verf\"ugung. Es existieren sogenannte Workstations welche gleichzusetzen sind mit den 
+        Terminals der alten \textit{time sharing machines}. Wenn jemand das System durch ein Terminal nutzt ist es durch den Benutzer Personalisiert.
+    
+        Das Dateisystemmodel ist gut verstanden bei Systembauern aber auch bei allgemeinen Nutzern. D.h. Services die Datei \"ahnliches Interface bereitstellen leicht zu bauen, leicht zu verstehen
+        und leicht zu benutzen. Das ist auch wirklich eines der wenigen Betriebssystem die mit an die Usability gedacht haben und es so einfach wie m\"oglich f\"ur die Nutzer zu machen.
+        
+        Der Dateiserver hat drei Speicherlevel, erstens memory buffer, zweitens disk und drittens Massenspeicher in einem write-once-read-many (WORM) Ger\"at. 
+        Disk ist dabei der Cache f\"ur den WORM und memory ist der cache von der disk. Ein feature exisitert das es erm\"oglicht zu bestimmten Zeitpunkten ein dump vom
+        Dateisystem zu erstellen. Das Dateisystem wird dabei eingefroren und alle modifizierten Bl\"ocke seitdem letztem dump werden in ein Warteschlange geschrieben
+        die dann nach und nach auf dem WORM geschrieben werden. Auf die dumps hat man direkten Zugriff sodass man z.B.  alte Compiler Versionen testen kann etc.
+        Zudem kann auch ein kompletter Systembackup erfolgen was aber einige Tage dauert da der Cache vom WORM erst wieder eingelesen werden muss etc.
+        Die Zugriffsrechte der dump files sind die selben wie zuvor jedoch ist das Dateisystem nur read-only. D.h. Dateien k\"onnen nicht im dump geschrieben egal
+        was f\"ur Zugriffsbits gesetzt sind.
+        
+        Die einheitliche Verbindung von Komponenten in Plan 9 macht es m\"oglich die Installation in vielen Wegen zu Konfigurieren.
+        
+        Authentifizierung wird f\"ur den Benutzerzugriff auf eine Ressource verwendet. Der Nutzer der die Ressource Anfragt wird Client genannt und der
+        Nutzer der den Zugriff gew\"ahrt wird Server genannt. Jeder Plan 9 User hat ein assoziierten DES Authentifikationsschl\"ussel. Die Identit\"at
+        des Nutzers wird verifiziert durch die M\"oglichkeit bestimmte Nachrichten \textit{challenges} zu Ver- und Entschl\"usseln.
+        
+        Die Authentifizierung erfolgt wie folgt: Nachdem die \textit{challenges} ausgetauscht wurden, Kontaktiert eine Partei  den Authentifizierungsserver um Berechtigungstickets Verschl\"usselt
+        mit dem Schl\"ussel jeder Partei zu erstellen. Dieses beinhaltet ein neuen Konversationsschl\"usseln. Jede Partei entschl\"usselt sein eigenes Ticket und benutzt den Konversationsschl\"ussel
+       um die \textit{challange} der anderen Partei zu entschl\"usseln. Plan 9 Authentifikation erm\"oglicht eine sogenannte Spricht-f\"ur Beziehung das erm\"oglicht ein Benutzer
+       die Befugnis eines anderen zu haben.
+       
+       Plan 9 besitzt keine Super user sowie sie in UNIX existieren. Jeder Server ist verantwortlich f\"ur das aufrechterhalten der eigenen Sicherheit.
+       Normalerweise erlauben des Zugriffs nur \"uber die Konsole welche mit einem Passwort gesch\"utzt ist. Wenn eine Datei Lese gesch\"utzt ist durch ein Nutzer kann
+       nur dieser Nutzer Zugriff an andere weiter geben. Es existiert ein sogenannter administrativer Nutzer adm der besondere Rechte besitzt. None ist zu dem ein Benutzer
+       der immer existiert und der kein Passwort besitzt. Diesem ist es immer erlaubt sich zu verbinden. None besitzt nur eingeschr\"ankte Nutzungsrechte.
+       Die Idee hinter diesem Nutzer ist das selbe wie hinter dem anonymen Nutzer in FTP.
+       
+       \"Ahnlich wie in UNIX besitzen die Dateien sogenannte Zugriffsbits welche die read, write und execute Rechte anzeigen. Zum einen f\"ur den Besitzer der Datei, f\"ur eine bestimmte
+       Gruppe und vor alle restlichen. Die Gruppen ist ein neues Feature in Plan 9 welches auch heute noch in Linux verwendet wird. Gruppen sind nichts anderes
+       als ein Nutzer mit einer liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren diese k\"onnen die
+       besagte Gruppe dann Verwalten. Normalerweise geh\"ort eine Datei zu dem Nutzer der diese erstellt hat. Der Gruppenname wird vererbt von dem Verzeichnis in dem die neue Datei liegt.
+    \subsection{Exokernel}       
+       
+        
    
   \section{Kernel Unterschiede} \label{sec:kernel}
     Um sichere Betriebssysteme zu erstellen haben sich auch einige Wissenschaftler bzw. Informatiker mit der Verbesserung bzw. Verkleinerung
     des Kernels befasst. Sie haben diesen so strukturiert das dieser sicher ist und darauf aufbauend versucht ein sicheres Betriebssystem zu erzeugen.
-  
+
+   \nocite{*}     
 \bibliographystyle{IEEEtran}
 \bibliography{masterbib}
 \end{document}
