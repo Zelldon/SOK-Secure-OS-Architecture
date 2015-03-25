@@ -1,5 +1,5 @@
 \documentclass[9pt,technote]{IEEEtran}
-%\documentclass[a4paper]{scrartcl}
+%\documentclass[a4paper, 12pt]{scrartcl}
 \usepackage{cite}
 
 \title{SOK - A secure operating system architecture}
@@ -268,14 +268,39 @@
         Anwendungserstellern ein da neue Abstraktionen nur durch sonderbare Emulationen zum System hinzugef\"ujgt werden k\"onnen.
         
         Diese Probleme wollten die Entwickler des Exokernels bek\"ampfen deren Ziel es war ein minimalistischen Kernel genannt Exokernel zu erstellen.
-        Dieser Kernel vielf\"alltigt sicher die Verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht Vertrauensw\"urdigen Anwendungen die
+        Dieser Kernel vielf\"alltigt sicher die verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht Vertrauensw\"urdigen Anwendungen die
         z.B. IPC oder Ressource Management umsetzen. D.h. sogenannte \textit{library operating systems} arbeiten \"uber der Exokernel Schnittstelle. 
-        Diese Implementieren die Schnittstelle des h\"oheren Levels.
+        Diese Implementieren die Schnittstelle des h\"oheren Levels. Das erm\"oglicht Anwendungen bestimmte Bibliotheken auszuw\"ahlen bzw.
+        deren Implementierung direkt auf deren Notwendigkeiten anzupassen. Z.B. kann es verschiedene Arten von page-table Implementierungen
+        in einem System geben. Eine Anwendung kann dann eine library mit einer bestimmten Implementierung welche am besten passt ausw\"ahlen.
         
         Um Anwendungen die Kontrolle \"uber die Hardware zu erm\"oglichen definiert der Exokernel ein Low-Level Interface.
         Der Exokernel exportiert Hardware Ressourcen was eine effiziente und einfache Implementierung erm\"oglicht.
         Mithilfe von drei Techniken wird das Exportieren sicher umgesetzt. Zum einen mit sogenannten \textit{secure bindings}, 
         dann mit \textit{visible resource revocation} und durch ein \textit{abort protocol}. 
+        
+        \textit{Secure binding} ist ein Schutzmechanismus der die Authentifizierung und die tats\"achliche Benutzung von einander trennt.
+        Die \"Uberpr\"ufungen sind entweder in einfachen Operationen im Kernel oder Hardware ausgedr\"uckt die leicht implementiert werden k\"onnen.
+        Die Authentifizierung findet nur zur Bindezeit statt, das erm\"oglicht das Verwalten los zu l\"osen vom Schutzmechanismus. Es gibt drei Basis Techniken
+        um \textit{secure bindings} umzusetzen. Zum einen mit Hardware Mechanismen, Software Caching sowie mit dem Downloaden von Anwendungscode.
+        Downloading des Codes kann zum erh\"ohen der Performanz benutzt werden, es besitzt zwei Vorteile. Zum einen Eliminierung von Kernel \"Ubergang (Switch)
+        und die Ausf\"uhrungszeit kann eingegrenzt werden. Der wesentliche Knackpunkt ist dieser das der Code ausgef\"uhrt werden kann wenn die Anwendung nicht
+        scheduled ist. Diese losl\"osung erlaubt der Ausf\"uhrung von heruntergeladenen Code in Situationen an denen ein Kontextwechsel zur Anwendung nicht m\"oglich ist.
+        
+        \textit{Visible resource revocation} soll es erm\"oglichen das Ressourcen die gebunden wurden wieder befreit werden von einer Anwendung bzw. deren \textit{secure binding} brechen.
+        Normalerweise setzen Betriebssysteme diese revocation invisible durch. D.h. sie allozieren oder deallozieren Speicher oder Ressourcen ohne die Anwendungen zu informieren.
+        Diese sichtbare resource revocation erm\"oglicht das \textit{library operating systems} darauf reagieren k\"onnen und z.B. den ben\"otigten Prozessorzustand speichern.
+        Jedoch einige dinge wie Prozessor Kontextbezeichner werden sehr oft zur\"uckgeholt wo durch es besser ist die nicht sichtbare resource revocation zu nutzen.
+        
+        \textit{Abort protocol} erm\"oglicht es die Ressource zur\"uck zu holen indem Fall das die Anwendung auf die Anfrage der revocation nicht zufriedenstellend reagiert hat.
+        Anstatt die Anwendungen die nicht in bestimmter Zeit antworten einfach zu killen werden einfach die \textit{secure bindings} aufgel\"ost und die \textit{library operating systems} bzw.
+        Anwendungen informiert.
+        
+        Die Referenz Implementierung Aegis (Exokernel) mit dem ExOS (library operting system) gibt den Anwendungen gr\"o\ss ere flexiblit\"at 
+        und Performanz als monolithische oder Mikrokernel Systeme. 
+        
+        
+        
        
    
   \section{Kernel Unterschiede} \label{sec:kernel}
