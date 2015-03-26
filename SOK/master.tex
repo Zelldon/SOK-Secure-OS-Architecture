@@ -300,8 +300,51 @@
         und Performanz als monolithische oder Mikrokernel Systeme. 
         
         
-        
-       
+    \subsection{Spin}
+       Spin ist ein Betriebssystem welches dynamisch spezialisiert werden kann, um sicher die Bed\"urfnisse von Performanz und Funktionilt\"at f\"ur
+       Anwendungen anzupassen.
+    
+      \"Ahnlich dem Exokernel versucht Spin es zu erm\"oglichen das die Betriebssystemschnittstelle angepasst werden kann sodass die Bedingungen f\"ur Anwendungen verbessert werden k\"onnen.
+      Soll hei\ss en das bei normalen Betriebssystemen die Anwendungen nur schlecht oder gar nicht laufen k\"onnen in Spin die Schnittstellen des Betriebssystem auf die Notwendigkeiten angepasst werden.
+      
+      Spin und seine Erweiterungen sind in der typsicheren Sprache Modula-3 geschrieben. Modula-3 besitzt folgende Kernmerkmale: Interfaces, Typsicherheit, automatisches Speichermanagement,
+      Objekte, generische Interfaces, Threads und Exceptions. Durch die Typsicherheit ist gew\"ahrleistet das der Code nicht auf beliebigen Speicher zugreift, Pointer nur auf die Objekte
+      des Zeigertyps verweisen etc..
+      
+      Das Spin Betriebssystem beruht auf vier Techniken die auf Sprach- oder Laufzeitebene implementiert sind.
+      
+      Die erste ist die \textit{co-location}, d.h. die Erweiterungen werden dynamisch in den Virtuellen Adressraum des Kernel verlinkt.
+      \textit{Co-location} erm\"oglicht Kommunikation zwischen System und Erweiterungscode mit niedrigen Kosten.
+      
+      \textit{Enforced modularity}  Wie bereits erw\"ahnt sind Erweiterungen in Modula-3 geschrieben welche eine modulare
+      Programmiersprache ist und f\"ur die der Compiler Schnittstellengrenzen zwischen Modulen erzwingt.
+      Erweiterungen die im virtuellen Adressraum des Kernels ausgef\"uhrt werden k\"onnen auf keinen Speicher oder privilegierte Instruktionen zugreifen sofern sie nicht
+      die explizite Erlaubnis durch ein Interface erhalten haben. Modularit\"at erzwungen vom Compiler erm\"oglicht es Module mit geringen Kosten zu isolieren.
+      
+      Die dritte Technik wird \textit{logical protection domains} genannt. Erweiterungen existieren in logischen \textit{protection domains} welche Kernel Namensr\"aume
+      sind die Code und exportierte Interfaces beinhalten. Interfaces repres\"antieren Sichten auf die Systemressourcen die vom Betriebssystem gesch\"utzt sind.
+      Ein im Kernel liegend dynamischer Linker l\"ost Code in seperaten logischen \textit{protection domains} zur Laufzeit auf. Erm\"oglicht \textit{cross-domain} Kommunikation 
+      mit dem Overhead eines Prozeduraufrufs.
+      
+      Als letztes ist das \textit{dynamic call binding} zu nennen. Erweiterungen werden als Antwort auf Systemevents ausgef\"uhrt. Ein Event kann jede potentielle Aktion
+      im System beschreiben, wie z.B. ein page fault. Events werden in Schnittstellen deklariert und k\"onnen abgefertigt werden mit dem Overhead eines Prozeduraufrufs.
+      Siehe \cite[S. 267 f]{inproc:spin}.
+      
+      Das sogenannte \textit{protection model} kontrolliert die Menge an Operationen die auf die Ressourcen angewendet werden k\"onnen.
+      Alle Kernel Ressourcen in Spin sind mit \textit{capabilities} referenziert. Eine \textit{capability} in Spin ist eine unf\"alschbare Referenz auf eine Ressource.
+      Spin implementiert die \textit{capabilities} direkt mithilfe von Pointern, nicht wie andere Betriebssysteme die dazu Hardware oder anderes benutzen.
+      Ein Pointer bzw. Zeiger kann vom Kernel zur user-level Anwendung als ver\"ausserte Referenz weitergegeben werden.
+      Eine ver\"ausserte Referenz ist ein Index in der Anwendungstabelle die Typsichere Referenzen zur Kernel Datenstrukturen besitzt.
+      
+      Die Erweiterungen ver\"andern den Weg wie ein System ein Service zur Verf\"ugung stellt. Jede Software ist irgendwie erweiterbar, aber das sogenannte \textit{extension model}
+      entscheidet wie leicht, transparent und effizient eine Erweiterung angewendet werden kann. Spin's \textit{extension model} stellt eine kontrollierte Kommunikationsm\"oglichkeit
+      zwischen den Erweiterungen und dem Basis System, welches verschiedene Interaktionsarten erlaubt, zur Verf\"ugung.
+      Erweiterungen in Spin sind in Events und Handler definiert. Ein Event ist eine Nachricht die eine Ver\"anderung eines Zustands im System ank\"undigt oder eine Anfrage f\"ur einen Service.
+      Ein Eventhandler ist eine Prozedur die dieses Event erh\"alt und verarbeitet. Eine Erweiterung installiert einen Handler f\"ur ein Event durch explizites Registrieren mithilfe eines Zentralen 
+      \textit{dispatchers}. (Siehe \cite[S. 272]{inproc:spin})
+      
+      Das Spin Betriebssystem demonstriert das es m\"oglich ist gute Performanz in einem erweiterbaren System, ohne die Sicherheit zu kompromittieren, zu erm\"oglichen.
+      
    
   \section{Kernel Unterschiede} \label{sec:kernel}
     Um sichere Betriebssysteme zu erstellen haben sich auch einige Wissenschaftler bzw. Informatiker mit der Verbesserung bzw. Verkleinerung
