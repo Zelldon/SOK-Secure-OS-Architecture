@@ -16,7 +16,7 @@
   
   \section{Einleitung} \label{sec:intro}
     Das folgende Paper entstand innerhalb einer Seminararbeit IT-Sicherheit an der FU Berlin.
-    Es behandelt doe fr\"uhzeitlichen und neuer entwickelten Betriebssysteme und deren Ideen,
+    Es behandelt die fr\"uhzeitlichen und neuer entwickelten Betriebssysteme und deren Ideen,
     wobei vor allem auf deren Zugriffsschutzmechanismen eingegangen wird.
     Bei dem Paper handelt es sich um ein sogenanntes Systematization of Knowledge (Sok),
     welches grunds\"atzlich f\"ur die IEEE Symposium on Security and Privacy Konferenz entwickelt wurde.
@@ -36,15 +36,15 @@
   
    \subsection{Multics}  
    
-   Informationen werden in Segmente gespeichert und koennen geteilt werden sie beinhalten eigene Attribute 
-   ueber deren Groesse sowie die Zugriffsrechte.
+   Informationen werden in Segmente gespeichert und k\"onnen geteilt werden sie beinhalten eigene Attribute 
+   ueber deren Gr\"o\ss e sowie die Zugriffsrechte.
    
    In Multiplexed Information and Computing Service - Multics  liefer Segmentierung eine allgemeine Basis fuer den direkten Zugriff
-   und das Teilen von online Informationen durch erfuellen zweier Desigin Ziele. : 1 direkt zugriff 2 Zugriffskontrolle
+   und das Teilen von online Informationen durch erfuellen zweier Desigin Ziele. : 1 direkt Zugriff 2 Zugriffskontrolle
    
-   Vorteil der direkten Adressierung ist das die Informationen nicht mehr kopiert werden muessen. Da alle instruktionen und Daten
-   im System vom Prozessor adressierbar sind. D.h. duplizierung von Prozeduren und Daten is unnoetig soll heissen Abbilder von Prozessen muessen
-   nicht vorher geladen werden die orginalen Prozeduren koennen direkt adressiert werden.
+   Vorteil der direkten Adressierung ist das die Informationen nicht mehr kopiert werden m\"ussen. Da alle Instruktionen und Daten
+   im System vom Prozessor adressierbar sind. D.h. duplizierung von Prozeduren und Daten is unn\"otig soll heissen Abbilder von Prozessen m\"ussen
+   nicht vorher geladen werden die orginalen Prozeduren k\"onnen direkt adressiert werden.
    
   Dies soll dem Programmierer eine attraktive reduktion der programm komplexitaet versprechen.
   
@@ -344,12 +344,56 @@
       \textit{dispatchers}. (Siehe \cite[S. 272]{inproc:spin})
       
       Das Spin Betriebssystem demonstriert das es m\"oglich ist gute Performanz in einem erweiterbaren System, ohne die Sicherheit zu kompromittieren, zu erm\"oglichen.
-      
+    \subsection{EROS}      
+        Eros ist ein \textit{capability} basierender Mikrokernel mit einem einstufigen Speichermodell. Die einstufige Speicher Persistierung ist transparent f\"ur Anwendungen.
+        Speicherallokierung, Scheduling und fault Handling Politiken liegen au\ss erhalb des Kernels um verschiedene Operationsumgebungen und Anwendungsspezifische Ressourcemanagments zu erlauben.
+        Eine \textit{capability} wie bereits schon erw\"ahnt ist eine unf\"alschbares Paar von Objektidentifizierer und einer Menge von erlaubten Operationen (einem Interface) an diesem Objekt.
+        Lauten den Autoren ist auch ein UNIX File descriptor eine \textit{capability}. In einem \textit{capability system} h\"alt jeder Prozess \textit{capabilities} und kann diese Operationen ausf\"uhren
+        welche durch die \textit{capabilities} autorisiert sind. Die Sicherheit wird dadurch gew\"ahrleistet das \textit{capabilities} f\"alschungssicher sind, Prozesse nur \textit{capabilities} durch
+        Autorisierte Schnittstellen erhalten und \textit{capabilities} nur an Prozesse gegeben werden die auch autorisiert sind diese zu halten.
+        
+        Eine \textit{protection domain} wie bereits schon erw\"ahnt ist eine Menge von \textit{capabilities} welche von einem Subsystem zug\"anglich sind.
+        
+        Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in seperate Komponenten, .d.h. jede besitzt eigene \textit{protection domains}.
+        
+        EROS erstellt periodisch st\"andig Checkpoints vom System um ein Konsistentes System sicherzustellen. Bei einem System mit 256 JMB physikalischem Speicher dauert der Snapshot um die
+        50ms. Was bei heutigen Systemen um einiges l\"anger dauern w\"urde.
+
+        Die EROS Architektur ist in Kernel und Kernel Services eingeteilt zudem beinhaltet die Architektur eine Menge von Systemservices die von nicht Privilegierten Anwendungen implementiert sind.
+        Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware via \textit{capability} gesch\"utzten Abstraktion dar.
+        Daten und \textit{capabilities } werden in Seiten deren Gr\"osse bei der Hardware bestimmt ist gespeichert. \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert,
+        wobei ein \textit{node} 32 \textit{capabilities} speichern kann. Adressr\"aume werden in B\"aume aufgebaut, d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter
+        sind Daten- und \textit{capability}-Pages. Durch die Nutzung eines Baumes f\"ur das Adressraummapping ist es m\"oglich ein fein gradige Spezifikation von fault Handlern vorzunehmen.
+        Das traversieren des Baumes ist aber ziemlich teuer weshalb einige Optimierungen notwendig sind. 
+        
+        Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von \textit{capabilities}:
+        \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern und \textit{entry capabilities} welche dem Halter das Aufrufen der Dienste eines Programms
+        innerhalb eines bestimmten Prozess erlaubt. EROS unterscheidet nicht zwischen Prozessen und Threads. Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl.
+        einen Adressraum sich teilen jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. Jeder Prozess ist eine \textit{protection domain}.
+        
+        Jeder Ressourcen Zugriff in EROS wird via einer \textit{capability invocation} vollbracht. Wenn es bei der \textit{capability} Autorisiert ist l\"ost jeder Aufruf
+        bei dem genannten Objekt ein Objekt definierte Operation die vom Aufrufer spezifiziert wurde aus. Es existiert ein einheitliches Interface was bedeutet das alle \textit{capabilities}
+        die selben Argumente an nehmen, was ein Vorteil bei der Performanz bringt.
+        
+        Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden resultieren in einem korrekten Systemzustand solange
+        der Initialzustand korrekt war. Die Herausforderung in der Kausalen-Ordnung ist zu Garantieren das das Wiedererlangen eines korrekten Systemzustands nachdem das System ungeplant 
+        Heruntergefahren ist z.B. durch ein crash m\"oglich ist. Um das zu erreichen muss wie bereits erw\"ahnt ein konsistentes Abbild des Systems erstellt werden.
+        EROS snapshot Mechanismus f\"uhrt zuvor einen Konsistenz Check durch bevor der Snapshot durchgef\"uhrt wird, anders als bei z.B. L3. Falls der Test fehlschl\"agt 
+        wird das System neu gestartet ohne den derzeitigen Checkpoint zu speichern. 
+        
+        Die EROS IPC implementierung wurde stark von L3 und Mach 4 beeinflusst. Zudem besitzt L3 auch ein Persistierungsmechanismus der aber nicht so ausgereift ist wie der von EROS.
+        
+        Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion,
+        da sie keine Objekte benennen oder direkt Zugriff autorisieren.
+        
+        
+        
+        
    
   \section{Kernel Unterschiede} \label{sec:kernel}
     Um sichere Betriebssysteme zu erstellen haben sich auch einige Wissenschaftler bzw. Informatiker mit der Verbesserung bzw. Verkleinerung
     des Kernels befasst. Sie haben diesen so strukturiert das dieser sicher ist und darauf aufbauend versucht ein sicheres Betriebssystem zu erzeugen.
-
+    
    \nocite{*}     
 \bibliographystyle{IEEEtran}
 \bibliography{masterbib}
