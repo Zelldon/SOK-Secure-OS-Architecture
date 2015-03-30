@@ -386,8 +386,52 @@
         Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion,
         da sie keine Objekte benennen oder direkt Zugriff autorisieren.
         
-        
-        
+    \subsection{Asbestos}        
+      Asbestos ist ein neuer Prototyp eines Betriebssystems welches neuartige Kennzeichnungs- und Isolierungsmechanismen liefert die helfen \textit{exploitable} Software einzugrenzen.
+
+      Ein m\"achtiges Werkzeug um \textit{exploits} einzugrenzen ist das Prinzip des geringsten Recht. D.h. das jede Systemkomponente die minimale Anzahl an Rechten besitzen soll
+      die es ben\"otigt um seine Aufgabe auszuf\"uhren. Ungl\"ucklicherweise k\"onnen derzeitige Betriebssysteme nicht das Prinzip des geringsten Recht erf\"ullen.
+      
+      Asbestos Beitr\"age sind zweif\"alltig, zum einen benutzen alle Zugriffskontrollen die Asbestos labels. Es handelt sich dabei um eine Primitive die die Vorteile
+      von discretionary (DAC) und mandatory (MAC) Zugriffskontrolle kombiniert.
+      
+      Bei DAC wird die Entscheidung, ob auf eine Ressource zugegriffen werden darf,  allein auf der Basis der Identität des Akteurs getroffen. 
+      %http://de.wikipedia.org/wiki/Discretionary_Access_Control
+      
+      Im Gegensatz zu MAC wo die Entscheidungen über Zugriffsberechtigungen nicht nur auf der Basis der Identität des Akteurs (Benutzers, Prozesses) und des Objekts (Ressource, auf die zugegriffen     
+      werden soll) gefällt, sondern aufgrund zusätzlicher Regeln und Eigenschaften (wie Kategorisierungen, Labels und Code-Wörtern) gemacht werden.
+      %http://de.wikipedia.org/wiki/Mandatory_Access_Control
+      
+      Labels bestimmen welche Dienste ein Prozess aufrufen und mit welchen anderen Prozessen er interagieren kann. Asbestos labels k\"onnen zudem den Informationsfluss in
+      System- und Anwendungskomponenten verfolgen und limitieren.
+      Asbestos labels unterst\"utzen dezentralisierte Abteilungen die jeder Prozess dynamisch erstellen und manipulieren kann.
+      Asbestos gibt einen Programm das eine neue Abteilung erstellt ein willk\"urliches Recht um die Daten in der Abteilung freizugeben.
+      Das Programm kann dieses Recht weggeben welches das Recht \"ahnlich einer \textit{capability} macht.
+      
+      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion welche Serveranwendungen effizient viele gleichzeitige Nutzer unterst\"utzt und isoliert.
+      In normalen label Systemen w\"urden Serverprozesse schnell Kontaminiert werden durch Daten die zu mehreren Benutzern geh\"oren und die m\"oglichkeit verlieren auf jeden 
+      zu antworten. Event Prozesse erlauben es einen einzelnen Prozess privat Zustand f\"ur mehrere Benutzer zu behalten aber isoliert diesen Zustand sodass ein \textit{exploit}
+      nur die Daten des Nutzers beeinflusst. Eine Gruppe von Event Prozessen ist genauso effizient als ein einzelner gew\"ohnlicher Prozess. \cite[S. 1]{inproc:asbestos}
+      
+      Asbestos IPC \"ahnelt dem von Mikrokerneles wie z.B. von Mach. Prozesse kommunizieren mithilfe von Nachrichten die an Ports gesendet werden. Ein Prozess kann
+      beliebig viele Porst erstellen. Nachrichten gesendet an Ports werden an ein einzelnen Prozess gesendet mit Empfangsrechten f\"ur diesen Port. Initial hat der Prozess
+      die Empfangsrechte der den Port erstellt, aber diese Rechte sind \"ubertragbar. Das Nachrichtenprotokoll von Asbestos wurde von 9P (Plan 9) inspiriert.
+      
+      
+      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert sondern die Semantik von \textit{capability} basierende
+      sende Rechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche sende Rechte.
+      
+      In Asbestos \textit{event process} abstrahiert den Gedanken als Untermenge von einem Prozesszustand der zu einem bestimmten Nutzer geh\"ort. Genauso wie bei Prozessen beschr\"ankt der Kernel
+      die Privilegien des Eventprozesses w\"ahrend er ankommende Nachrichten f\"ur den Nutzer behandelt. und isoliert verschiedene Event Prozess Zust\"ande.
+      Jeder Event Prozess ist einem konventionellen base Prozess assoziiert. Der Kernel Zustand der Event Prozesse besteht aus einem send, recieve label und recieve rights f\"ur bestimmte Ports
+      und eine Menge privater Speicherseiten plus einige Buchhaltungsinformationen. Alles zusammen z\"ahlt 44 Bytes vom Asbestos Kernelspeicher. Zum Vergleich Asbestos kleinste Prozessstruktur
+      nimmt 320 Bytes ein. 
+      
+      Der base Prozess wird nachdem aufrufen des sogenannten \textit{ep\_checkpoints} de-scheduled bist eine Nachricht ankommt auf einem Port an dem der base Prozess oder einer der
+      Event Prozesse recieve Rechte besitzt. Die Nachricht wird dann behandelt und danach wird der Event Prozess wieder suspendiert.
+      Diese Prozessvariante verursacht weniger Overhead als wenn der Adressraum aufgeteilt wird, somit k\"onnen viele tausende von Event Prozess theoretisch Co-existieren.
+      
+     
         
    
   \section{Kernel Unterschiede} \label{sec:kernel}
