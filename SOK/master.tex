@@ -426,82 +426,114 @@
         
         Eine \textit{protection domain} wie bereits schon erw\"ahnt ist eine Menge von \textit{capabilities} welche von einem Subsystem zug\"anglich sind.
         
-        Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in seperate Komponenten, .d.h. jede besitzt eigene \textit{protection domains}.
+        Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in seperate Komponenten,
+        d.h. jede besitzt eigene \textit{protection domains}.
         
-        EROS erstellt periodisch st\"andig Checkpoints vom System um ein Konsistentes System sicherzustellen. Bei einem System mit 256 JMB physikalischem Speicher dauert der Snapshot um die
+        EROS erstellt periodisch st\"andig Checkpoints vom System um ein Konsistentes System sicherzustellen. 
+        Bei einem System mit 256 JMB physikalischem Speicher dauert der Snapshot um die
         50ms. Was bei heutigen Systemen um einiges l\"anger dauern w\"urde.
 
-        Die EROS Architektur ist in Kernel und Kernel Services eingeteilt zudem beinhaltet die Architektur eine Menge von Systemservices die von nicht Privilegierten Anwendungen implementiert sind.
+        Die EROS Architektur ist in Kernel und Kernel Services eingeteilt zudem beinhaltet die Architektur eine Menge von Systemservices
+        die von nicht Privilegierten Anwendungen implementiert sind.
         Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware via \textit{capability} gesch\"utzten Abstraktion dar.
-        Daten und \textit{capabilities } werden in Seiten deren Gr\"osse bei der Hardware bestimmt ist gespeichert. \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert,
-        wobei ein \textit{node} 32 \textit{capabilities} speichern kann. Adressr\"aume werden in B\"aume aufgebaut, d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter
-        sind Daten- und \textit{capability}-Pages. Durch die Nutzung eines Baumes f\"ur das Adressraummapping ist es m\"oglich ein fein gradige Spezifikation von fault Handlern vorzunehmen.
+        Daten und \textit{capabilities } werden in Seiten deren Gr\"osse bei der Hardware bestimmt ist gespeichert. 
+        \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert,
+        wobei ein \textit{node} 32 \textit{capabilities} speichern kann. Adressr\"aume werden in B\"aume aufgebaut, 
+        d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter
+        sind Daten- und \textit{capability}-Pages. Durch die Nutzung eines Baumes f\"ur das Adressraummapping i
+        ist es m\"oglich ein fein gradige Spezifikation von fault Handlern vorzunehmen.
         Das traversieren des Baumes ist aber ziemlich teuer weshalb einige Optimierungen notwendig sind. 
         
         Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von \textit{capabilities}:
-        \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern und \textit{entry capabilities} welche dem Halter das Aufrufen der Dienste eines Programms
-        innerhalb eines bestimmten Prozess erlaubt. EROS unterscheidet nicht zwischen Prozessen und Threads. Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl.
-        einen Adressraum sich teilen jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. Jeder Prozess ist eine \textit{protection domain}.
+        \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern und 
+        \textit{entry capabilities} welche dem Halter das Aufrufen der Dienste eines Programms
+        innerhalb eines bestimmten Prozess erlaubt. EROS unterscheidet nicht zwischen Prozessen und Threads. 
+        Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl.
+        einen Adressraum sich teilen jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. 
+        Jeder Prozess ist eine \textit{protection domain}.
         
-        Jeder Ressourcen Zugriff in EROS wird via einer \textit{capability invocation} vollbracht. Wenn es bei der \textit{capability} Autorisiert ist l\"ost jeder Aufruf
-        bei dem genannten Objekt ein Objekt definierte Operation die vom Aufrufer spezifiziert wurde aus. Es existiert ein einheitliches Interface was bedeutet das alle \textit{capabilities}
+        Jeder Ressourcen Zugriff in EROS wird via einer \textit{capability invocation} vollbracht. 
+        Wenn es bei der \textit{capability} Autorisiert ist l\"ost jeder Aufruf
+        bei dem genannten Objekt ein Objekt definierte Operation die vom Aufrufer spezifiziert wurde aus. 
+        Es existiert ein einheitliches Interface was bedeutet das alle \textit{capabilities}
         die selben Argumente an nehmen, was ein Vorteil bei der Performanz bringt.
         
-        Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden resultieren in einem korrekten Systemzustand solange
-        der Initialzustand korrekt war. Die Herausforderung in der Kausalen-Ordnung ist zu Garantieren das das Wiedererlangen eines korrekten Systemzustands nachdem das System ungeplant 
+        Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden resultieren 
+        in einem korrekten Systemzustand solange
+        der Initialzustand korrekt war. Die Herausforderung in der Kausalen-Ordnung ist zu Garantieren das das Wiedererlangen eines 
+        korrekten Systemzustands nachdem das System ungeplant 
         Heruntergefahren ist z.B. durch ein crash m\"oglich ist. Um das zu erreichen muss wie bereits erw\"ahnt ein konsistentes Abbild des Systems erstellt werden.
-        EROS snapshot Mechanismus f\"uhrt zuvor einen Konsistenz Check durch bevor der Snapshot durchgef\"uhrt wird, anders als bei z.B. L3. Falls der Test fehlschl\"agt 
+        EROS snapshot Mechanismus f\"uhrt zuvor einen Konsistenz Check durch bevor der Snapshot durchgef\"uhrt wird, 
+        anders als bei z.B. L3. Falls der Test fehlschl\"agt 
         wird das System neu gestartet ohne den derzeitigen Checkpoint zu speichern. 
         
-        Die EROS IPC implementierung wurde stark von L3 und Mach 4 beeinflusst. Zudem besitzt L3 auch ein Persistierungsmechanismus der aber nicht so ausgereift ist wie der von EROS.
+        Die EROS IPC implementierung wurde stark von L3 und Mach 4 beeinflusst. 
+        Zudem besitzt L3 auch ein Persistierungsmechanismus der aber nicht so ausgereift ist wie der von EROS.
         
-        Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion,
+        Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine 
+        \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion,
         da sie keine Objekte benennen oder direkt Zugriff autorisieren.
         
     \subsection{Asbestos}        
-      Asbestos ist ein neuer Prototyp eines Betriebssystems welches neuartige Kennzeichnungs- und Isolierungsmechanismen liefert die helfen \textit{exploitable} Software einzugrenzen.
+      Asbestos ist ein neuer Prototyp eines Betriebssystems welches neuartige Kennzeichnungs- und Isolierungsmechanismen 
+      liefert die helfen \textit{exploitable} Software einzugrenzen.
 
-      Ein m\"achtiges Werkzeug um \textit{exploits} einzugrenzen ist das Prinzip des geringsten Recht. D.h. das jede Systemkomponente die minimale Anzahl an Rechten besitzen soll
+      Ein m\"achtiges Werkzeug um \textit{exploits} einzugrenzen ist das Prinzip des geringsten Recht. 
+      D.h. das jede Systemkomponente die minimale Anzahl an Rechten besitzen soll
       die es ben\"otigt um seine Aufgabe auszuf\"uhren. Ungl\"ucklicherweise k\"onnen derzeitige Betriebssysteme nicht das Prinzip des geringsten Recht erf\"ullen.
       
-      Asbestos Beitr\"age sind zweif\"alltig, zum einen benutzen alle Zugriffskontrollen die Asbestos labels. Es handelt sich dabei um eine Primitive die die Vorteile
+      Asbestos Beitr\"age sind zweif\"alltig, zum einen benutzen alle Zugriffskontrollen die Asbestos labels. 
+      Es handelt sich dabei um eine Primitive die die Vorteile
       von discretionary (DAC) und mandatory (MAC) Zugriffskontrolle kombiniert.
       
-      Bei DAC wird die Entscheidung, ob auf eine Ressource zugegriffen werden darf,  allein auf der Basis der Identität des Akteurs getroffen. 
+      Bei DAC wird die Entscheidung, ob auf eine Ressource zugegriffen werden darf,  
+      allein auf der Basis der Identität des Akteurs getroffen. 
       %http://de.wikipedia.org/wiki/Discretionary_Access_Control
       
-      Im Gegensatz zu MAC wo die Entscheidungen über Zugriffsberechtigungen nicht nur auf der Basis der Identität des Akteurs (Benutzers, Prozesses) und des Objekts (Ressource, auf die zugegriffen     
+      Im Gegensatz zu MAC wo die Entscheidungen über Zugriffsberechtigungen nicht nur auf der Basis der Identität des Akteurs 
+      (Benutzers, Prozesses) und des Objekts (Ressource, auf die zugegriffen     
       werden soll) gefällt, sondern aufgrund zusätzlicher Regeln und Eigenschaften (wie Kategorisierungen, Labels und Code-Wörtern) gemacht werden.
       %http://de.wikipedia.org/wiki/Mandatory_Access_Control
       
-      Labels bestimmen welche Dienste ein Prozess aufrufen und mit welchen anderen Prozessen er interagieren kann. Asbestos labels k\"onnen zudem den Informationsfluss in
+      Labels bestimmen welche Dienste ein Prozess aufrufen und mit welchen anderen Prozessen er interagieren kann. 
+      Asbestos labels k\"onnen zudem den Informationsfluss in
       System- und Anwendungskomponenten verfolgen und limitieren.
       Asbestos labels unterst\"utzen dezentralisierte Abteilungen die jeder Prozess dynamisch erstellen und manipulieren kann.
       Asbestos gibt einen Programm das eine neue Abteilung erstellt ein willk\"urliches Recht um die Daten in der Abteilung freizugeben.
       Das Programm kann dieses Recht weggeben welches das Recht \"ahnlich einer \textit{capability} macht.
       
-      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion welche Serveranwendungen effizient viele gleichzeitige Nutzer unterst\"utzt und isoliert.
-      In normalen label Systemen w\"urden Serverprozesse schnell Kontaminiert werden durch Daten die zu mehreren Benutzern geh\"oren und die m\"oglichkeit verlieren auf jeden 
+      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion welche Serveranwendungen 
+      effizient viele gleichzeitige Nutzer unterst\"utzt und isoliert.
+      In normalen label Systemen w\"urden Serverprozesse schnell Kontaminiert werden durch Daten die zu mehreren Benutzern 
+      geh\"oren und die m\"oglichkeit verlieren auf jeden 
       zu antworten. Event Prozesse erlauben es einen einzelnen Prozess privat Zustand f\"ur mehrere Benutzer zu behalten aber isoliert diesen Zustand sodass ein \textit{exploit}
-      nur die Daten des Nutzers beeinflusst. Eine Gruppe von Event Prozessen ist genauso effizient als ein einzelner gew\"ohnlicher Prozess. \cite[S. 1]{inproc:asbestos}
+      nur die Daten des Nutzers beeinflusst. Eine Gruppe von Event Prozessen ist genauso effizient als ein einzelner gew\"ohnlicher Prozess. 
+      \cite[S. 1]{inproc:asbestos}
       
       Asbestos IPC \"ahnelt dem von Mikrokerneles wie z.B. von Mach. Prozesse kommunizieren mithilfe von Nachrichten die an Ports gesendet werden. Ein Prozess kann
-      beliebig viele Porst erstellen. Nachrichten gesendet an Ports werden an ein einzelnen Prozess gesendet mit Empfangsrechten f\"ur diesen Port. Initial hat der Prozess
+      beliebig viele Porst erstellen. Nachrichten gesendet an Ports werden an ein einzelnen Prozess gesendet mit Empfangsrechten f\"ur diesen Port. 
+      Initial hat der Prozess
       die Empfangsrechte der den Port erstellt, aber diese Rechte sind \"ubertragbar. Das Nachrichtenprotokoll von Asbestos wurde von 9P (Plan 9) inspiriert.
       
       
-      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert sondern die Semantik von \textit{capability} basierende
+      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert sondern die Semantik von
+      \textit{capability} basierende
       sende Rechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche sende Rechte.
       
-      In Asbestos \textit{event process} abstrahiert den Gedanken als Untermenge von einem Prozesszustand der zu einem bestimmten Nutzer geh\"ort. Genauso wie bei Prozessen beschr\"ankt der Kernel
+      In Asbestos \textit{event process} abstrahiert den Gedanken als Untermenge von einem Prozesszustand der zu einem bestimmten Nutzer geh\"ort.
+      Genauso wie bei Prozessen beschr\"ankt der Kernel
       die Privilegien des Eventprozesses w\"ahrend er ankommende Nachrichten f\"ur den Nutzer behandelt. und isoliert verschiedene Event Prozess Zust\"ande.
-      Jeder Event Prozess ist einem konventionellen base Prozess assoziiert. Der Kernel Zustand der Event Prozesse besteht aus einem send, recieve label und recieve rights f\"ur bestimmte Ports
-      und eine Menge privater Speicherseiten plus einige Buchhaltungsinformationen. Alles zusammen z\"ahlt 44 Bytes vom Asbestos Kernelspeicher. Zum Vergleich Asbestos kleinste Prozessstruktur
+      Jeder Event Prozess ist einem konventionellen base Prozess assoziiert. Der Kernel Zustand der Event Prozesse besteht aus einem send, 
+      recieve label und recieve rights f\"ur bestimmte Ports
+      und eine Menge privater Speicherseiten plus einige Buchhaltungsinformationen. Alles zusammen z\"ahlt 44 Bytes vom Asbestos Kernelspeicher. 
+      Zum Vergleich Asbestos kleinste Prozessstruktur
       nimmt 320 Bytes ein. 
       
-      Der base Prozess wird nachdem aufrufen des sogenannten \textit{ep\_checkpoints} de-scheduled bist eine Nachricht ankommt auf einem Port an dem der base Prozess oder einer der
+      Der base Prozess wird nachdem aufrufen des sogenannten \textit{ep\_checkpoints} de-scheduled bist eine Nachricht ankommt 
+      auf einem Port an dem der base Prozess oder einer der
       Event Prozesse recieve Rechte besitzt. Die Nachricht wird dann behandelt und danach wird der Event Prozess wieder suspendiert.
-      Diese Prozessvariante verursacht weniger Overhead als wenn der Adressraum aufgeteilt wird, somit k\"onnen viele tausende von Event Prozess theoretisch Co-existieren.
+      Diese Prozessvariante verursacht weniger Overhead als wenn der Adressraum aufgeteilt wird,
+      somit k\"onnen viele tausende von Event Prozess theoretisch Co-existieren.
       
      
         
