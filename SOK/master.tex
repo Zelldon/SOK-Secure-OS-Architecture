@@ -122,56 +122,63 @@
 		    Jeder Prozess in Multics besitzt ein privates Deskriptor Segment welches Segmentnummern in Kernspeicheradressen umwandelt und eine Private Tabelle besitzt   
 		    die die symbolischen Segmentnamen in Segmentnummern abbildet. Wird auch als Known Segment Table (KST) bezeichnet.
 		    Der Supervisor in Multics ist im Grunde wie der Kernel in heutigen Unix bzw. Linux Systemen.
-
-    		Nicht wie in anderen Systemen arbeitet er in eigenem Speicherraum oder Prozess sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess
+		   
+      Nicht wie in anderen Systemen arbeitet er in eigenem Speicherraum oder Prozess sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess
     	  geteilt. Immer wenn ein neuer Prozess erstellt wird, wird das Deskriptor Segment mit den Supervisordeskriptoren initialisiert.
     	  Dadurch m\"ussen aber auch die Supervisor Segmente vor unautorisierten Zugriffen gesch\"utzt werden.
     	  Multics unterst\"utzt den Benutzer mit einem sogenannten Ring Protection Mechanismen, welches die Segmente in dem Adressraum in einzelne Mengen mit 
     		verschiedenen Zugriffsrechten unterteilt. Dieser Mechanismus wird vom Supervisor zum eigenen Schutz verwendet. Siehe dazu n\"achster Abschnitt 
     		\ref{subsubsec:protectrings}
     		
-  \subsubsection{Protection Rings} \label{subsubsec:protectrings}
-    Multics wurde zuerst auf einem Honeywell 645 Computer system ausgef\"uhrt jedoch konnte die Hardware nicht viel Zugriffsmechanismen zur verf\"ugung stellen.
-    Deshalb wurde eine neue Hardware entwickelt die die Zugriffsmechanismen mejhr auf Hardwareebene bringen sollte, sodass das meiste nicht mehr \"uber Software
-    gepr\"uft werden muss. Das hei\ss t die sogenannten Protection rings wurden sogut wie vollst\"andig in Hardware umgesetzt. \cite{inproc:protec-rings}
+      \subsubsection{Protection Rings} \label{subsubsec:protectrings}
+        In dem folgendem Abschnitt werden die bereits erw\"ahnten Protection Rings anhand von Multics n\"aher erl\"autert.
+        Multics wurde zuerst auf einem Honeywell 645 Computer system ausgef\"uhrt jedoch konnte die Hardware nicht viele Zugriffsmechanismen zur Verf\"ugung stellen.
+        Deshalb wurde eine neue Hardware entwickelt die die Zugriffsmechanismen mehr auf Hardwareebene bringen sollte, sodass das meiste nicht mehr \"uber Software
+        gepr\"uft werden muss. Das hei\ss t die sogenannten Protection rings wurden so gut wie vollst\"andig in Hardware umgesetzt. \cite{inproc:protec-rings}
     
-  
-    Schutz soll gew\"ahrleistet werden sodass einzelne Benutzer von einander getrennt sind und wenn gew\"unscht aber untereinander Kommunizieren k\"onnen.
-    Vier Kriterien k\"onnen auf Zugriffskontrollmechanismen angewendet werden: Funktionale capability, economy, simplicity und programming generality.
-    Das erste bedeutet es soll bestimmte Benutzerschtuzbed\"urfnisse tilgen, economy befasst sich dabei mit den Kosten der Umsetzung.
-    Kosten beinhaltet dabei auch Komplexit\"at des Subsystems, Benutzer bel\"astigung durch benutzen dieser Zugriffsmechanismen sowie der benutze
-    extra Speicher und die erh\"ohte Laufzeit. Die Kosten sollten Proportional zu den Leistungen sein.
-    Simplicity bedeutet Einfachheit das heisst das die Zugriffsmechanismen so einfach wie m\"oglich sein sollen, oft
-    impliziert das fehlen von Einfachheit auch das fehlen von Sicherheit. Programming generality besagt einfach das die Prozeduren so allgemein gehalten sind
-    das sie ohne Wissen der internen Struktur verwendet werden k\"onnen und dinge auch ersetzt werden k\"onnen.
-    Es ist schwer ein Zugriffskontrollmechanismus zu entwickeln mit der Erf\"ullung aller Kriterien.
+        Schutz soll wie gew\"ahrleistet werden sodass einzelne Benutzer von einander getrennt sind und wenn gew\"unscht aber untereinander Kommunizieren k\"onnen.
+        Vier Kriterien k\"onnen auf Zugriffskontrollmechanismen angewendet werden: 
+        \begin{enumerate}
+          \item \textit{Funktionale capability}
+          \item \textit{Economy}
+          \item \textit{Simplicity}
+          \item \textit{Programming generality}
+        \end{enumerate}
+        Das erste bedeutet es soll bestimmte Benutzerschtuzbed\"urfnisse tilgen, \textit{economy} befasst sich dabei mit den Kosten der Umsetzung.
+        Kosten beinhaltet dabei auch Komplexit\"at des Subsystems, Benutzer Bel\"astigung durch benutzen dieser Zugriffsmechanismen sowie der benutzte
+        extra Speicher und die erh\"ohte Laufzeit. Die Kosten sollten Proportional zu den Leistungen sein.
+        \textit{Simplicity} bedeutet Einfachheit, das hei\ss t das die Zugriffsmechanismen so einfach wie m\"oglich sein sollen, oft
+        impliziert das fehlen von Einfachheit auch das fehlen von Sicherheit. \textit{Programming generality} besagt einfach das die Prozeduren so allgemein gehalten sind
+        das sie ohne Wissen der internen Struktur verwendet werden k\"onnen und Dinge auch ersetzt werden k\"onnen.
+        Es ist schwer ein Zugriffskontrollmechanismus zu entwickeln mit der Erf\"ullung aller Kriterien.
+     
+        Eine Dom\"ane ist eine Menge von Zugriffsberechtigungen. Ein sehr allgemeiner Zugriffskontrollmechanismus w\"urde kein Beschr\"ankung von der Anzahl an
+        Dom\"anen f\"ur ein Prozess machen und w\"urde keine einschr\"ankenden Beziehungen f\"ur die Zugriffsberechtigungen aufzwingen.
+        Ungl\"ucklicherweise ist das Entwickeln eines solchen Mechanismus der auch die letzten drei Kriterien \textit{economy}, \textit{simplicity} und \textit{programming generality}
+        erf\"ullt ein schwieriges Forschungsthema.  In Multics wurden die Anzahl von Dom\"anen f\"ur ein Prozess limitiert und es werden Beziehungen von den Zugriffsrechten innerhalb
+        der Dom\"anen aufgezwungen. Das Resultat sind sogenannte Protection rings. (Siehe \cite[S. 160]{inproc:protec-rings}) 
+        
+        Die Charakterisierung von Ringen als beschr\"ankte Implementierung von Dom\"anen ist das Ergebnis sp\"aterer Einsicht. 
+        Als sie Entwickelt wurden, wurden Ringe als nat\"urliche Verallgemeinerung der Supervisor/User Modi die Schutz in vielen Computern liefern betrachtet.
     
-    Dom\"an ist eine Menge von Zugriffsberechtigungen. Ein sehr allgemeiner Zugriffskontrollmechanismus w\"urde kein beschr\"ankung von der Anzahl an
-    dom\"anen f\"ur ein Prozess machen und w\"urde keine einschr\"ankenden Beziehungen f\"ur die Zugriffsberechtigungen aufzwingen.
-    Ungl\"ucklicherweise ist das Entwickeln eines solchen Mechanismus der auch die letzten drei Kriterien economy, simplicity und programming generality
-    erf\"ullt ein schwieriges Forschungsthema.  In Multics wurden Anzahl von Dom\"anen f\"jur ein Prozess limitiert und es werden Beziehungen von den Zugriffsrechten innerhalb
-    der Dom\"anen aufgezwungen. Das Resultat sind sogenannte protection rings. (Siehe \cite[S. 160]{inproc:protec-rings}) 
-    Die Charakterisierung von Ringen als beschr\"ankte Implementierung von Dom\"anen ist das Ergebnis sp\"aterer Einsicht. 
-    Als sie Entwickelt wurden, wurden Ringe als nat\"urliche verallgemeinerung der Supervisor/User Modi die Schutz in vielen Computern liefern betrachtet.
-    
-    Mit jedem Prozess sind eine bestimmte Anzahl von Dom\"anen assoziiert, genannt protection rings. Diese r Ringe sind mit Zahlen von $0$ bis $r - 1$ benannt.
-    Die Zugriffsberechtigungen in Ring m sind so beschr\"ankt das sie eine Teilmenge von n sind, wenn gilt: $m > n$. Das bedeutet
-    Ring $0$ besitzt die gr\"o\ss te Menge an Berechtigungen und $r-1$ die kleinste. Also hat ein Prozess der im Ring $0$ ausgef\"uhrt wird
-    die meisten Zugriffsprivilegien und im Ring $r-1$ die wenigsten. Es existieren sogenannte brackets (engl. Klammern) f\"ur die einzelnen Berechtigungen
-    wie read, write und execute. D.h. ein write bracket gibt an in welchem Bereich das write Recht angewendet werden darf. Neben den 
-    Berechtigung werden noch die Ausma\ss e gespeichert und ein Flag f\"ur die jeweilige Berechtigung. Ist das Flag auf \textit{on} gesetzt 
-    so wird die obere Grenze des Bereichs f\"ur die Berechtigung gespeichert, wobei der Ring r kleiner oder gleich der Grenze sein muss.
-    Ist das Flag auf off gesetzt so gibt es keine Berechtigung in keinem Ring f\"ur diesem Prozess. In Multics wurden 8 Ringe als angemessen 
-    angenommen und umgesetzt jedoch ist das keine Vorgabe und in anderen Systemen k\"onnen andere Anzahlen vorkommen.
+        Mit jedem Prozess sind eine bestimmte Anzahl von Dom\"anen assoziiert, genannt Protection rings. Diese r Ringe sind mit Zahlen von $0$ bis $r - 1$ benannt.
+        Die Zugriffsberechtigungen in Ring m sind so beschr\"ankt das sie eine Teilmenge von n sind, wenn gilt: $m > n$. Das bedeutet
+        Ring $0$ besitzt die gr\"o\ss te Menge an Berechtigungen und $r-1$ die kleinste. Also hat ein Prozess der im Ring $0$ ausgef\"uhrt wird
+        die meisten Zugriffsprivilegien und im Ring $r-1$ die wenigsten. Es existieren sogenannte brackets (engl. Klammern) f\"ur die einzelnen Berechtigungen
+        wie \textit{read}, \textit{write} und \textit{execute}. D.h. ein write bracket gibt an in welchem Bereich das write Recht angewendet werden darf. Neben den 
+        Berechtigung werden noch die Ausma\ss e gespeichert und ein Flag f\"ur die jeweilige Berechtigung. Ist das Flag auf \textit{on} gesetzt 
+        so wird die obere Grenze des Bereichs f\"ur die Berechtigung gespeichert, wobei der Ring $r$ kleiner oder gleich der Grenze sein muss.
+        Ist das Flag auf \textit{off} gesetzt so gibt es keine Berechtigung in keinem Ring f\"ur diesem Prozess. In Multics wurden 8 Ringe als angemessen 
+        angenommen und umgesetzt jedoch ist das keine Vorgabe und in anderen Systemen k\"onnen andere Anzahlen vorkommen.
     
     %gates protection rings
-    Eine neue Berechtigung wurde eingef\"uhrt und zwar das \"andern der Ausf\"uhrungsdom\"an eines Prozesses.
-    Dadurch das durch \"andern der Domain neue Berechtigungen dazu kommen k\"onnen ist es eine Operation die gut Kontrolliert werden muss.
-    Mithilfe der Dom\"anen soll es m\"oglicjh sein das bestimmte Zugriffsberechtigungen nur an bestimmten stellen Verf\"ugbar  sind bzw. wenn bestimmte Programmteile 
-    ausgef\"uhrt werden. Das hei\ss t an bestimmten Programmpositionen auch gates genannt soll es m\"oglich sein die Dom\"ane zu \"andern.
-    Es werden daf\"ur gate list und gate extension eingef\"uhrt die eine neue bracket definieren in der das Programm die Ringe wechseln kann, diese
-    gelten nur f\"ur das herunterwechseln der Ringe da dort mehr Rechte verf\"ugbar werden. Wechselt man ein Ring nach oben so werden es weniger Rechte deshalb
-    soll das ohne beschr\"ankung m\"oglich sein. 
+        Eine neue Berechtigung wurde eingef\"uhrt und zwar das \"andern der Ausf\"uhrungsdom\"an eines Prozesses.
+        Durch das\"andern einer Dom\"ane k\"onnen neue Berechtigungen dazu kommen, weshalb es eine Operation ist die gut Kontrolliert werden muss.
+        Mithilfe der Dom\"anen soll es m\"oglicjh sein das bestimmte Zugriffsberechtigungen nur an bestimmten stellen Verf\"ugbar  sind bzw. wenn bestimmte Programmteile 
+        ausgef\"uhrt werden. Das hei\ss t an bestimmten Programmpositionen auch \textit{gates} genannt soll es m\"oglich sein die Dom\"ane zu \"andern.
+        Es werden daf\"ur \textit{gate list} und \textit{gate extension} eingef\"uhrt die eine neue bracket definieren in der das Programm die Ringe wechseln kann, diese
+        gelten nur f\"ur das herunter wechseln der Ringe, da dort mehr Rechte verf\"ugbar werden. Wechselt man ein Ring nach oben so werden es weniger Rechte deshalb
+        soll das ohne beschr\"ankung m\"oglich sein. 
     
     %probleme call und return 
     %Wenn calling prozedur im gleichen ring wie caller dann kein problem
@@ -179,48 +186,46 @@
     % caller auch rechte besitzt fuer bestimmte argumente oder ergebnisse die gelesen und geschrieben werden 
     % bei hoeherem wird returned zu niedrigem problem ist das evtl argumente nich referenziert werden koennen von aufgerufener prozedujr
     
-    In Multics wird der Supervisor und die protection ring so umgesetzt das die Primitiven Operationen wie Zugriffskontrolle, I/O, Speicherverwaltung sowie
-    Prozessverwaltung im Ring 0 ausgef\"uhrt werden, alles andere vom Supervisor in Ring 1.
+        In Multics wird der Supervisor und die Protection rings so umgesetzt das die Primitiven Operationen wie Zugriffskontrolle, I/O, Speicherverwaltung sowie
+        Prozessverwaltung im Ring 0 ausgef\"uhrt werden, alles andere vom Supervisor in Ring 1.
     
-    Die Hardware Umsetzung der protectiong rings die im Paper \cite{inproc:protec-rings} beschrieben wurde erm\"oglicht die drei folgenden dinge:
-    \begin{itemize}
-      \item Benutzer k\"onnen beliebige gesch\"utzte Sub-Systeme erstellen die von anderen genutzt werden k\"onnen
-      \item Der Supervisor kann in Schichten Implementiert werden die aufgezwungen werden.
-      \item Der Nutzer kann sich selbst sch\"utzen w\"arend er eigene oder andere Programme debugged.
-    \end{itemize}
+        Die Hardware Umsetzung der Protection rings die im Paper \cite{inproc:protec-rings} beschrieben wurde erm\"oglicht die drei folgenden dinge:
+		    \begin{itemize}
+		      \item Benutzer k\"onnen beliebige gesch\"utzte Subsysteme erstellen die von anderen genutzt werden k\"onnen
+		      \item Der Supervisor kann in Schichten Implementiert werden die aufgezwungen werden.
+		      \item Der Nutzer kann sich selbst sch\"utzen w\"arend er eigene oder andere Programme debugged.
+		    \end{itemize}
     
     \subsection{Access bits oder Matrix} \label{subsec:access}
+      Im folgendem Abschnitt werden die Access bits bzw. Access Matrizen als Zugriffsmechanismus anhand der Betriebssysteme Unix und Plan 9 beschrieben.
       \subsubsection{Unix}
 		    Unix wurde von den bekannten Informatikern Dennis Ritchie (C) und Ken Thompson (Unix, UTF8, Plan9 etc.) an den Bell Labs entwickelt.
 		    Es ist ein Universal-, Mehrbenutzer- und interaktives Betriebssystem. Ein gro\ss er Teil von Unix ist in C geschrieben was vorallem Multiprogramming
 		    und das Teilen von Code erm\"oglicht. Die wichtigste Aufgabe von UNIX ist ein Dateisystem bereitzustellen. Es gibt drei verschiedene Arten von Files:
 		    gew\"ohnliche Datentr\"agerdateien, Verzeichnisse, und spezielle Dateien. Anders als in Multics ist das ganze System in Dateien aufgeteilt und nicht in
-		    Segmente. Gew\"ohnliche Datentr\"agerdateien beinhalten die Information die der User in diese platziert. 
-		    Die Struktur wird nicht vom System kontrolliert maximal
+		    Segmente. Gew\"ohnliche Datentr\"agerdateien beinhalten die Information die der User in diese platziert. Die Struktur wird nicht vom System kontrolliert maximal
 		    von den zu benutzenden Programmen. Verzeichnisse liefern das Mapping zwischen den Dateinamen und den Dateien selber, somit entsteht eine Baumstruktur.
 		    Ein Verzeichnis ist im Grunde wie eine normale Datei nur das sie nicht von unprivilegierten Nutzern beschrieben werden kann. D.h. das System Kontrolliert den
 		    Inhalt der Verzeichnisse. Das System besitzt eigene Verzeichnisse und Unterverzeichnisse ein wichtiges ist \textit{root}.
-		     Alle Dateien im System k\"onnen gefunden 
-		    werden durch folgen eines Pfades von einer Kette von Verzeichnissen bis die Datei gefunden wurde. 
+		    Alle Dateien im System k\"onnen gefunden werden durch folgen eines Pfades von einer Kette von Verzeichnissen bis die Datei gefunden wurde. 
 		    Der Startpunkt ist oft dabei \textit{root}.(Siehe \cite[S. 366]{inproc:unix})
 		    
-		    Das Zugriffskontrollschema ist in UNIX relativ simple. Jeder Nutzer besitzt eine eigene ID wird eine Datei erstellt
-		    vom Nutzer erh\"alt diese die ID sodass der Ersteller immer
+		    Das Zugriffskontrollschema ist in UNIX relativ simpel. Jeder Nutzer besitzt eine eigene ID, wird eine Datei vom Nutzer erstellt  erh\"alt diese die ID, sodass der Ersteller immer
 		    erfasst werden kann. Zudem gibt es 7 Bits f\"ur die Dateien die den Zugriff kontrollieren. 
-		    Die ersten drei geben f\"ur den Eigent\"umer die Rechte: read, write und execute an.
-		    Die n\"achsten drei f\"ur alle anderen Nutzer diese Recht und das letzte Bit ist das sogenannte S-Bit. Ist dieses Bit gesetzt so wird die User ID tempor\"ar
+		    Die ersten drei geben f\"ur den Eigent\"umer die Rechte: \textit{read}, \textit{write} und \textit{execute} an.
+		    Die n\"achsten drei f\"ur alle anderen Nutzer die Rechte und das letzte Bit ist das sogenannte S-Bit. Ist dieses Bit gesetzt so wird die User ID tempor\"ar
 		    mit der des Datei Eigent\"umers ersetzt bzw. das Programm mit der User ID des Eigent\"umers ausgef\"uhrt.
 		    D.h. es werden deren Rechte benutzt f\"ur den Zeitraum der Programmausf\"uhrung. Dieses sollte erm\"oglichen das Programme
-		    auf Dateien zugreifen k\"onnen f\"ur die der Nutzer im normal Fall keine Rechte besitzt. (Siehe \cite[S. 367]{inproc:unix}    
-		    Mithilfe des S-Bits konnten jedoch einige Exploits geschrieben werden die es unautorisierten Nutzen erm\"oglichte
+		    auf Dateien zugreifen k\"onnen f\"ur die der Nutzer im Normalfall keine Rechte besitzt. (Siehe \cite[S. 367]{inproc:unix}    
+		    Mithilfe des S-Bits konnten jedoch einige Exploits geschrieben werden die es unautorisierten Nutzern erm\"oglichten
 		    die Kontrolle \"uber das System zu erlangen. 
 		    
-		    UNIX wurde laut den Autoren auch von Multics beeinflusst vorallem in dem Bereich I/O, Shell und deren Funktionalit\"at. (Siehe \cite[S. 374]{inproc:unix})
+		    UNIX wurde laut den Autoren auch von Multics beeinflusst vor allem in dem Bereich I/O, Shell und deren Funktionalit\"at. (Siehe \cite[S. 374]{inproc:unix})
 		    UNIX hat sich bis heute stark durch gesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
 	    \subsubsection{Plan 9}
-        Laut den Autor von Plan 9 hatte UNIX einige Problem die zu tief lagen die dadurch nicht einfach gefixed werden konnte 
-        jedoch auch einige Ideen die \"ubernommen werden konnten
-        in dem neuen System von den Bell Labs. Das war zum einen das Dateisystem um Ressourcen erreichbar zu machen und zu benennen.
+        Laut den Autoren von Plan 9, hatte UNIX einige Probleme die zu tief lagen und somit nicht einfach gel\"ost werden konnten.
+        Es gab jedoch auch einige Ideen die in dem neuen System von den Bell Labs \"ubernommen werden konnten.
+        Das war zum einem das Dateisystem um Ressourcen erreichbar zu machen und zu benennen.
     
         Die Sicht auf das System ist auf drei Prinzipien aufgebaut.
         Erstens die Ressourcen werden benannt und sind erreichbar genauso wie Dateien in einem Hierarchischem Dateisystem. 
