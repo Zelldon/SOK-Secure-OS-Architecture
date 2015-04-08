@@ -41,81 +41,96 @@
     
     \subsection{Motivation}
       Die Entwicklung der Betriebssysteme hat gezeigt das es verschieden und gute L\"osungen gibt um ein sicheres Betriebssystem zu entwickeln.
-      Jedoch scheiterte es oft entweder an der Umsetzung oder an der Usability. 
-      In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen  zusammengetragen.
+      Jedoch scheiterte es oft entweder an der Umsetzung oder an der Nutzbarkeit. 
+      In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen zusammengetragen.
       Falls m\"oglich wird versucht die Mechanismen zu vergleichen und zu zeigen welche sich evtl. sogar durchgesetzt haben.
    \section{Betriebssysteme}
-     Seit dem die Idee existiert Mehrbenutzersysteme zu Entwickeln wurde auch dar\"uber nachgedacht wie man die einzelnen Benutzer isolieren kann.
+     Seitdem die Idee existiert Mehrbenutzersysteme zu Entwickeln wurde auch dar\"uber nachgedacht wie man die einzelnen Benutzer isolieren kann.
      Aber nicht nur \"uber die Isolierung wurde nachgedacht sondern auch grundlegend wie man die Daten 
      der jeweiligen Nutzer vor unberechtigten Zugriffen sch\"utzen kann.
      
   \section{Sicherheitsmechanismen} \label{sec:protection}
-    \subsection{Protection Rings}
+    In diesem Abschnitt werden zum einen Protection Rings (siehe Abschnitt \ref{subsec:protectrings}), Access Bits bzw. Access Matrix 
+    (siehe Abschnitt \ref{subsec:access}) und Capability Systeme (siehe Abschnitt \ref{subsec:capability}) erkl\"art und 
+    auf die bereits erstellten Arbeiten verwiesen.
+    \subsection{Protection Rings} \label{subsec:protectrings}
+      Im folgendem Abschnitt wird kurz auf das Multiplexed Information and Computing Service (Multics) Betriebssystem
+      aus \cite{inproc:multics} eingegangen und dieses erl\"autert danach werden mithilfe von Multics die Protection Rings erkl\"art.
       \subsubsection{Multics}  
-   
-		   Informationen werden in Segmente gespeichert und k\"onnen geteilt werden sie beinhalten eigene Attribute 
-		   ueber deren Gr\"o\ss e sowie die Zugriffsrechte.
-		   
-		   In Multiplexed Information and Computing Service - Multics  liefer Segmentierung eine allgemeine Basis fuer den direkten Zugriff
-		   und das Teilen von online Informationen durch erfuellen zweier Desigin Ziele. : 1 direkt Zugriff 2 Zugriffskontrolle
-		   
-		   Vorteil der direkten Adressierung ist das die Informationen nicht mehr kopiert werden m\"ussen. Da alle Instruktionen und Daten
-		   im System vom Prozessor adressierbar sind. D.h. duplizierung von Prozeduren und Daten is unn\"otig soll heissen Abbilder von Prozessen m\"ussen
-		   nicht vorher geladen werden die orginalen Prozeduren k\"onnen direkt adressiert werden.
-		   
-		  Dies soll dem Programmierer eine attraktive reduktion der programm komplexitaet versprechen.
+        In Multics werden Informationen in Segmente gespeichert und k\"onnen geteilt 
+				werden sie beinhalten eigene Attribute \"uber deren Gr\"o\ss e sowie die Zugriffsrechte.
+				Segmentierung liefert eine allgemeine Basis f\"ur den direkten Zugriff und das Teilen von online Informationen durch erf\"ullen zweier Design Ziele.
+		    \begin{enumerate}
+		      \item direkter Zugriff
+		      \item Zugriffskontrolle
+        \end{enumerate}
+		    Vorteil der direkten Adressierung ist das die Informationen nicht mehr kopiert werden m\"ussen, da alle Instruktionen und Daten
+		    im System vom Prozessor adressierbar sind. D.h. Duplizierung von Prozeduren und Daten ist unn\"otig soll hei\ss en Abbilder von Prozessen m\"ussen
+		    nicht vorher geladen werden die originalen Prozeduren k\"onnen direkt adressiert werden.
+		    Dies soll dem Programmierer eine attraktive Reduktion der Programm Komplexit\"at versprechen.
 		  
-		  In Multics Segemente sind Packete von Informationen welche direkt Adressiert und Kontrolliert Zugegriffen werden koennen.
-		  Mit jedem Segement sind Zugriffsattribute fuer jeden User der auf dieses Segment evtl. zugreifen will assoziiert.
-		  Diese Attribute werden von der Hardware ueberprueft. Jede Information kann direkt als Segment referenziert werden
-		  in anderen Systemen meist online informationen als Dateien referenziert werden. (unix, plan9 etc.)
+		    Multics Segmente sind Pakete von Informationen welche direkt Adressiert und Kontrolliert Zugegriffen werden k\"onnen.
+		    Mit jedem Segment sind Zugriffsattribute f\"ur jeden User der auf dieses Segment evtl. zugreifen will assoziiert.
+		    Diese Attribute werden von der Hardware \"uberpr\"uft. Jede Information kann direkt als Segment referenziert werden
+		    in anderen Systemen meist online Informationen als Dateien referenziert werden. (unix, plan9 etc.)
 		  
 		  %S. 31
-		  In den meisten Systemen die Informationsteilung zur Verfuegung stellen sind die genannten beiden Kriterien nicht erfuellt.
-		  Als Beispiel wird im Paper \cite{inproc:multics} das CTSS System genannt, welches Informationen die geteilt werden sollen in Dateien vorhaelt.
-		  Das bedeutet das eine Kopie in den Buffer des Users kopiert werden muss damit der Benutzer darauf Zugreifen kann. (Benoetigt IO - Request)
+		    In den meisten Systemen die Informationsteilung zur Verfuegung stellen sind die genannten beiden Kriterien nicht erfuellt.
+		    Als Beispiel wird im Paper \cite{inproc:multics} das CTSS System genannt, welches Informationen die geteilt werden sollen in Dateien vorh\"alt.
+		    Das bedeutet das eine Kopie in den buffer des Users kopiert werden muss damit der Benutzer darauf Zugreifen kann. (Benoetigt IO - Request)
 		  
-		  In nicht segmentierten Systemen das Benutzen von Kern Abbildern macht es sogut wie Unmoeglich den Zugriffskontrolle durchzusetzen.
+		    In nicht segmentierten Systemen macht das Benutzen von Kern Abbildern es so gut wie unm\"oglich die Zugriffskontrolle durchzusetzen.
 		  
-		 Die Hardware hat auf jedes Segment Zugriff mithilfe eines Segment descriptors, der die attribute beinhaltet.
+        Die Hardware hat auf jedes Segment Zugriff mithilfe eines Segmentdeskriptors, der die Attribute beinhaltet.
+		    Name und Attribute eines Segments sind mit einem Katalog assoziiert. Im Grunde existiert eine Tabelle mit je einem Eintrag f\"ur ein Segment. 
+		    Ein Eintrag beinhaltet den Namen sowie die Segmentattribute. In Multics ist dieser Katalog als mehrere
+		    Segmente Implementiert und wird Verzeichnis bzw. Directory genannt. Das Verzeichnis wird in einem Baum Strukturiert.
+		    D.h. ein Segmentname besteht aus einer Liste von einzelnen Subnamen die die Position des Eintrags im Baum reflektieren.
+		    (Subname = Entryname, Liste = Pfadname)
+		    Der Pfadname ist in der ganzen Hierarchie einzigartig und der Entryname nur im gegeben Directory.
+		     
+		    Multics gibt dem Nutzer gro\ss e Menge an Segmentdeskriptoren sodass das Zwischenspeichern der Informationen nicht mehr notwendig ist und 
+		    die Informationen nicht ihre Zugeh\"origkeit verliert. Zudem hei\ss t das ein Multics Nutzer keine Dateien benutzt sondern alle Informationen
+		    als Segmente referenziert., welche direkt vom Programm erreichbar sind.
 		 
-		 Multics gibt dem nutzer grosse Menge an segment descriptoren sodass Buffering der Informationen nicht mehr notwendig ist und die Informationen nicht
-		 ihre zugehoerigkeit verliert. Zudem heisst das ein Multics user keine Dateien benutzt sondern alle Informationen
-		 als Segmente referenziert., welche direkt vom Programm erreichbar sind.
-		 
-		 Fuer Multics users ersjcheint Speicher als eingeschlossen grosser unabhaengiger linearer Kernspeicher, jeder mit einem eigenen descriptor assoziiert. 
-		 Der Zugriff erfolgt durch [name, i] wobei name der symbolische Name des Segments und i ist die Wort Zahl im Linearen Speicher.
-		 Jeder User kann auf [name, i] referenzieren jedoch hat er nur die Zugriffsrechte die er auch vom Ersteller des Segments zugewiesen bekommen hat
-		 und die im Segment deskriptor eingetragen sind. Kombinationen von den folgenden Zugriffsrechten ''read'', ''write'', ''execute'' und ''append'' sind moeglich.
-		 
-		 Segmente koennen zudem in gleich grosse Teile geteilt werden sogenannten Pages. Dies wird auch in heutigen Systemen noch benutzt.
-		 Im Paper \cite{inproc:multics} wird auf die Vorteile drauf hingewiesen das die Allokierung durch die gleiche Groesse sehr vereinfacht wird,
-		 das die Pages nur im Speicher sein muessen die auch benoetigt werden das bedeutet das Segment groessen keine Einschraenkungen mehr besitzen.
-		 Sie weisen auch darauf hin das die Pages angefordert werden koennen die gebraucht 
-		 werden und das keine anderen dann in den Speicher mit uebertragen werden muessen.
-		 Das ist auch eine Sache die heutzutage in aktuellen Betriebssystemen noch betrieben wird sogenanntes Paging welches mithilfe von
-		 verschieden Algorithmen wie FIFO (First In First Out), LRU (Last Recently used) oder anderen umgesetzt wird.
-		 
-		 Was heutzutage der TLB (translation lookaside buffer) bzw. die MMU macht (Seitennummern in Speicheradressen um mappen) hat in Multics der supervisor gemacht
-		 dieser transformierte den symbolischen Namen in eine passende Hardware Adresse, welche direkt vom Prozessor fuer weitere Referenzierungen benutzt wird.
-		 
-		 In der Multics Implementierung sind alle Segmente gepaged und die Page size betraegt 1024 Woerter.
-		 
-		 Prozesse sind Programme in der Ausfuehrung (definition \cite{inproc:multics}[S. 34]) Jeder Prozess in Multics besitzt ein privates Deskriptor Segement welches
-		 Segmentnummern in Kernspeicher adressen umwandelt und eine Private Tabelle welches die symbolischen Segmentnamen in Segmentnummern mapped. Wird
-		 auch als Known Segment Table KST bezeichnet. Supervisor in Multics ist im grunde wie der Kernel in heutigen Unix Systemen.
-		 Nicht wie in anderen Systemen arbeitet er in eigenem Speicherraum oder Prozess sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess geteilt. 
-		 Immer wenn ein neuer Prozess erstellt wird, wird das Deskriptor Segment mit den supervisor deskriptoren initialisiert. Dadurch muessen aber auch die Supervisor
-		 Segmente vor unautorisierten Zugriffen geschuetzt werden. Multics unterstuetzt den Benutzer mit einem sogenannten ring protection Mechanismen,
-		 welches die Segmente in dem Adressraum in einzelne Mengen mit verschiedenen Zugriffsrechten unterteilt. Dieser Mechanismus wird vom Supervisor zum
-		 eigenen Schutz verwendet.
-		 
-		 Name und Attribute eines Segments sind mit einem Katalog assoziiert. Im Grunde existiert eine Tabelle mit je einem Eintrag fuer ein Segment. 
-		 Ein Eintrag beinhaltet den Namen sowie die Segment Attribute. In Multics ist dieser Katalog als mehrere
-		 Segmente Implementiert und wird Verzeichnis bzw. directory genannt. Das Verzeichnis wird in einem Baum Strukturiert.
-		 D.h. ein Segmentname besteht aus einer Liste von einzelnen Subnamen die die Position des Eintrags im Baum reflektieren. (Subname = Entryname, liste = pathname)
-		 Pathname ist einzigartig in der ganzen Hierarchie und der Entryname nur im gegeben Directory.
-  \subsection{Protection Rings}
+        F\"ur Multics Nutzer erscheint der Speicher als eingeschlossen gro\ss er unabh\"angiger linearer Kernspeicher,
+        jeder assoziiert mit einem eigenen Deskriptor. 
+        Der Zugriff erfolgt durch [\textit{Name}, \textit{i}] wobei \textit{Name} der symbolische Name des Segments und \textit{i} ist die Wort Zahl
+        im Linearen Speicher. Jeder Nutzer kann auf [\textit{Name}, \textit{i}] referenzieren jedoch hat er nur die Zugriffsrechte die er auch vom Ersteller
+	      des Segments zugewiesen bekommen hat und die im Segmentdeskriptor eingetragen sind.
+	      Kombinationen von den folgenden Zugriffsrechten ''read'', ''write'', ''execute'' und ''append'' sind m\"oglich.
+	 
+	      Segmente k\"onnen zudem in gleich gro\ss e Teile geteilt werden sogenannten Pages. Dieser Ansatz der Segmentierung
+	      und des Paging wird auch in heutigen Systemen noch verwendet.
+	     
+	      Im Paper \cite{inproc:multics} wird auf die Vorteile hingewiesen das die Allokierung durch das Paging sehr vereinfacht wird,
+	      sowie das nur die Pages, welche auch ben\"otigt werden, im Speicher sein m\"ussen. 
+	      Das bedeutet das Segmentgr\"ossen keine Einschr\"ankungen mehr besitzen.
+	     
+	      Sie weisen auch darauf hin das die Pages, die gebraucht werden, angefordert werden k\"onnen und das keine anderen dann in 
+	      den Speicher mit \"ubertragen werden m\"ussen.
+	     
+	      Dies wird auch heutzutage in aktuellen Betriebssystemen noch betrieben, sogenanntes Paging welches mithilfe von
+	      verschieden Algorithmen wie FIFO (First In First Out), LRU (Last Recently used) oder anderen umgesetzt wird.
+	 
+	      Was heutzutage der Translation Lookaside Buffer (TLB) bzw. die Memory Managment Unit (MMU) macht
+	      (Seitennummern in Speicheradressen um mappen) hat in Multics der Supervisor gemacht.
+	      Dieser transformierte den symbolischen Namen in eine passende Hardware Adresse, welche direkt vom Prozessor f\"ur weitere Referenzierungen benutzt wird.
+	 
+	      In der Multics Implementierung sind alle Segmente in Pages unterteilt und die Page size betr\"agt 1024 W\"orter.
+        Prozesse sind Programme in der Ausf\"uhrung (vgl. \cite{inproc:multics}[S. 34]). 
+		    Jeder Prozess in Multics besitzt ein privates Deskriptor Segment welches Segmentnummern in Kernspeicheradressen umwandelt und eine Private Tabelle besitzt   
+		    die die symbolischen Segmentnamen in Segmentnummern abbildet. Wird auch als Known Segment Table (KST) bezeichnet.
+		    Der Supervisor in Multics ist im Grunde wie der Kernel in heutigen Unix bzw. Linux Systemen.
+
+    		Nicht wie in anderen Systemen arbeitet er in eigenem Speicherraum oder Prozess sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess
+    	  geteilt. Immer wenn ein neuer Prozess erstellt wird, wird das Deskriptor Segment mit den Supervisordeskriptoren initialisiert.
+    	  Dadurch m\"ussen aber auch die Supervisor Segmente vor unautorisierten Zugriffen gesch\"utzt werden.
+    	  Multics unterst\"utzt den Benutzer mit einem sogenannten Ring Protection Mechanismen, welches die Segmente in dem Adressraum in einzelne Mengen mit 
+    		verschiedenen Zugriffsrechten unterteilt. Dieser Mechanismus wird vom Supervisor zum eigenen Schutz verwendet. Siehe dazu n\"achster Abschnitt 
+    		\ref{subsubsec:protectrings}
+    		
+  \subsubsection{Protection Rings} \label{subsubsec:protectrings}
     Multics wurde zuerst auf einem Honeywell 645 Computer system ausgef\"uhrt jedoch konnte die Hardware nicht viel Zugriffsmechanismen zur verf\"ugung stellen.
     Deshalb wurde eine neue Hardware entwickelt die die Zugriffsmechanismen mejhr auf Hardwareebene bringen sollte, sodass das meiste nicht mehr \"uber Software
     gepr\"uft werden muss. Das hei\ss t die sogenannten Protection rings wurden sogut wie vollst\"andig in Hardware umgesetzt. \cite{inproc:protec-rings}
@@ -174,7 +189,7 @@
       \item Der Nutzer kann sich selbst sch\"utzen w\"arend er eigene oder andere Programme debugged.
     \end{itemize}
     
-    \subsection{Access bits oder Matrix}
+    \subsection{Access bits oder Matrix} \label{subsec:access}
       \subsubsection{Unix}
 		    Unix wurde von den bekannten Informatikern Dennis Ritchie (C) und Ken Thompson (Unix, UTF8, Plan9 etc.) an den Bell Labs entwickelt.
 		    Es ist ein Universal-, Mehrbenutzer- und interaktives Betriebssystem. Ein gro\ss er Teil von Unix ist in C geschrieben was vorallem Multiprogramming
@@ -269,7 +284,7 @@
        als ein Nutzer mit einer liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren diese k\"onnen die
        besagte Gruppe dann Verwalten. Normalerweise geh\"ort eine Datei zu dem Nutzer der diese erstellt hat. 
        Der Gruppenname wird vererbt von dem Verzeichnis in dem die neue Datei liegt.
-    \subsection{Capabilities}
+    \subsection{Capabilities} \label{subsec:capability}
       
       \subsubsection{CAP}
 		     Wurde entwickelt um detaillierten Speicherschutz zu gew\"ahrleisten. Die Intention ist das jedes Modul eines Programms welches auf dem CAP ausgef\"uhrt wird
