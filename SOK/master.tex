@@ -21,11 +21,6 @@
     Auf Kernel, Sicherheitsmechanismen sowie einige Kombinationen bzw. sichere Betriebssysteme soll in diesem
     Systematization of Knowledge (SOK) eingegangen werden.
     %TODO move cite to intro
-    Es werden dabei Mikro-, Exokernel sowie andere Hybride Systeme aus den folgenden Papers 
-    \cite{inproc:micro, inproc:exo, inproc:spin, inproc:eros, inproc:asbestos} vorgestellt.
-    Des Weiteren werden Zugriffsmechanismen wie Access bits, Protection Rings und auch Capabilities erl\"autert
-    und anhand von Beispiel Systemen aufgezeigt. Die folgenden Papers wurden dabei verwendet:
-    \cite{inproc:multics, inproc:protec-rings, inproc:unix, inproc:plan9, inproc:cap}.
   \end{abstract}
   
   \section{Einleitung} \label{sec:intro} 
@@ -44,16 +39,20 @@
     
     Deshalb werden in diesem SOK einige historische Paper verwendet und deren Arbeit
     zusammengefasst und auf den Punkt gebracht.
+    So werden z.B. Mikro-, Exokernel sowie andere Hybride Systeme aus den folgenden Papers 
+    \cite{inproc:micro, inproc:exo, inproc:spin, inproc:eros, inproc:asbestos} vorgestellt.
+    Des Weiteren werden Zugriffsmechanismen wie Access bits, Protection Rings und auch Capabilities erl\"autert
+    und anhand von Beispiel Systemen aufgezeigt. Die folgenden Papers wurden dabei verwendet:
+    \cite{inproc:multics, inproc:protec-rings, inproc:unix, inproc:plan9, inproc:cap}.
     
     \subsection{Motivation}
-      Die Entwicklung der Betriebssysteme hat gezeigt das es verschieden und gute L\"osungen gibt um ein sicheres Betriebssystem zu entwickeln.
-      Jedoch scheiterte es oft entweder an der Umsetzung oder an der Nutzbarkeit. 
-      In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen zusammengetragen.
-      Falls m\"oglich wird versucht die Mechanismen zu vergleichen und zu zeigen welche sich evtl. sogar durchgesetzt haben.
-   \section{Betriebssysteme}
      Seitdem die Idee existiert Mehrbenutzersysteme zu Entwickeln wurde auch dar\"uber nachgedacht wie man die einzelnen Benutzer isolieren kann.
      Aber nicht nur \"uber die Isolierung wurde nachgedacht sondern auch grundlegend wie man die Daten 
      der jeweiligen Nutzer vor unberechtigten Zugriffen sch\"utzen kann.
+     Die Entwicklung der Betriebssysteme hat gezeigt das es verschieden und gute L\"osungen gibt um ein sicheres Betriebssystem zu entwickeln.
+     Jedoch scheiterte es oft entweder an der Umsetzung, Performanz oder an der Nutzbarkeit. 
+     In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen zusammengetragen.
+     Falls m\"oglich wird versucht die Mechanismen zu vergleichen und zu zeigen welche sich evtl. sogar durchgesetzt haben.
      
   \section{Sicherheitsmechanismen} \label{sec:secure}
     In diesem Abschnitt werden zum einen Protection Rings (siehe Abschnitt \ref{sec:secure:protectrings}), Access Bits bzw. Access Matrix 
