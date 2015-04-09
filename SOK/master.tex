@@ -20,7 +20,10 @@
     
     Auf Kernel, Sicherheitsmechanismen sowie einige Kombinationen bzw. sichere Betriebssysteme soll in diesem
     Systematization of Knowledge (SOK) eingegangen werden.
-    %TODO move cite to intro
+    Es werden dabei Mirco-, Exokernel sowie Hybride Systeme und Zugriffsmechanismen
+    wie Protection Rings, Access bits und Capabilities vorgestellt und erl\"autert.
+    Es wird versucht bei den einzelnen Konzepten Bezug auf die heutigen Systeme und die Verwendung von Mechanismen zu nehmen,
+    dies soll vor allem zeigen welche Konzepte sich durchgesetzt haben.
   \end{abstract}
   
   \section{Einleitung} \label{sec:intro} 
@@ -60,7 +63,7 @@
     auf die bereits erstellten Arbeiten verwiesen.
     \subsection{Protection Rings} \label{sec:secure:protectrings}
       Im folgendem Abschnitt wird kurz auf das Multiplexed Information and Computing Service (Multics) Betriebssystem
-      aus \cite{inproc:multics} eingegangen und dieses erl\"autert danach werden mithilfe von Multics die Protection Rings erkl\"art.
+      aus \cite{inproc:multics} eingegangen und dieses erl\"autert, danach werden mithilfe von Multics die Protection Rings erkl\"art.
       \subsubsection{Multics}  
         In Multics werden Informationen in Segmente gespeichert und k\"onnen geteilt 
 				werden sie beinhalten eigene Attribute \"uber deren Gr\"o\ss e sowie die Zugriffsrechte.
@@ -322,7 +325,7 @@
 		     ist das nachdem Boot ein sogenannter init Prozess erzeugt wird der als Wurzel der Prozesshierarchie hierbei steht, \"ahnlich wie 
 		     im CAP System \cite{Url:linux:processes}.
 		     
-  \section{Weitere Sicheresysteme} \label{sec:other}
+  \section{Weitere sichere Systeme} \label{sec:other}
     Unabh\"angig von den zuvor bereits erw\"ahnten Zugriffsmechanismen wollten einige Systementwickler und Wissenschaftler neue weitere sichere Systeme
     vor allem minimalistische Kernel entwickeln. Minimalistische Kernel um somit die Sicherheit eines Systems besser zu gew\"ahrleisten.
     Im folgendem Abschnitt wird dabei auf die Entwicklung des Mikro-, Exokernels und auf einige andere Versuche eingegangen sichere Systeme zu erstellen.
