@@ -1,7 +1,7 @@
-\documentclass[german, 9pt,technote]{IEEEtran}
+\documentclass[11pt,technote]{IEEEtran}
 \usepackage{url} %to break the url in the bilbio
 \usepackage{ngerman}
-\newcommand\BIBentryALTinterwordstretchfactor{2.5}
+%\newcommand\BIBentryALTinterwordstretchfactor{2.5}
 \usepackage{cite}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -545,12 +545,21 @@
       
      
   \section{Fazit}
-    Viel Arbeit in sichere System ist bereits geflossen vor allem wurde schon sehr fr\"uh \"uber Sicherheitsmechanismen nachgedacht.
+    Viel Arbeit ist in sichere System bereits geflossen, vor allem wurde schon sehr fr\"uh \"uber Sicherheitsmechanismen nachgedacht.
     Jedoch sind sie oft an der Umsetzung oder Nutzbarkeit gescheitert. Denn zusammenfassend ist zu sagen das einzig die Ans\"atze von Unix bzw. Plan
     9 und Mikrokernel sich wirklich in die heutigen Systeme durchgesetzt haben. Betrachten wir die heutigen Zugriffsmechanismen so werden in Linux 
     und deren Variationen weiterhin access bits verwendet und in Windows oder Mac OS X sogenannte \textit{access control lists} (ACL)
-    \cite{Url:windows:acl, Url:macosx:acl}.
-    In Linux k\"onnen zudem ACLs benutzt werden sodass sp\"ater ein Datenaustausch mit Windows \"uber Samba vollzogen werden kann \cite{Url:linux:acl}.    
+    \cite{Url:windows:acl, Url:macosx:acl}. In Linux k\"onnen zudem ACLs benutzt werden, sodass sp\"ater ein Datenaustausch mit Windows \"uber
+    Samba vollzogen werden kann \cite{Url:linux:acl}.    
+    
+    Das die anderen Systeme sich nicht durchgesetzt haben hei\ss t jedoch nicht das deren Ans\"atze schlecht waren.
+    Das Problem was oft sichere Systeme besitzen ist wie bereits erw\"ahnt die Performanz oder Nutzbarkeit. Was f\"ur 
+    viele normale Nutzer ein absolutes K.O. Kriterium ist, da die meisten nicht besonders viel auf Sicherheit setzen.
+    Jedenfalls nicht soviel das sie einige Defizite annehmen. Dies ist durch aus Wahrscheinlich einer der Gr\"unde warum sich solche
+    Forschungssysteme nicht durch setzen k\"onnten, davon abgesehen das andere Systeme heutzutage den Markt beherrschen und
+    die Unterst\"utzung f\"ur sichere Systeme nicht gro\ss\ genug ist.   
+    
+    
 \bibliographystyle{IEEEtran}
 \bibliography{masterbib}
 \end{document}
