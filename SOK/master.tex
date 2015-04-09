@@ -1,32 +1,37 @@
-\documentclass[12pt,technote]{IEEEtran}
-%\documentclass[a4paper, 12pt]{scrartcl}
+\documentclass[german, 9pt,technote]{IEEEtran}
+\usepackage{url} %to break the url in the bilbio
+\usepackage{ngerman}
+\newcommand\BIBentryALTinterwordstretchfactor{2.5}
 \usepackage{cite}
-
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \title{SOK - A secure operating system architecture}
 \author{Christopher Zell\\
         zell.christopher@fu-berlin.de}       
-
+%\emergencystrech=2em
 
 \begin{document}
 \maketitle
 
   \begin{abstract}
-    Sichere Systeme bestehen aus verschiedenen Schichten zum einen aus
-    User Interface, Dateisysteme, trusted computer base (TCB) z.B. Kernel aber auch
-    grundlegende Sicherheitsmechanismen.
+    Sichere Systeme bestehen aus verschiedenen Schichten zum einen aus User Interface, Dateisysteme, trusted computer base (TCB)
+    z.B. Kernel aber auch grundlegende Sicherheitsmechanismen. Die richtige Kombination f\"ur ein sicheres System ist dabei sehr wichtig.
     
-    Auf TCB, Dateisysteme sowie einige Sicherheitsmechanismen soll in diesem
+    Auf Kernel, Sicherheitsmechanismen sowie einige Kombinationen bzw. sichere Betriebssysteme soll in diesem
     Systematization of Knowledge (SOK) eingegangen werden.
     
-    %TODO ADD content
+    Es werden dabei Mikro-, Exokernel sowie andere Hybride Systeme aus den folgenden Papers 
+    \cite{inproc:micro, inproc:exo, inproc:spin, inproc:eros, inproc:asbestos} vorgestellt.
+    Des Weiteren werden Zugriffsmechanismen wie Access bits, Protection Rings und auch Capabilities erl\"autert
+    und anhand von Beispiel Systemen aufgezeigt. Die folgenden Papers wurden dabei verwendet:
+    \cite{inproc:multics, inproc:protec-rings, inproc:unix, inproc:plan9, inproc:cap}.
   \end{abstract}
   
-  \section{Einleitung} \label{sec:intro}
-    Sichere Systeme bestehen aus verschiedenen Schichten zum einen aus
-    User Interface, Dateisysteme, trusted computer base (TCB) z.B. Kernel aber auch
-    grundlegende Sicherheitsmechanismen.
+  \section{Einleitung} \label{sec:intro} 
+    Sichere Systeme bestehen aus verschiedenen Schichten zum einen aus User Interface, Dateisysteme, trusted computer base (TCB)
+    z.B. Kernel aber auch grundlegende Sicherheitsmechanismen. Die richtige Kombination f\"ur ein sicheres System ist dabei sehr wichtig.
     
-    Auf TCB, Dateisysteme sowie einige Sicherheitsmechanismen soll in diesem
+    Auf Kernel, Dateisysteme, Sicherheitsmechanismen sowie einige Kombination bzw. sichere Betriebssysteme soll in diesem
     Systematization of Knowledge (SOK) eingegangen werden.
     
     SOK wurde f\"ur die IEEE Symposium on Security and Privacy (SOSP) Konferenz
@@ -34,7 +39,7 @@
     und in einem Paper vereinigen, sodass ein schneller Blick auf bereits getane
     Arbeit erm\"oglicht wird. Denn das Problem was die Veranstalter der Konferenz
     erkannt haben ist, das viele Dinge die bereits in der Vergangenheit entwickelt oder
-    erforscht wurden in Vergessenheit geraten.
+    erforscht wurden in Vergessenheit geraten \cite{Url:sok}.
     
     Deshalb werden in diesem SOK einige historische Paper verwendet und deren Arbeit
     zusammengefasst und auf den Punkt gebracht.
@@ -222,7 +227,7 @@
 		    
 		    UNIX wurde laut den Autoren auch von Multics beeinflusst vor allem in dem Bereich I/O, Shell und deren Funktionalit\"at. (Siehe \cite[S. 374]{inproc:unix})
 		    UNIX hat sich bis heute stark durch gesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
-	    \subsubsection{Plan 9}
+	    \subsubsection{Plan 9} \label{sec:secure:access:plan9}
         Laut den Autoren von Plan 9, hatte UNIX einige Probleme die zu tief lagen und somit nicht einfach gel\"ost werden konnten.
         Es gab jedoch auch einige Ideen die in dem neuen System von Bell Labs \"ubernommen werden konnten.
         Das war zum einem das Dateisystem um Ressourcen erreichbar zu machen und zu benennen.
@@ -273,8 +278,8 @@
         Kontaktiert eine Partei den Authentifizierungsserver um verschl\"usselte Berechtigungstickets, 
         mit dem Schl\"ussel jeder Partei, zu erstellen. Dieses Ticket beinhaltet ein neuen Konversationsschl\"usseln.
         Jede Partei entschl\"usselt sein eigenes Ticket und benutzt den Konversationsschl\"ussel um die \textit{challenge} der anderen Partei zu entschl\"usseln.     
-        Plan 9's Au­then­ti­fi­ka­ti­on erm\"oglicht eine sogenannte \textit{Spricht-f\"ur} Beziehung, sodass ein Benutzer die Befugnis eines anderen besitzt.
-       
+        Plan 9's Authentifikation erm\"oglicht eine sogenannte \textit{Spricht f\"ur} Beziehung, sodass ein Benutzer die Befugnis eines anderen besitzt.
+        
         Plan 9 besitzt keine Superuser sowie sie in UNIX existieren. Jeder Server ist verantwortlich f\"ur das aufrechterhalten der eigenen Sicherheit.
         Normalerweise wird der Zugriff nur \"uber die Konsole, welche mit einem Passwort gesch\"utzt ist, erlaubt.
         Wenn eine Datei durch ein Nutzer \textit{read} gesch\"utzt ist kann nur dieser Nutzer Zugriff an andere weiter geben.
@@ -317,11 +322,10 @@
 		     ist das nachdem Boot ein sogenannter init Prozess erzeugt wird der als Wurzel der Prozesshierarchie hierbei steht, \"ahnlich wie 
 		     im CAP System \cite{Url:linux:processes}.
 		     
-  \section{Minimalistische Kernel-Varianten} \label{sec:other} %TODO change section
-    Unabh\"angig von den zuvor bereits erw\"ahnten Zugriffsmechanismen wollten einige Systementwickler und Wissenschaftler neue minimalistische Kernel
-    erzeugen um somit die Sicherheit eines Systems besser zu gew\"ahrleisten. Im folgendem Abschnitt wird dabei auf die Entwicklung
-    des Mikro-, Exokernels und einigen anderen Variationen eingegangen.
-    %TODO change intro
+  \section{Weitere Sicheresysteme} \label{sec:other}
+    Unabh\"angig von den zuvor bereits erw\"ahnten Zugriffsmechanismen wollten einige Systementwickler und Wissenschaftler neue weitere sichere Systeme
+    vor allem minimalistische Kernel entwickeln. Minimalistische Kernel um somit die Sicherheit eines Systems besser zu gew\"ahrleisten.
+    Im folgendem Abschnitt wird dabei auf die Entwicklung des Mikro-, Exokernels und auf einige andere Versuche eingegangen sichere Systeme zu erstellen.
     \subsection{Mikrokernel}
 	    Grundidee des Mikrokernels ist das der Kernel minimiert und das alles so gut es geht ausgelagert werden soll.
 	    Die Vorteile dieser Herangehensweise ist das ein klares Mikrokernel Interface die modularit\"at der Systemstruktur erh\"oht.
@@ -494,79 +498,59 @@
       
     \subsection{Asbestos}        
       Asbestos ist ein neuer Prototyp eines Betriebssystems welches neuartige Kennzeichnungs- und Isolierungsmechanismen 
-      liefert die helfen \textit{exploitable} Software einzugrenzen.
+      liefert, die helfen \textit{exploitable} Software einzugrenzen.
 
-      Ein m\"achtiges Werkzeug um \textit{exploits} einzugrenzen ist das Prinzip des geringsten Recht. 
-      D.h. das jede Systemkomponente die minimale Anzahl an Rechten besitzen soll
-      die es ben\"otigt um seine Aufgabe auszuf\"uhren. Ungl\"ucklicherweise k\"onnen derzeitige Betriebssysteme nicht das Prinzip des geringsten Recht erf\"ullen.
+      Ein m\"achtiges Werkzeug um \textit{exploits} einzugrenzen ist das Prinzip des geringsten Rechts.
+      D.h. das jede Systemkomponente die minimale Anzahl an Rechten besitzen soll die es ben\"otigt um seine Aufgabe auszuf\"uhren.
+      Siehe dazu auch den Ansatz von CAP in Abschnitt \ref{sec:secure:capability}. Ungl\"ucklicherweise k\"onnen derzeitige Betriebssysteme 
+      nicht das Prinzip des geringsten Recht erf\"ullen. Asbestos Beitr\"age sind zweif\"alltig, zum einen benutzen alle Zugriffskontrollen die Asbestos labels. 
+      Es handelt sich dabei um eine Primitive die die Vorteile von discretionary (DAC) und mandatory (MAC) Zugriffskontrolle kombiniert.
       
-      Asbestos Beitr\"age sind zweif\"alltig, zum einen benutzen alle Zugriffskontrollen die Asbestos labels. 
-      Es handelt sich dabei um eine Primitive die die Vorteile
-      von discretionary (DAC) und mandatory (MAC) Zugriffskontrolle kombiniert.
-      
-      Bei DAC wird die Entscheidung, ob auf eine Ressource zugegriffen werden darf,  
-      allein auf der Basis der Identität des Akteurs getroffen. 
-      %http://de.wikipedia.org/wiki/Discretionary_Access_Control
-      
+      Bei DAC wird die Entscheidung, ob auf eine Ressource zugegriffen werden darf, allein auf der Basis der Identität des Akteurs getroffen \cite{Url:dac}.      
       Im Gegensatz zu MAC wo die Entscheidungen über Zugriffsberechtigungen nicht nur auf der Basis der Identität des Akteurs 
       (Benutzers, Prozesses) und des Objekts (Ressource, auf die zugegriffen     
-      werden soll) gefällt, sondern aufgrund zusätzlicher Regeln und Eigenschaften (wie Kategorisierungen, Labels und Code-Wörtern) gemacht werden.
-      %http://de.wikipedia.org/wiki/Mandatory_Access_Control
+      werden soll) gefällt, sondern aufgrund zusätzlicher Regeln und Eigenschaften (wie Kategorisierungen, Labels und Code-Wörtern) gemacht werden \cite{Url:mac}.
       
-      Labels bestimmen welche Dienste ein Prozess aufrufen und mit welchen anderen Prozessen er interagieren kann. 
-      Asbestos labels k\"onnen zudem den Informationsfluss in
-      System- und Anwendungskomponenten verfolgen und limitieren.
-      Asbestos labels unterst\"utzen dezentralisierte Abteilungen die jeder Prozess dynamisch erstellen und manipulieren kann.
-      Asbestos gibt einen Programm das eine neue Abteilung erstellt ein willk\"urliches Recht um die Daten in der Abteilung freizugeben.
-      Das Programm kann dieses Recht weggeben welches das Recht \"ahnlich einer \textit{capability} macht.
+      Die Labels bestimmen welche Dienste ein Prozess aufrufen und mit welchen anderen Prozessen er interagieren kann. 
+      Asbestos Labels k\"onnen zudem den Informationsfluss in System- und Anwendungskomponenten verfolgen und limitieren.
+      Sie unterst\"utzen dezentralisierte Abteilungen, die jeder Prozess dynamisch erstellen und manipulieren kann.
+      Asbestos gibt einen Programm das eine neue Abteilung erstellt ein willk\"urliches Recht, um die Daten in der Abteilung freizugeben.
+      Das Programm kann dieses Recht weggeben, welches das Recht \"ahnlich einer \textit{capability} macht.
       
-      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion welche Serveranwendungen 
+      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion welche f\"ur Serveranwendungen 
       effizient viele gleichzeitige Nutzer unterst\"utzt und isoliert.
-      In normalen label Systemen w\"urden Serverprozesse schnell Kontaminiert werden durch Daten die zu mehreren Benutzern 
-      geh\"oren und die m\"oglichkeit verlieren auf jeden 
-      zu antworten. Event Prozesse erlauben es einen einzelnen Prozess privat Zustand f\"ur mehrere Benutzer zu behalten aber isoliert diesen Zustand sodass ein \textit{exploit}
-      nur die Daten des Nutzers beeinflusst. Eine Gruppe von Event Prozessen ist genauso effizient als ein einzelner gew\"ohnlicher Prozess. 
-      \cite[S. 1]{inproc:asbestos}
+      In normalen Label-Systemen w\"urden Serverprozesse schnell, durch Daten die zu mehreren Benutzern geh\"oren, Kontaminiert werden und die 
+      M\"oglichkeit verlieren auf jeden zu antworten. Event Prozesse erlauben es, einen einzelnen Prozesszustand privat f\"ur mehrere Benutzer zu behalten.
+      Aber diesen Zustand so isoliert sodass ein \textit{exploit} nur die Daten des Nutzers beeinflussen w\"urden.
+      Eine Gruppe von Event Prozessen ist genauso effizient als ein einzelner gew\"ohnlicher Prozess \cite[S. 1]{inproc:asbestos}.
       
-      Asbestos IPC \"ahnelt dem von Mikrokerneles wie z.B. von Mach. Prozesse kommunizieren mithilfe von Nachrichten die an Ports gesendet werden. Ein Prozess kann
-      beliebig viele Porst erstellen. Nachrichten gesendet an Ports werden an ein einzelnen Prozess gesendet mit Empfangsrechten f\"ur diesen Port. 
+      Asbestos IPC \"ahnelt dem Mikrokernel IPC wie z.B. von Mach. Prozesse kommunizieren mithilfe von Nachrichten die an Ports gesendet werden. Ein Prozess kann
+      beliebig viele Ports erstellen. Nachrichten gesendet an Ports werden an ein einzelnen Prozess gesendet mit Empfangsrechten f\"ur diesen Port. 
       Initial hat der Prozess
-      die Empfangsrechte der den Port erstellt, aber diese Rechte sind \"ubertragbar. Das Nachrichtenprotokoll von Asbestos wurde von 9P (Plan 9) inspiriert.
+      die Empfangsrechte der den Port erstellt, aber diese Rechte sind \"ubertragbar. Das Nachrichtenprotokoll von Asbestos wurde von 9P (Plan 9) inspiriert
+      siehe Abschnitt \ref{sec:secure:access:plan9}.      
       
+      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert, sondern die Semantik von
+      \textit{capability} basierende sende Rechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche sende Rechte.
+      Genauso wie bei den Prozessen beschr\"ankt der Kernel die Privilegien der Event Prozesse, w\"ahrend diese die ankommenden Nachrichten f\"ur den Nutzer
+      behandeln und isoliert verschiedene Event Prozesszust\"ande.
+      Jeder Event Prozess ist einem konventionellen \textit{base} Prozess assoziiert. Der Kernelzustand der Event Prozesse besteht aus einem \textit{send}, 
+      \textit{recieve} Label, \textit{recieve rights} f\"ur bestimmte Ports und eine Menge privater Speicherseiten plus einige Buchhaltungsinformationen.
+      Alles zusammen z\"ahlt 44 Bytes vom Asbestos Kernelspeicher. Zum Vergleich Asbestos kleinste Prozessstruktur nimmt 320 Bytes ein. 
       
-      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert sondern die Semantik von
-      \textit{capability} basierende
-      sende Rechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche sende Rechte.
-      
-      In Asbestos \textit{event process} abstrahiert den Gedanken als Untermenge von einem Prozesszustand der zu einem bestimmten Nutzer geh\"ort.
-      Genauso wie bei Prozessen beschr\"ankt der Kernel
-      die Privilegien des Eventprozesses w\"ahrend er ankommende Nachrichten f\"ur den Nutzer behandelt. und isoliert verschiedene Event Prozess Zust\"ande.
-      Jeder Event Prozess ist einem konventionellen base Prozess assoziiert. Der Kernel Zustand der Event Prozesse besteht aus einem send, 
-      recieve label und recieve rights f\"ur bestimmte Ports
-      und eine Menge privater Speicherseiten plus einige Buchhaltungsinformationen. Alles zusammen z\"ahlt 44 Bytes vom Asbestos Kernelspeicher. 
-      Zum Vergleich Asbestos kleinste Prozessstruktur
-      nimmt 320 Bytes ein. 
-      
-      Der base Prozess wird nachdem aufrufen des sogenannten \textit{ep\_checkpoints} de-scheduled bist eine Nachricht ankommt 
-      auf einem Port an dem der base Prozess oder einer der
-      Event Prozesse recieve Rechte besitzt. Die Nachricht wird dann behandelt und danach wird der Event Prozess wieder suspendiert.
-      Diese Prozessvariante verursacht weniger Overhead als wenn der Adressraum aufgeteilt wird,
-      somit k\"onnen viele tausende von Event Prozess theoretisch Co-existieren.
+      Der \textit{base} Prozess wird nachdem aufrufen des sogenannten \textit{ep\_checkpoints} de-scheduled bis eine Nachricht auf einem Port ankommt 
+      an dem der \textit{base} Prozess oder einer der Event Prozesse \textit{recieve} Rechte besitzt.
+      Die Nachricht wird dann behandelt und danach wird der Event Prozess wieder suspendiert. Diese Prozessvariante verursacht weniger Overhead als wenn der
+      Adressraum aufgeteilt wird, somit k\"onnen viele tausende von Event Prozess theoretisch Co-existieren.
       
      
-        
-%   
-%  \section{Kernel Unterschiede} \label{sec:kernel}
-%    Um sichere Betriebssysteme zu erstellen haben sich auch einige Wissenschaftler bzw. Informatiker mit der Verbesserung bzw. Verkleinerung
-%    des Kernels befasst. Sie haben diesen so strukturiert das dieser sicher ist und darauf aufbauend versucht ein sicheres Betriebssystem zu erzeugen.
-    
   \section{Fazit}
-    Viel Arbeit in sichere System ist bereits geflossen vor allem auch schon sehr fr\"uh wurde \"uber Sicherheitsmechanismen nachgedacht.
-    Jedoch sind sie oft an der Umsetzung oder Nutzbarkeit gescheitert. Eine Idee w\"are es die Kombination von einige Sicherheitsfeatures
-    wie z.B. ein Plan 9 Betriebssystem mit einem Exokernel und den Protection Rings.
-    
-    
-   \nocite{*}     
+    Viel Arbeit in sichere System ist bereits geflossen vor allem wurde schon sehr fr\"uh \"uber Sicherheitsmechanismen nachgedacht.
+    Jedoch sind sie oft an der Umsetzung oder Nutzbarkeit gescheitert. Denn zusammenfassend ist zu sagen das einzig die Ans\"atze von Unix bzw. Plan
+    9 und Mikrokernel sich wirklich in die heutigen Systeme durchgesetzt haben. Betrachten wir die heutigen Zugriffsmechanismen so werden in Linux 
+    und deren Variationen weiterhin access bits verwendet und in Windows oder Mac OS X sogenannte \textit{access control lists} (ACL)
+    \cite{Url:windows:acl, Url:macosx:acl}.
+    In Linux k\"onnen zudem ACLs benutzt werden sodass sp\"ater ein Datenaustausch mit Windows \"uber Samba vollzogen werden kann \cite{Url:linux:acl}.    
 \bibliographystyle{IEEEtran}
 \bibliography{masterbib}
 \end{document}
