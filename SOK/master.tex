@@ -1,4 +1,4 @@
-\documentclass[9pt,technote]{IEEEtran}
+\documentclass[12pt,technote]{IEEEtran}
 %\documentclass[a4paper, 12pt]{scrartcl}
 \usepackage{cite}
 
@@ -49,11 +49,11 @@
      Aber nicht nur \"uber die Isolierung wurde nachgedacht sondern auch grundlegend wie man die Daten 
      der jeweiligen Nutzer vor unberechtigten Zugriffen sch\"utzen kann.
      
-  \section{Sicherheitsmechanismen} \label{sec:protection}
-    In diesem Abschnitt werden zum einen Protection Rings (siehe Abschnitt \ref{subsec:protectrings}), Access Bits bzw. Access Matrix 
-    (siehe Abschnitt \ref{subsec:access}) und Capability Systeme (siehe Abschnitt \ref{subsec:capability}) erkl\"art und 
+  \section{Sicherheitsmechanismen} \label{sec:secure}
+    In diesem Abschnitt werden zum einen Protection Rings (siehe Abschnitt \ref{sec:secure:protectrings}), Access Bits bzw. Access Matrix 
+    (siehe Abschnitt \ref{sec:secure:access}) und Capability Systeme (siehe Abschnitt \ref{sec:secure:capability}) erkl\"art und 
     auf die bereits erstellten Arbeiten verwiesen.
-    \subsection{Protection Rings} \label{subsec:protectrings}
+    \subsection{Protection Rings} \label{sec:secure:protectrings}
       Im folgendem Abschnitt wird kurz auf das Multiplexed Information and Computing Service (Multics) Betriebssystem
       aus \cite{inproc:multics} eingegangen und dieses erl\"autert danach werden mithilfe von Multics die Protection Rings erkl\"art.
       \subsubsection{Multics}  
@@ -196,7 +196,7 @@
 		      \item Der Nutzer kann sich selbst sch\"utzen w\"arend er eigene oder andere Programme debugged.
 		    \end{itemize}
     
-    \subsection{Access bits oder Matrix} \label{subsec:access}
+    \subsection{Access bits oder Matrix} \label{sec:secure:access}
       Im folgendem Abschnitt werden die Access bits bzw. Access Matrizen als Zugriffsmechanismus anhand der Betriebssysteme Unix und Plan 9 beschrieben.
       \subsubsection{Unix}
 		    Unix wurde von den bekannten Informatikern Dennis Ritchie (C) und Ken Thompson (Unix, UTF8, Plan9 etc.) an den Bell Labs entwickelt.
@@ -224,42 +224,44 @@
 		    UNIX hat sich bis heute stark durch gesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
 	    \subsubsection{Plan 9}
         Laut den Autoren von Plan 9, hatte UNIX einige Probleme die zu tief lagen und somit nicht einfach gel\"ost werden konnten.
-        Es gab jedoch auch einige Ideen die in dem neuen System von den Bell Labs \"ubernommen werden konnten.
+        Es gab jedoch auch einige Ideen die in dem neuen System von Bell Labs \"ubernommen werden konnten.
         Das war zum einem das Dateisystem um Ressourcen erreichbar zu machen und zu benennen.
     
-        Die Sicht auf das System ist auf drei Prinzipien aufgebaut.
+        Die Sicht auf das System ist auf drei Prinzipien gebaut.
         Erstens die Ressourcen werden benannt und sind erreichbar genauso wie Dateien in einem Hierarchischem Dateisystem. 
-        Zweitens es existiert ein Standard Protokoll namens 9P um auf die 
-        Ressourcen zuzugreifen. Drittens die unterschiedlichen Hierarchien die von den verschiedenen Servicen geliefert
-        werden sind Verbunden zu einem einzelnen Privaten
-        Hierarchischem Dateinamensraum. D.h. es existieren sogenannte lokale Namensr\"aume auf den nur die jeweiligen Nutzer Zugriff haben.
+        Zweitens es existiert ein Standard Protokoll namens \textit{9P} um auf die 
+        Ressourcen zuzugreifen. Drittens die unterschiedlichen Hierarchien die von den verschiedenen Services geliefert
+        werden sind verbunden zu einem einzelnen Privaten Hierarchischem Dateinamensraum. 
+        D.h. es existieren sogenannte lokale Namensr\"aume auf den nur die jeweiligen Nutzer Zugriff haben.
         Dieses Feature wird vor allem durch den eigenen Fensterserver benutzt der aus bestimmten Dateien im lokalen 
         Namensraum Daten liest die er dann dem Nutzer anzeigt.
         
-        9P ist ein Netzwerkprotokoll welches Maschinen Zugriff zu entfernten Dateien erm\"oglicht.
-        Es als Menge von Transaktionen strukturiert das Anfragen von einem Client zu einem Server sendet und die Antwort zur\"uck.
-        9P kontrolliert Dateisystem nicht nur Dateien,
-        es beinhaltet Prozeduren um Dateinamen aufzul\"osen und die Namenshierarchie vom Dateisystem des Servers zu traversieren.
-        Datei Zugriff ist auf Byte und nicht auf Blockebene nicht wie bei NFS und RFS.
+        9P ist ein Netzwerkprotokoll welches Maschinenzugriff auf entfernten Dateien erm\"oglicht.
+        Es ist als Menge von Transaktionen strukturiert das Anfragen von einem Client zu einem Server und die Antwort zur\"uck sendet.
+        9P kontrolliert das Dateisystem nicht nur die Dateien, es beinhaltet Prozeduren um Dateinamen aufzul\"osen und die Namenshierarchie
+        vom Dateisystem des Servers zum traversieren.
+        Dateizugriff ist auf Byte und nicht auf Blockebene, nicht wie bei \textit{NFS} und \textit{RFS}.
         
-        Eine gro\ss e Plan 9 Installation hat eine Anzahl von Computer zusammen in einem Netzwerk, jeder liefert eine eigene Klasse von Anwendung.
-        Geteilter Multiprozessorserver stellen
-        Berechnungszyklen bereit andere gro\ss e Machinen stellen Speicher zur Verf\"ugung. Es existieren sogenannte Workstations welche gleichzusetzen sind mit den 
+        Eine gro\ss e Plan 9 Installation besitzt eine Anzahl von Computer die zusammen in einem Netzwerk verbunden sind,
+        jeder liefert eine eigene Klasse von Anwendung. Geteilte Multiprozessorserver stellen
+        Berechnungszyklen bereit andere gro\ss e Maschinen stellen Speicher zur Verf\"ugung. Es existieren sogenannte Workstations welche gleichzusetzen sind mit den 
         Terminals der alten \textit{time sharing machines}. Wenn jemand das System durch ein Terminal nutzt ist es durch den Benutzer Personalisiert.
     
-        Das Dateisystemmodel ist gut verstanden bei Systembauern aber auch bei allgemeinen Nutzern. 
-        D.h. Services die Datei \"ahnliches Interface bereitstellen leicht zu bauen, leicht zu verstehen
-        und leicht zu benutzen. Das ist auch wirklich eines der wenigen Betriebssystem die mit an die Usability 
-        gedacht haben und es so einfach wie m\"oglich f\"ur die Nutzer zu machen.
+        Das Dateisystemmodel ist gut verstanden bei Systementwicklern aber auch bei allgemeinen Nutzern. 
+        D.h. Services die Datei \"ahnliches Interface bereitstellen sind leicht zu bauen, leicht zu verstehen
+        und leicht zu benutzen. Das ist auch wirklich eines der wenigen Betriebssystem die mit an die Nutzbarkeit
+        gedacht haben um es so einfach wie m\"oglich f\"ur die Nutzer zu machen.
         
-        Der Dateiserver hat drei Speicherlevel, erstens memory buffer, zweitens disk und drittens Massenspeicher in einem write-once-read-many (WORM) Ger\"at. 
-        Disk ist dabei der Cache f\"ur den WORM und memory ist der cache von der disk.
-        Ein feature exisitert das es erm\"oglicht zu bestimmten Zeitpunkten ein dump vom
+        Der Dateiserver hat drei Speicherlevel, erstens den \textit{Memory Buffer}, zweitens die \textit{Disk} und drittens den \textit{Massenspeicher}
+        in einem \textit{write-once-read-many} (WORM) Ger\"at. 
+        Die \textit{Disk} ist dabei der Cache f\"ur den WORM und der \textit{Memory Buffer} ist der Cache der \textit{Disk}.
+        Ein weiteres Feature existiert das es erm\"oglicht zu bestimmten Zeitpunkten einen \textit{dump} vom
         Dateisystem zu erstellen. Das Dateisystem wird dabei eingefroren und alle modifizierten Bl\"ocke seitdem letztem dump werden in ein Warteschlange geschrieben
-        die dann nach und nach auf dem WORM geschrieben werden. Auf die dumps hat man direkten Zugriff sodass man z.B.  alte Compiler Versionen testen kann etc.
-        Zudem kann auch ein kompletter Systembackup erfolgen was aber einige Tage dauert da der Cache vom WORM erst wieder eingelesen werden muss etc.
-        Die Zugriffsrechte der dump files sind die selben wie zuvor jedoch ist das Dateisystem nur read-only. D.h. Dateien k\"onnen nicht im dump geschrieben egal
-        was f\"ur Zugriffsbits gesetzt sind.
+        die dann nach und nach auf dem WORM geschrieben werden. Auf die \textit{dumps} hat man direkten Zugriff sodass man z.B. alte Compiler Versionen
+        und vieles weitere testen kann.
+        Zudem kann auch ein kompletter Systembackup erfolgen, was aber einige Tage dauert da der Cache vom WORM erst wieder eingelesen werden muss etc.
+        Die Zugriffsrechte der \textit{dump} Files sind die selben wie zuvor, jedoch ist das Dateisystem nur \textit{read-only}.
+        D.h. Dateien k\"onnen nicht im \textit{dump} geschrieben werden, egal was f\"ur Zugriffsbits gesetzt sind.
         
         Die einheitliche Verbindung von Komponenten in Plan 9 macht es m\"oglich die Installation in vielen Wegen zu Konfigurieren.
         
@@ -267,198 +269,196 @@
         Nutzer der den Zugriff gew\"ahrt wird Server genannt. Jeder Plan 9 User hat ein assoziierten DES Authentifikationsschl\"ussel. Die Identit\"at
         des Nutzers wird verifiziert durch die M\"oglichkeit bestimmte Nachrichten \textit{challenges} zu Ver- und Entschl\"usseln.
         
-        Die Authentifizierung erfolgt wie folgt: Nachdem die \textit{challenges} ausgetauscht wurden, 
-        Kontaktiert eine Partei  den Authentifizierungsserver um Berechtigungstickets Verschl\"usselt
-        mit dem Schl\"ussel jeder Partei zu erstellen. Dieses beinhaltet ein neuen Konversationsschl\"usseln.
-        Jede Partei entschl\"usselt sein eigenes Ticket und benutzt den Konversationsschl\"ussel
-       um die \textit{challange} der anderen Partei zu entschl\"usseln. Plan 9 Authentifikation erm\"oglicht eine 
-       sogenannte Spricht-f\"ur Beziehung das erm\"oglicht ein Benutzer
-       die Befugnis eines anderen zu haben.
+        Die Authentifizierung wird wie folgt durchgef\"uhrt: Nachdem die \textit{challenges} ausgetauscht wurden, 
+        Kontaktiert eine Partei den Authentifizierungsserver um verschl\"usselte Berechtigungstickets, 
+        mit dem Schl\"ussel jeder Partei, zu erstellen. Dieses Ticket beinhaltet ein neuen Konversationsschl\"usseln.
+        Jede Partei entschl\"usselt sein eigenes Ticket und benutzt den Konversationsschl\"ussel um die \textit{challenge} der anderen Partei zu entschl\"usseln.     
+        Plan 9's Au­then­ti­fi­ka­ti­on erm\"oglicht eine sogenannte \textit{Spricht-f\"ur} Beziehung, sodass ein Benutzer die Befugnis eines anderen besitzt.
        
-       Plan 9 besitzt keine Super user sowie sie in UNIX existieren. Jeder Server ist verantwortlich f\"ur das aufrechterhalten der eigenen Sicherheit.
-       Normalerweise erlauben des Zugriffs nur \"uber die Konsole welche mit einem Passwort gesch\"utzt ist.
-       Wenn eine Datei Lese gesch\"utzt ist durch ein Nutzer kann
-       nur dieser Nutzer Zugriff an andere weiter geben. Es existiert ein sogenannter administrativer Nutzer adm der besondere Rechte besitzt. 
-       None ist zu dem ein Benutzer
-       der immer existiert und der kein Passwort besitzt. Diesem ist es immer erlaubt sich zu verbinden. None besitzt nur eingeschr\"ankte Nutzungsrechte.
-       Die Idee hinter diesem Nutzer ist das selbe wie hinter dem anonymen Nutzer in FTP.
+        Plan 9 besitzt keine Superuser sowie sie in UNIX existieren. Jeder Server ist verantwortlich f\"ur das aufrechterhalten der eigenen Sicherheit.
+        Normalerweise wird der Zugriff nur \"uber die Konsole, welche mit einem Passwort gesch\"utzt ist, erlaubt.
+        Wenn eine Datei durch ein Nutzer \textit{read} gesch\"utzt ist kann nur dieser Nutzer Zugriff an andere weiter geben.
+        Es existiert ein sogenannter administrativer Nutzer \textit{adm} der besondere Rechte besitzt. 
+        None ist zudem ein Benutzer der immer existiert und der kein Passwort besitzt.
+        Diesem ist es immer erlaubt sich zu verbinden. None besitzt nur eingeschr\"ankte Nutzungsrechte. Die Idee hinter diesem Nutzer ist die selbe
+        wie hinter dem anonymen Nutzer in FTP.
        
-       \"Ahnlich wie in UNIX besitzen die Dateien sogenannte Zugriffsbits welche die read, write und execute Rechte anzeigen. 
-       Zum einen f\"ur den Besitzer der Datei, f\"ur eine bestimmte
-       Gruppe und vor alle restlichen. Die Gruppen ist ein neues Feature in Plan 9 welches auch heute noch in Linux verwendet wird. Gruppen sind nichts anderes
-       als ein Nutzer mit einer liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren diese k\"onnen die
-       besagte Gruppe dann Verwalten. Normalerweise geh\"ort eine Datei zu dem Nutzer der diese erstellt hat. 
-       Der Gruppenname wird vererbt von dem Verzeichnis in dem die neue Datei liegt.
-    \subsection{Capabilities} \label{subsec:capability}
-      
+        \"Ahnlich wie in UNIX besitzen die Dateien sogenannte Zugriffsbits welche die \textit{read}, \textit{write} und \textit{execute} Rechte anzeigen. 
+         Zum einen f\"ur den Besitzer der Datei, f\"ur eine bestimmte Gruppe und vor allen restlichen.
+         Die Gruppen sind ein neues Feature in Plan 9 welches auch heute noch in Linux verwendet wird. Gruppen sind nichts anderes
+         als ein Nutzer mit einer Liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren diese k\"onnen die
+         besagte Gruppe dann Verwalten. Normalerweise geh\"ort eine Datei zu dem Nutzer der diese erstellt hat. 
+         Der Gruppenname wird vererbt von dem Verzeichnis in dem die neue Datei liegt. In Linux ist es \"ahnlich nur der der Unterschied liegt darin
+         das eine Datei die default Gruppe des Nutzers erbt und nur \textit{root} eine Gruppe ver\"andern darf \cite{Url:linux:groups} \cite{Url:linux:groupmod}.
+    \subsection{Capabilities} \label{sec:secure:capability}
+      Im folgenden Abschnitt werden Capabilities Zugriffsmechanismen anhand vom Cambridge CAP Computersystem erkl\"art.
       \subsubsection{CAP}
-		     Wurde entwickelt um detaillierten Speicherschutz zu gew\"ahrleisten. Die Intention ist das jedes Modul eines Programms welches auf dem CAP ausgef\"uhrt wird
-		     nur Zugriff auf genau die und nur die Daten besitzen soll welche sie auch wirklich f\"ur korrekte funktionalit\"at ben\"otigt.
+		     CAP wurde entwickelt um detaillierten Speicherschutz zu gew\"ahrleisten. Die Intention ist das jedes Modul eines Programms,
+		     welches auf dem CAP ausgef\"uhrt wird, nur Zugriff auf genau die und nur die Daten besitzen soll,
+		     welche sie auch wirklich f\"ur korrekte Funktionalit\"at ben\"otigt.
 		     
-		     
-		     Capabilities werden benutzt um in CAP den Zugang zu Segment zu gew\"ahrleisten.
-		     Capabilities besitzen base und limit des Segments sowie sogenannten access status. Dieser Status
-		     besteht aus 5 bits, drei davon sind f\"ur den Datenzugriff also read, write und execute die anderen beiden sind f\"ur den capability Zugriff,
-		     d.h. read capability und write capability. Es wird zwischen data typ und capability type capabilities unterschieden,
-		     der erste Typ besitzt bits in den ersten drei bits und
-		     der zweite Typ in den letzten. Es existiert keine capability mit gesetzten data und capability access bits. Capabilities werden in Segmenten gespeichert die
-		     capability type access besitzen. Zu jeder Lebenszeit eines Prozesses sind nur die Ressourcen erreichbar die von den
-		     capabilities definiert wurden die der Prozess
-		     benutzen kann. Mit jedem Prozess ist ein fundamentales Segment assoziiert genannt Process Resource List (PRL). 
-		     Im CAP Betriebssystem existiert eine Prozesshierarchie.
-		     Als Wurzel der Hierarchie steht ein einzelner Prozess deren PRL wird auch Master Ressource List genannt.    
-		     Das Programm welches in diesem Prozess l\"auft ist Verantwortlich f\"ur die Erstellung und Verwaltung von Level 2 
+		     Capabilities werden benutzt um in CAP den Zugang zu Segmenten zu gew\"ahrleisten.
+		     Capabilities besitzen \textit{base} und \textit{limit} des Segments sowie sogenannten \textit{access status}. Dieser Status
+		     besteht aus 5 bits, drei davon sind f\"ur den Datenzugriff also \textit{read}, \textit{write} und \textit{execute}.
+		     Die anderen beiden sind f\"ur den capability Zugriff, d.h.\textit{read capability} und \textit{write capability}.
+		     Es wird zwischen \textit{data typ} und \textit{capability type} capabilities unterschieden. Der erste Typ besitzt gesetzte bits in den ersten drei bits 
+		     und der zweite Typ in den letzten. Es existiert keine capability mit gesetzten \textit{data} und \textit{capability access bits}.
+		     Capabilities werden in Segmenten gespeichert die \textit{capability type access} besitzen.
+		     Zu jeder Lebenszeit eines Prozesses sind nur die Ressourcen erreichbar die von den capabilities definiert wurden.
+		     Mit jedem Prozess ist ein fundamentales Segment assoziiert, genannt Process Resource List (PRL). 
+		     Im CAP Betriebssystem existiert eine Prozesshierarchie. Als Wurzel der Hierarchie steht ein einzelner Prozess deren PRL wird auch Master Ressource List 
+		     genannt. Das Programm welches in diesem Prozess l\"auft ist Verantwortlich f\"ur die Erstellung und Verwaltung von Level 2 
 		     Prozessen es wird Master Coordinator genannt (MC).
-		     Die PRL eines Level 2 Prozesses ist ein normales Daten Segment vom MC. Es ist m\"oglich die Hierarchie zur erweitern und weitere Junior
-		     bzw. Subprozesse zu erzeugen.
-         Diese ben\"otigen nur eine capability f\"ur ein Segment um dies als PRL zu nutzen.
-  \section{Trusted Computer Base}
-    \subsection{MicroKernel}
-	    Grundidee des Micro Kernels ist das der Kernel minimiert werden soll und das alles so gut es geht ausgelagert werden soll.
-	    Die Vorteile dieser Herangehensweise ist das ein klares Mikro Kernel Interface die modularit\"at der Systemstruktur erh\"oht.
-	    Das System ist flexibler und anpassbarer. Verschiedene Strategien und Schnittstellen k\"onnen gleichzeitig im System existieren.
+		     Die PRL eines Level 2 Prozesses ist ein normales Datensegment vom MC. Es ist m\"oglich die Hierarchie zur erweitern und weitere Junior
+		     bzw. Subprozesse zu erzeugen. Diese ben\"otigen nur eine capability f\"ur ein Segment um dies als PRL zu nutzen.
+		     
+		     In heutigen Linux Systemen werden auch sogenannte Prozesshierarchien verwendet, siehe z.B. die Shell die bei jedem
+		     Kommando, bis auf built-in Funktionen, ein neuen Kind-Prozess erzeugt und dieses Kind das Kommando ausf\"uhren l\"asst. Weiteres Beispiel
+		     ist das nachdem Boot ein sogenannter init Prozess erzeugt wird der als Wurzel der Prozesshierarchie hierbei steht, \"ahnlich wie 
+		     im CAP System \cite{Url:linux:processes}.
+		     
+  \section{Minimalistische Kernel-Varianten} \label{sec:other} %TODO change section
+    Unabh\"angig von den zuvor bereits erw\"ahnten Zugriffsmechanismen wollten einige Systementwickler und Wissenschaftler neue minimalistische Kernel
+    erzeugen um somit die Sicherheit eines Systems besser zu gew\"ahrleisten. Im folgendem Abschnitt wird dabei auf die Entwicklung
+    des Mikro-, Exokernels und einigen anderen Variationen eingegangen.
+    %TODO change intro
+    \subsection{Mikrokernel}
+	    Grundidee des Mikrokernels ist das der Kernel minimiert und das alles so gut es geht ausgelagert werden soll.
+	    Die Vorteile dieser Herangehensweise ist das ein klares Mikrokernel Interface die modularit\"at der Systemstruktur erh\"oht.
+	    Das System ist flexibler und anpassbarer, verschiedene Strategien und Schnittstellen k\"onnen gleichzeitig im System existieren.
 	    
-	    Memory-Managment sowie Paging werden im Mikro Kernel ausserhalb platziert, nur grant, map und flash Operationen sind im Kernel enthalten. \cite[S. 238 f]{inproc:micro}
-	    Threads, IPC sowie das generieren von UID's (unique identifiers) werden jedoch im Kernel behalten.
+	    Dieser Abschnitt bezieht sich auf das Paper \cite{inproc:micro} welches die Erstellung eines Mikrokernel behandelt.
+	    Memory-Management sowie Paging werden im Mikrokernel au\ss erhalb platziert, nur \textit{grant}, \textit{map} und \textit{flash} Operationen sind im Kernel 
+	    enthalten. \cite[S. 238 f]{inproc:micro} Threads, IPC sowie das generieren von UID's (unique identifiers) werden jedoch im Kernel behalten.
 	    
 	    Ein Mikrokernel kann h\"ohere Schichten mit einem minimalen Satz von passenden Abstraktionen liefern.
 	    Diese sind flexible genug um beliebige Implementierungen von Betriebssystemen sowie das weite ausnutzen der Hardware zu erlauben.
-	    Multi-Level Sicherheitssysteme benutzen dazu noch sogenannte clans oder ein \"ahnliches Referenzmonitor Konzept.        
-	    Liedtke zeigt das es mit seinem L4 Mikrokernel m\"oglich ist einen performanten Mikrokernel durch Prozessorspezifische Implementierung 
-	    von Prozessor unabh\"angigen Abstraktionen zu erzeugen.\cite[S. 248]{inproc:micro}
+	    Multi-Level Sicherheitssysteme benutzen dazu noch sogenannte \textit{clans} oder ein \"ahnliches Referenzmonitor Konzept.        
+	    Liedtke zeigt das es mit seinem L4 Mikrokernel m\"oglich ist einen performanten Mikrokernel durch prozessorspezifische Implementierung, 
+	    von Prozessor unabh\"angigen Abstraktionen, zu erzeugen.\cite[S. 248]{inproc:micro}
    
     \subsection{Exokernel}       
-       Betriebssysteme definieren die Schnittstelle zwischen den Anwendungen und den Physikalischen Ressourcen.
-       Ungl\"ucklicherweise kann diese Schnittstelle die Performanz sowie die Implementierung von Anwendungen einschr\"anken. \"Ublicherweise
-       abstrahieren Betriebssysteme Informationen \"uber die Hardware in Prozessen, Dateien, Adressr\"aumen und IPC. Diese Abstraktionen definieren eine 
-       Virtuelle Maschine in der die Anwendungen ausgef\"uhrt werden. Deren Implementierung kann nicht durch nicht vertrauensw\"urdige Anwendungen ersetzt werden.
-        Das f\"uhrt zu einigen Problemen: Es verweigert Anwendungen den Vorteil von Dom\"an spezifischen Optimierungen. Es schr\"ankt zudem die flexibilit\"at von
-        Anwendungserstellern ein da neue Abstraktionen nur durch sonderbare Emulationen zum System hinzugef\"ujgt werden k\"onnen.
+      Betriebssysteme definieren die Schnittstelle zwischen den Anwendungen und den Physikalischen Ressourcen.
+      Ungl\"ucklicherweise kann diese Schnittstelle die Performanz sowie die Implementierung von Anwendungen einschr\"anken. \"Ublicherweise
+      abstrahieren Betriebssysteme Informationen \"uber die Hardware in Prozessen, Dateien, Adressr\"aumen und IPC. Diese Abstraktionen definieren eine 
+      Virtuelle Maschine in der die Anwendungen ausgef\"uhrt werden. Deren Implementierung kann \textbf{nicht} durch nicht vertrauensw\"urdige Anwendungen
+      ersetzt werden. Das f\"uhrt zu einigen Problemen: Es verweigert Anwendungen den Vorteil von Dom\"anen spezifischen Optimierungen.
+      Es schr\"ankt zudem die Flexibilit\"at von Anwendungsentwicklern ein, da neue Abstraktionen nur durch sonderbare Emulationen zum
+      System hinzugef\"ugt werden k\"onnen.
         
-        Diese Probleme wollten die Entwickler des Exokernels bek\"ampfen deren Ziel es war ein minimalistischen Kernel genannt Exokernel zu erstellen.
-        Dieser Kernel vielf\"alltigt sicher die verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht Vertrauensw\"urdigen Anwendungen die
-        z.B. IPC oder Ressource Management umsetzen. D.h. sogenannte \textit{library operating systems} arbeiten \"uber der Exokernel Schnittstelle. 
-        Diese Implementieren die Schnittstelle des h\"oheren Levels. Das erm\"oglicht Anwendungen bestimmte Bibliotheken auszuw\"ahlen bzw.
-        deren Implementierung direkt auf deren Notwendigkeiten anzupassen. Z.B. kann es verschiedene Arten von page-table Implementierungen
-        in einem System geben. Eine Anwendung kann dann eine library mit einer bestimmten Implementierung welche am besten passt ausw\"ahlen.
+      Diese Probleme wollten die Entwickler des Exokernels bek\"ampfen, deren Ziel es war ein minimalistischen Kernel genannt Exokernel zu erstellen.
+      Dieser Kernel vielf\"alltigt sicher die verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht Vertrauensw\"urdigen Anwendungen die
+      z.B. IPC oder Ressource Management umsetzen. D.h. sogenannte \textit{library operating systems} arbeiten \"uber der Exokernel Schnittstelle. 
+      Diese Implementieren die Schnittstelle des h\"oheren Levels. Das erm\"oglicht Anwendungen bestimmte Bibliotheken auszuw\"ahlen bzw.
+      deren Implementierung direkt auf deren Notwendigkeiten anzupassen. Z.B. kann es verschiedene Arten von page-table Implementierungen
+      in einem System geben. Eine Anwendung kann dann eine Bibliothek mit einer bestimmten Implementierung, welche am besten passt, ausw\"ahlen.
         
-        Um Anwendungen die Kontrolle \"uber die Hardware zu erm\"oglichen definiert der Exokernel ein Low-Level Interface.
-        Der Exokernel exportiert Hardware Ressourcen was eine effiziente und einfache Implementierung erm\"oglicht.
-        Mithilfe von drei Techniken wird das Exportieren sicher umgesetzt. Zum einen mit sogenannten \textit{secure bindings}, 
-        dann mit \textit{visible resource revocation} und durch ein \textit{abort protocol}. 
+      Um Anwendungen die Kontrolle \"uber die Hardware zu erm\"oglichen definiert der Exokernel ein Low-Level Interface.
+      Der Exokernel exportiert Hardware Ressourcen was eine effiziente und einfache Implementierung erm\"oglicht.
+      Mithilfe von drei Techniken wird das Exportieren sicher umgesetzt. Zum einen mit sogenannten \textit{secure bindings}, 
+      mit \textit{visible resource revocation} und durch ein \textit{abort protocol}. 
         
-        \textit{Secure binding} ist ein Schutzmechanismus der die Authentifizierung und die tats\"achliche Benutzung von einander trennt.
-        Die \"Uberpr\"ufungen sind entweder in einfachen Operationen im Kernel oder Hardware ausgedr\"uckt die leicht implementiert werden k\"onnen.
-        Die Authentifizierung findet nur zur Bindezeit statt, das erm\"oglicht das Verwalten los zu l\"osen vom Schutzmechanismus. Es gibt drei Basis Techniken
-        um \textit{secure bindings} umzusetzen. Zum einen mit Hardware Mechanismen, Software Caching sowie mit dem Downloaden von Anwendungscode.
-        Downloading des Codes kann zum erh\"ohen der Performanz benutzt werden, es besitzt zwei Vorteile. Zum einen Eliminierung von Kernel \"Ubergang (Switch)
-        und die Ausf\"uhrungszeit kann eingegrenzt werden. Der wesentliche Knackpunkt ist dieser das der Code ausgef\"uhrt werden kann wenn die Anwendung nicht
-        scheduled ist. 
-        Diese losl\"osung erlaubt der Ausf\"uhrung von heruntergeladenen Code in Situationen an denen ein Kontextwechsel zur Anwendung nicht m\"oglich ist.
+      \textit{Secure binding} ist ein Schutzmechanismus der die Authentifizierung und die tats\"achliche Benutzung von einander trennt.
+      Die \"Uberpr\"ufungen sind entweder in einfachen Operationen im Kernel oder Hardware ausgedr\"uckt, die leicht implementiert werden k\"onnen.
+      Die Authentifizierung findet nur zur Bindezeit statt, das erm\"oglicht das Verwalten vom Schutzmechanismus los zu l\"osen. Es gibt drei Basis Techniken
+      um \textit{secure bindings} umzusetzen. Zum einen mit Hardware Mechanismen, Software Caching sowie mit dem Downloaden von Anwendungscode.
+      Downloading des Codes kann zum erh\"ohen der Performanz benutzt werden, es besitzt zwei Vorteile. Zum einen Eliminierung von Kernel \"Ubergang (Switch)
+      und die Ausf\"uhrungszeit kann eingegrenzt werden. Der wesentliche Knackpunkt ist dieser das der Code ausgef\"uhrt werden kann wenn die Anwendung nicht
+      scheduled ist. Diese Losl\"osung erlaubt die Ausf\"uhrung von heruntergeladenen Code in Situationen an denen ein Kontextwechsel zur
+      Anwendung nicht m\"oglich ist.
         
-        \textit{Visible resource revocation} soll es erm\"oglichen das Ressourcen die gebunden wurden wieder befreit werden von einer Anwendung 
-        bzw. deren \textit{secure binding} brechen.
-        Normalerweise setzen Betriebssysteme diese revocation invisible durch. 
-        D.h. sie allozieren oder deallozieren Speicher oder Ressourcen ohne die Anwendungen zu informieren.
-        Diese sichtbare resource revocation erm\"oglicht das \textit{library operating systems} darauf reagieren k\"onnen und
-        z.B. den ben\"otigten Prozessorzustand speichern.
-        Jedoch einige dinge wie Prozessor Kontextbezeichner werden sehr oft zur\"uckgeholt wo durch es besser ist die nicht sichtbare 
-        resource revocation zu nutzen.
+      \textit{Visible resource revocation} soll es erm\"oglichen das Ressourcen die gebunden wurden wieder von einer Anwendung befreit werden  
+      bzw. deren \textit{secure binding} brechen. Normalerweise setzen Betriebssysteme diese \textit{revocation} invisible durch. 
+      D.h. sie allozieren oder deallozieren Speicher oder Ressourcen ohne die Anwendungen zu informieren.
+      Diese sichtbare \textit{resource revocation} erm\"oglicht das \textit{library operating systems} darauf reagieren k\"onnen und
+      z.B. den ben\"otigten Prozessorzustand speichern. Jedoch einige dinge wie Prozessorkontextbezeichner werden sehr oft zur\"uckgeholt wodurch
+      es besser ist die nicht sichtbare \textit{resource revocation} zu nutzen.
         
-        \textit{Abort protocol} erm\"oglicht es die Ressource zur\"uck zu holen indem Fall das die Anwendung auf die
-        Anfrage der revocation nicht zufriedenstellend reagiert hat.
-        Anstatt die Anwendungen die nicht in bestimmter Zeit antworten einfach zu killen werden einfach die
-        \textit{secure bindings} aufgel\"ost und die \textit{library operating systems} bzw.
-        Anwendungen informiert.
+      Das \textit{Abort protocol} erm\"oglicht es die Ressource indem Fall zur\"uck zu holen, wenn die Anwendung auf die
+      Anfrage der \textit{revocation} nicht zufriedenstellend reagiert hat.
+      Anstatt die Anwendungen, die nicht in bestimmter Zeit antworte,n einfach zu killen werden einfach die
+      \textit{secure bindings} aufgel\"ost und die \textit{library operating systems} bzw. Anwendungen informiert.
         
-        Die Referenz Implementierung Aegis (Exokernel) mit dem ExOS (library operting system) gibt den Anwendungen gr\"o\ss ere flexiblit\"at 
-        und Performanz als monolithische oder Mikrokernel Systeme. 
+      Die Referenz Implementierung Aegis (Exokernel) mit dem ExOS (library operting system) gibt den Anwendungen gr\"o\ss ere flexiblit\"at 
+      und Performanz als monolithische oder Mikrokernel Systeme. Jedoch ist der Exokernel Ansatz bis heute noch in der Forschung und wird
+      noch nicht produktiv wie z.B. der Mikrokernel eingesetzt.
         
         
-    \subsection{Spin}
-       Spin ist ein Betriebssystem welches dynamisch spezialisiert werden kann, um sicher die Bed\"urfnisse von Performanz und Funktionilt\"at f\"ur
-       Anwendungen anzupassen.
-    
-      \"Ahnlich dem Exokernel versucht Spin es zu erm\"oglichen das die Betriebssystemschnittstelle angepasst werden kann sodass die Bedingungen 
-      f\"ur Anwendungen verbessert werden k\"onnen.
-      Soll hei\ss en das bei normalen Betriebssystemen die Anwendungen nur schlecht oder gar nicht laufen k\"onnen in Spin die Schnittstellen 
-      des Betriebssystem auf die Notwendigkeiten angepasst werden.
+    \subsection{Spin} \label{sec:other:spin}
+      Spin ist ein Betriebssystem welches dynamisch spezialisiert werden kann, um sicher die Bed\"urfnisse von Performanz und Funktionilt\"at f\"ur
+      Anwendungen anzupassen. \"Ahnlich dem Exokernel versucht Spin es zu erm\"oglichen das die Betriebssystemschnittstelle angepasst werden kann
+      sodass die Bedingungen f\"ur Anwendungen verbessert werden k\"onnen. Soll hei\ss en das bei normalen Betriebssystemen die Anwendungen nur 
+      schlecht oder gar nicht laufen k\"onnen in Spin die Schnittstellen des Betriebssystem auf die Notwendigkeiten angepasst werden.
       
       Spin und seine Erweiterungen sind in der typsicheren Sprache Modula-3 geschrieben. Modula-3 besitzt folgende Kernmerkmale: 
-      Interfaces, Typsicherheit, automatisches Speichermanagement,
-      Objekte, generische Interfaces, Threads und Exceptions. Durch die Typsicherheit ist gew\"ahrleistet das der Code nicht auf beliebigen Speicher zugreift,
+      Interfaces, Typsicherheit, automatisches Speichermanagement, Objekte, generische Interfaces, Threads und Exceptions.
+      Durch die Typsicherheit ist, lauten den Autoren von \cite{inproc:spin}, gew\"ahrleistet das der Code nicht auf beliebigen Speicher zugreift,
       Pointer nur auf die Objekte des Zeigertyps verweisen etc..
-      
       Das Spin Betriebssystem beruht auf vier Techniken die auf Sprach- oder Laufzeitebene implementiert sind.
-      
-      Die erste ist die \textit{co-location}, d.h. die Erweiterungen werden dynamisch in den Virtuellen Adressraum des Kernel verlinkt.
+      Die erste ist die \textit{co-location}, d.h. die Erweiterungen werden dynamisch in den virtuellen Adressraum des Kernel verlinkt.
       \textit{Co-location} erm\"oglicht Kommunikation zwischen System und Erweiterungscode mit niedrigen Kosten.
       
-      \textit{Enforced modularity}  Wie bereits erw\"ahnt sind Erweiterungen in Modula-3 geschrieben welche eine modulare
+      Zweitens \textit{enforced modularity}, wie bereits erw\"ahnt sind Erweiterungen in Modula-3 geschrieben welche eine modulare
       Programmiersprache ist und f\"ur die der Compiler Schnittstellengrenzen zwischen Modulen erzwingt.
       Erweiterungen die im virtuellen Adressraum des Kernels ausgef\"uhrt werden k\"onnen auf keinen Speicher oder privilegierte Instruktionen 
-      zugreifen sofern sie nicht
-      die explizite Erlaubnis durch ein Interface erhalten haben. Modularit\"at erzwungen vom Compiler erm\"oglicht es Module mit geringen Kosten zu isolieren.
+      zugreifen sofern sie nicht die explizite Erlaubnis durch ein Interface erhalten haben.
+      Modularit\"at erzwungen vom Compiler erm\"oglicht es Module mit geringen Kosten zu isolieren.
       
-      Die dritte Technik wird \textit{logical protection domains} genannt. Erweiterungen existieren in logischen 
-      \textit{protection domains} welche Kernel Namensr\"aume
-      sind die Code und exportierte Interfaces beinhalten. Interfaces repres\"antieren Sichten auf die Systemressourcen die vom Betriebssystem gesch\"utzt sind.
-      Ein im Kernel liegend dynamischer Linker l\"ost Code in seperaten logischen \textit{protection domains} zur Laufzeit auf.
-      Erm\"oglicht \textit{cross-domain} Kommunikation mit dem Overhead eines Prozeduraufrufs.
+      Die dritte Technik wird \textit{logical protection domains} genannt. Erweiterungen existieren in logischen \textit{protection domains} welche Kernel
+      Namensr\"aume sind, die Code und exportierte Interfaces beinhalten. Interfaces repres\"antieren Sichten auf die Systemressourcen
+      die vom Betriebssystem gesch\"utzt sind. Ein im Kernel liegend dynamischer Linker l\"ost Code in separaten logischen 
+      \textit{protection domains} zur Laufzeit auf. Dies erm\"oglicht \textit{cross-domain} Kommunikation mit dem Overhead eines Prozeduraufrufs.
       
       Als letztes ist das \textit{dynamic call binding} zu nennen. Erweiterungen werden als Antwort auf Systemevents ausgef\"uhrt.
-      Ein Event kann jede potentielle Aktion
-      im System beschreiben, wie z.B. ein page fault. Events werden in Schnittstellen deklariert und k\"onnen abgefertigt werden mit dem Overhead 
-      eines Prozeduraufrufs. Siehe \cite[S. 267 f]{inproc:spin}.
+      Ein Event kann jede potentielle Aktion im System beschreiben, wie z.B. ein page fault. Events werden in Schnittstellen deklariert
+      und k\"onnen abgefertigt werden mit dem Overhead eines Prozeduraufrufs, vgl. \cite[S. 267 f]{inproc:spin}.
       
       Das sogenannte \textit{protection model} kontrolliert die Menge an Operationen die auf die Ressourcen angewendet werden k\"onnen.
       Alle Kernel Ressourcen in Spin sind mit \textit{capabilities} referenziert. 
       Eine \textit{capability} in Spin ist eine unf\"alschbare Referenz auf eine Ressource.
       Spin implementiert die \textit{capabilities} direkt mithilfe von Pointern, nicht wie andere Betriebssysteme die dazu Hardware oder anderes benutzen.
-      Ein Pointer bzw. Zeiger kann vom Kernel zur user-level Anwendung als ver\"ausserte Referenz weitergegeben werden.
-      Eine ver\"ausserte Referenz ist ein Index in der Anwendungstabelle die Typsichere Referenzen zur Kernel Datenstrukturen besitzt.
+      Siehe als Beispiel das CAP System welches Software und Hardware nutzt, vgl. \cite{inproc:cap}.
+      Ein Pointer bzw. Zeiger kann vom Kernel zur User-Level Anwendung als ver\"ausserte Referenz weitergegeben werden.
+      Eine ver\"ausserte Referenz ist ein Index, in der Anwendungstabelle, die typsichere Referenzen zur Kernel Datenstrukturen besitzt.
       
       Die Erweiterungen ver\"andern den Weg wie ein System ein Service zur Verf\"ugung stellt. Jede Software ist irgendwie erweiterbar, 
-      aber das sogenannte \textit{extension model}
-      entscheidet wie leicht, transparent und effizient eine Erweiterung angewendet werden kann. 
-      Spin's \textit{extension model} stellt eine kontrollierte Kommunikationsm\"oglichkeit
-      zwischen den Erweiterungen und dem Basis System, welches verschiedene Interaktionsarten erlaubt, zur Verf\"ugung.
-      Erweiterungen in Spin sind in Events und Handler definiert. 
-      Ein Event ist eine Nachricht die eine Ver\"anderung eines Zustands im System ank\"undigt oder eine Anfrage f\"ur einen Service.
-      Ein Eventhandler ist eine Prozedur die dieses Event erh\"alt und verarbeitet. 
-      Eine Erweiterung installiert einen Handler f\"ur ein Event durch explizites Registrieren mithilfe eines Zentralen 
-      \textit{dispatchers}. (Siehe \cite[S. 272]{inproc:spin})
+      aber das sogenannte \textit{extension model} entscheidet wie leicht, transparent und effizient eine Erweiterung angewendet werden kann. 
+      Spin's \textit{extension model} stellt eine kontrollierte Kommunikationsm\"oglichkeit zwischen den Erweiterungen und dem Basis System,
+      welches verschiedene Interaktionsarten erlaubt, zur Verf\"ugung.
+      Erweiterungen in Spin sind in Events und Handler definiert. Ein Event ist eine Nachricht die eine Ver\"anderung eines Zustands im System ank\"undigt
+      oder eine Anfrage f\"ur einen Service. Ein Event-Handler ist eine Prozedur die dieses Event erh\"alt und verarbeitet. 
+      Eine Erweiterung installiert einen Handler f\"ur ein Event durch explizites Registrieren, mithilfe eines Zentralen
+      \textit{dispatchers} vgl. \cite[S. 272]{inproc:spin})
       
-      Das Spin Betriebssystem demonstriert das es m\"oglich ist gute Performanz in einem erweiterbaren System, 
-      ohne die Sicherheit zu kompromittieren, zu erm\"oglichen.
+      Das Spin Betriebssystem erm\"oglicht gute Performanz in einem erweiterbaren System, ohne die Sicherheit zu kompromittieren.
+      Jedoch \"ahnlich wie der Exokernel ist Spin nur ein weiteres Forschungsthema und leider nicht Produktiv im Einsatz.
+      Die Entwicklung von Spin wurde zudem nicht weiter verfolgt, was der Spin Homepage zu entnehmen ist.
+      Dort werden seit 1996 keine weiteren Paper referenziert \cite{Url:spin:papers}, zudem kann das System nur mit einer Linux Red Hat Version 4.2 
+      gebaut werden welche im Mai 1997 erschien \cite{Url:spin:distro}.
+      
     \subsection{EROS}      
-        Eros ist ein \textit{capability} basierender Mikrokernel mit einem einstufigen Speichermodell. 
-        Die einstufige Speicher Persistierung ist transparent f\"ur Anwendungen.
-        Speicherallokierung, Scheduling und fault Handling Politiken liegen au\ss erhalb des Kernels um 
-        verschiedene Operationsumgebungen und Anwendungsspezifische Ressourcemanagments zu erlauben.
-        Eine \textit{capability} wie bereits schon erw\"ahnt ist eine unf\"alschbares Paar von Objektidentifizierer 
-        und einer Menge von erlaubten Operationen (einem Interface) an diesem Objekt.
-        Lauten den Autoren ist auch ein UNIX File descriptor eine \textit{capability}. In einem \textit{capability system} 
-        h\"alt jeder Prozess \textit{capabilities} und kann diese Operationen ausf\"uhren
-        welche durch die \textit{capabilities} autorisiert sind. Die Sicherheit wird dadurch gew\"ahrleistet das \textit{capabilities} 
-        f\"alschungssicher sind, Prozesse nur \textit{capabilities} durch
-        Autorisierte Schnittstellen erhalten und \textit{capabilities} nur an Prozesse gegeben werden die auch autorisiert sind diese zu halten.
+      Eros ist ein \textit{capability} basierender Mikrokernel mit einem einstufigen Speichermodell. 
+      Die einstufige Speicher Persistierung ist transparent f\"ur Anwendungen. Speicherallokierung, Scheduling und fault Handling Politiken 
+      liegen au\ss erhalb des Kernels, um verschiedene Operationsumgebungen und Anwendungsspezifische Ressourcemanagments zu erlauben.
+      Eine \textit{capability} ist wie bereits schon erw\"ahnt ist eine unf\"alschbares Paar von Objektidentifizierer und einer Menge von erlaubten Operationen
+      (einem Interface) an diesem Objekt. Siehe dazu auch Abschnitt \ref{sec:secure:capability} oder \ref{sec:other:spin}.
+      Lauten den Autoren ist auch ein UNIX File Deskriptor eine \textit{capability}. In einem \textit{capability system} 
+      h\"alt jeder Prozess \textit{capabilities} und kann diese Operationen ausf\"uhren welche durch die \textit{capabilities} autorisiert sind. 
+      Die Sicherheit wird dadurch gew\"ahrleistet das \textit{capabilities} f\"alschungssicher sind und Prozesse nur \textit{capabilities} durch
+      Autorisierte Schnittstellen erhalten. D.h es werden \textit{capabilities} nur an Prozesse gegeben die auch autorisiert sind diese zu halten.
         
-        Eine \textit{protection domain} wie bereits schon erw\"ahnt ist eine Menge von \textit{capabilities} welche von einem Subsystem zug\"anglich sind.
+      Eine \textit{protection domain} wie bereits auch schon erw\"ahnt ist eine Menge von \textit{capabilities}, welche von einem Subsystem zug\"anglich sind.
+      Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in separate Komponenten, d.h. jede besitzt eigene
+      \textit{protection domains}.
         
-        Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in seperate Komponenten,
-        d.h. jede besitzt eigene \textit{protection domains}.
-        
-        EROS erstellt periodisch st\"andig Checkpoints vom System um ein Konsistentes System sicherzustellen. 
-        Bei einem System mit 256 JMB physikalischem Speicher dauert der Snapshot um die
-        50ms. Was bei heutigen Systemen um einiges l\"anger dauern w\"urde.
-
-        Die EROS Architektur ist in Kernel und Kernel Services eingeteilt zudem beinhaltet die Architektur eine Menge von Systemservices
-        die von nicht Privilegierten Anwendungen implementiert sind.
-        Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware via \textit{capability} gesch\"utzten Abstraktion dar.
-        Daten und \textit{capabilities } werden in Seiten deren Gr\"osse bei der Hardware bestimmt ist gespeichert. 
-        \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert,
-        wobei ein \textit{node} 32 \textit{capabilities} speichern kann. Adressr\"aume werden in B\"aume aufgebaut, 
+      EROS erstellt periodisch st\"andig Checkpoints vom System um ein Konsistentes System sicherzustellen. Bei einem System mit 256 MB physikalischem Speicher
+      dauert der Snapshot um die 50 ms. Was bei heutigen Systemen um einiges l\"anger dauern w\"urde.
+      Die EROS Architektur ist in Kernel und Kernel Services eingeteilt, zudem beinhaltet die Architektur eine Menge von Systemservices
+      die von nicht privilegierten Anwendungen implementiert sind.
+      Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware, via \textit{capability} gesch\"utzten Abstraktion dar.
+      Daten und \textit{capabilities} werden in Seiten, deren Gr\"osse bei der Hardware bestimmt ist, gespeichert. 
+      \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert, wobei ein \textit{node} 32 \textit{capabilities} speichern kann.
+       Adressr\"aume werden in B\"aume aufgebaut, 
         d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter
         sind Daten- und \textit{capability}-Pages. Durch die Nutzung eines Baumes f\"ur das Adressraummapping i
         ist es m\"oglich ein fein gradige Spezifikation von fault Handlern vorzunehmen.
