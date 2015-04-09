@@ -458,42 +458,40 @@
       Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware, via \textit{capability} gesch\"utzten Abstraktion dar.
       Daten und \textit{capabilities} werden in Seiten, deren Gr\"osse bei der Hardware bestimmt ist, gespeichert. 
       \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert, wobei ein \textit{node} 32 \textit{capabilities} speichern kann.
-       Adressr\"aume werden in B\"aume aufgebaut, 
-        d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter
-        sind Daten- und \textit{capability}-Pages. Durch die Nutzung eines Baumes f\"ur das Adressraummapping i
-        ist es m\"oglich ein fein gradige Spezifikation von fault Handlern vorzunehmen.
-        Das traversieren des Baumes ist aber ziemlich teuer weshalb einige Optimierungen notwendig sind. 
+      Die Adressr\"aume werden in B\"aume aufgebaut, d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter sind Daten- und \textit{capability}-Pages.
+      Durch die Nutzung eines Baumes f\"ur das Adressraummapping ist es m\"oglich eine fein gradige Spezifikation von fault Handlern vorzunehmen.
+      Das traversieren des Baumes ist aber ziemlich teuer, weshalb einige Optimierungen notwendig sind. 
         
-        Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von \textit{capabilities}:
-        \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern und 
-        \textit{entry capabilities} welche dem Halter das Aufrufen der Dienste eines Programms
-        innerhalb eines bestimmten Prozess erlaubt. EROS unterscheidet nicht zwischen Prozessen und Threads. 
-        Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl.
-        einen Adressraum sich teilen jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. 
-        Jeder Prozess ist eine \textit{protection domain}.
+      Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von \textit{capabilities}:
+      \begin{itemize}
+        \item \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern 
+        \item \textit{Entry capabilities} welche dem Halter das Aufrufen der Dienste eines Programms, innerhalb eines bestimmten Prozess, erlaubt.
+      \end{itemize}
         
-        Jeder Ressourcen Zugriff in EROS wird via einer \textit{capability invocation} vollbracht. 
-        Wenn es bei der \textit{capability} Autorisiert ist l\"ost jeder Aufruf
-        bei dem genannten Objekt ein Objekt definierte Operation die vom Aufrufer spezifiziert wurde aus. 
-        Es existiert ein einheitliches Interface was bedeutet das alle \textit{capabilities}
-        die selben Argumente an nehmen, was ein Vorteil bei der Performanz bringt.
+      EROS unterscheidet nicht zwischen Prozessen und Threads. Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl. einen Adressraum sich teilen
+      jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. Jeder Prozess ist eine \textit{protection domain}.
+      Jeder Ressourcenzugriff in EROS wird via einer \textit{capability invocation} vollbracht. Wenn es bei der \textit{capability} autorisiert ist,
+      l\"ost jeder Aufruf bei dem genannten Objekt eine Objekt definierte Operation, die vom Aufrufer spezifiziert wurde, aus. 
+      Es existiert ein einheitliches Interface, was bedeutet das alle \textit{capabilities} die selben Argumente an nehmen,
+      was ein Vorteil bei der Performanz bringt.
         
-        Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden resultieren 
-        in einem korrekten Systemzustand solange
-        der Initialzustand korrekt war. Die Herausforderung in der Kausalen-Ordnung ist zu Garantieren das das Wiedererlangen eines 
-        korrekten Systemzustands nachdem das System ungeplant 
-        Heruntergefahren ist z.B. durch ein crash m\"oglich ist. Um das zu erreichen muss wie bereits erw\"ahnt ein konsistentes Abbild des Systems erstellt werden.
-        EROS snapshot Mechanismus f\"uhrt zuvor einen Konsistenz Check durch bevor der Snapshot durchgef\"uhrt wird, 
-        anders als bei z.B. L3. Falls der Test fehlschl\"agt 
-        wird das System neu gestartet ohne den derzeitigen Checkpoint zu speichern. 
+      Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden  
+      in einem korrekten Systemzustand resultieren, solange der Initialzustand korrekt war. Die Herausforderung in der Kausalen-Ordnung ist
+      zu Garantieren das das Wiedererlangen eines korrekten Systemzustands, nachdem das System ungeplant Heruntergefahren ist z.B. durch ein crash, m\"oglich ist.
+      Um das zu erreichen muss wie bereits erw\"ahnt ein konsistentes Abbild des Systems erstellt werden.
+      EROS Snapshot-Mechanismus f\"uhrt zuvor einen Konsistenz Check durch, bevor der Snapshot durchgef\"uhrt wird, 
+      anders als bei z.B. L3. Falls der Test fehlschl\"agt wird das System neu gestartet ohne den derzeitigen Checkpoint zu speichern. 
+ 
+      Die EROS IPC Implementierung wurde stark von L3 und Mach 4 beeinflusst. Zudem besitzt L3 auch ein Persistierungsmechanismus der aber nicht so ausgereift 
+      ist wie der von EROS.
         
-        Die EROS IPC implementierung wurde stark von L3 und Mach 4 beeinflusst. 
-        Zudem besitzt L3 auch ein Persistierungsmechanismus der aber nicht so ausgereift ist wie der von EROS.
-        
-        Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine 
-        \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion,
-        da sie keine Objekte benennen oder direkt Zugriff autorisieren.
-        
+      Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine 
+      \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion, da sie keine Objekte benennen oder direkt Zugriff autorisieren.
+      
+      Die Forschung an dem EROS Betriebssystem wurde jedoch bereits wieder eingestellt. Ein Ableger des EROS Betriebssystems
+      existiert und nennt sich CapROS, welches die Codebasis benutzt \cite{Url:capros}. An der Johns Hopkins Unversit\"at wird zudem an einem 
+      Nachfolge Projekt geforscht genannt Coyotos. Dieses versucht einige Architekturdefizite von EROS zu beseitigen \cite{Url:coyotos}.
+      
     \subsection{Asbestos}        
       Asbestos ist ein neuer Prototyp eines Betriebssystems welches neuartige Kennzeichnungs- und Isolierungsmechanismen 
       liefert die helfen \textit{exploitable} Software einzugrenzen.
