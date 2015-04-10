@@ -101,7 +101,7 @@
 		    die Informationen nicht ihre Zugeh\"origkeit verliert. Zudem hei\ss t das, dass ein Multics Nutzer keine Dateien benutzt sondern alle Informationen
 		    als Segmente referenziert, welche direkt vom Programm erreichbar sind.
 		 
-        F\"ur Multics Nutzer erscheint der Speicher als eingeschlosser gro\ss er unabh\"angiger linearer Kernspeicher,
+        F\"ur Multics Nutzer erscheint der Speicher als eingeschlossener gro\ss er unabh\"angiger linearer Kernspeicher,
         jeder assoziiert mit einem eigenen Deskriptor. 
         Der Zugriff erfolgt durch [\textit{Name}, \textit{i}] wobei \textit{Name} der symbolische Name des Segments und \textit{i} das Wort
         im linearen Speicher ist. Jeder Nutzer kann auf [\textit{Name}, \textit{i}] referenzieren, jedoch hat er nur die Zugriffsrechte die er auch vom Ersteller
@@ -147,7 +147,7 @@
         Schutz soll so gew\"ahrleistet werden dass einzelne Benutzer von einander getrennt sind und wenn gew\"unscht aber untereinander Kommunizieren k\"onnen.
         Vier Kriterien k\"onnen auf Zugriffskontrollmechanismen angewendet werden: 
         \begin{enumerate}
-          \item \textit{Funktionale capability}
+          \item \textit{Funktionale Capability}
           \item \textit{Economy}
           \item \textit{Simplicity}
           \item \textit{Programming generality}
@@ -308,10 +308,10 @@
 		     Capabilities werden benutzt um in CAP den Zugang zu Segmenten zu gew\"ahrleisten.
 		     Capabilities besitzen \textit{base} und \textit{limit} des Segments, sowie sogenannten \textit{access status}. Dieser Status
 		     besteht aus 5 Bits, drei davon sind f\"ur den Datenzugriff also \textit{read}, \textit{write} und \textit{execute}.
-		     Die anderen beiden sind f\"ur den Capability Zugriff, d.h.\textit{read capability} und \textit{write capability}.
-		     Es wird zwischen \textit{data typ} und \textit{capability type} Capabilities unterschieden. Der erste Typ besitzt gesetzte Bits in den ersten drei Bits 
-		     und der zweite Typ in den letzten. Es existiert keine Capability mit gesetzten \textit{data} und \textit{capability access bits}.
-		     Capabilities werden in Segmenten gespeichert die \textit{capability type access} besitzen.
+		     Die anderen beiden sind f\"ur den Capability Zugriff, d.h.\textit{read Capability} und \textit{write Capability}.
+		     Es wird zwischen \textit{data typ} und \textit{Capability type} Capabilities unterschieden. Der erste Typ besitzt gesetzte Bits in den ersten drei Bits 
+		     und der zweite Typ in den letzten. Es existiert keine Capability mit gesetzten \textit{data} und \textit{Capability access bits}.
+		     Capabilities werden in Segmenten gespeichert die \textit{Capability type access} besitzen.
 		     Zu jeder Lebenszeit eines Prozesses sind nur die Ressourcen erreichbar die von den Capabilities definiert wurden.
 		     Mit jedem Prozess ist ein fundamentales Segment assoziiert, genannt Process Resource List (PRL). 
 		     Im CAP Betriebssystem existiert eine Prozesshierarchie. Als Wurzel der Hierarchie steht ein einzelner Prozess deren PRL wird auch Master Ressource List 
@@ -421,9 +421,9 @@
       und k\"onnen abgefertigt werden mit dem Overhead eines Prozeduraufrufs, vgl. \cite[S. 267 f]{inproc:spin}.
       
       Das sogenannte \textit{protection model} kontrolliert die Menge an Operationen die auf die Ressourcen angewendet werden k\"onnen.
-      Alle Kernel Ressourcen in Spin sind mit \textit{capabilities} referenziert. 
-      Eine \textit{capability} in Spin ist eine unf\"alschbare Referenz auf eine Ressource.
-      Spin implementiert die \textit{capabilities} direkt mithilfe von Pointern, nicht wie andere Betriebssysteme die dazu Hardware oder anderes benutzen.
+      Alle Kernel Ressourcen in Spin sind mit Capabilities referenziert. 
+      Eine Capability in Spin ist eine unf\"alschbare Referenz auf eine Ressource.
+      Spin implementiert die Capabilities direkt mithilfe von Pointern, nicht wie andere Betriebssysteme die dazu Hardware oder anderes benutzen.
       Siehe als Beispiel das CAP System welches Software und Hardware nutzt, vgl. \cite{inproc:cap}.
       Ein Pointer bzw. Zeiger kann vom Kernel zur User-Level Anwendung als ver\"ausserte Referenz weitergegeben werden.
       Eine ver\"ausserte Referenz ist ein Index, in der Anwendungstabelle, die typsichere Referenzen zur Kernel Datenstrukturen besitzt.
@@ -444,42 +444,42 @@
       gebaut werden welche im Mai 1997 erschien \cite{Url:spin:distro}.
       
     \subsection{EROS}      
-      Eros ist ein \textit{capability} basierender Mikrokernel mit einem einstufigen Speichermodell. 
+      Eros ist ein Capability basierender Mikrokernel mit einem einstufigen Speichermodell. 
       Die einstufige Speicher Persistierung ist transparent f\"ur Anwendungen. Speicherallokierung, Scheduling und fault Handling Politiken 
       liegen au\ss erhalb des Kernels, um verschiedene Operationsumgebungen und Anwendungsspezifische Ressourcemanagments zu erlauben.
-      Eine \textit{capability} ist wie bereits schon erw\"ahnt ist eine unf\"alschbares Paar von Objektidentifizierer und einer Menge von erlaubten Operationen
+      Eine Capability ist wie bereits schon erw\"ahnt ist eine unf\"alschbares Paar von Objektidentifizierer und einer Menge von erlaubten Operationen
       (einem Interface) an diesem Objekt. Siehe dazu auch Abschnitt \ref{sec:secure:capability} oder \ref{sec:other:spin}.
-      Lauten den Autoren ist auch ein UNIX File Deskriptor eine \textit{capability}. In einem \textit{capability system} 
-      h\"alt jeder Prozess \textit{capabilities} und kann diese Operationen ausf\"uhren welche durch die \textit{capabilities} autorisiert sind. 
-      Die Sicherheit wird dadurch gew\"ahrleistet das \textit{capabilities} f\"alschungssicher sind und Prozesse nur \textit{capabilities} durch
-      autorisierte Schnittstellen erhalten. D.h es werden \textit{capabilities} nur an Prozesse gegeben die auch autorisiert sind diese zu halten.
+      Lauten den Autoren ist auch ein UNIX File Deskriptor eine Capability. In einem Capability System
+      h\"alt jeder Prozess Capabilities und kann diese Operationen ausf\"uhren welche durch die Capabilities autorisiert sind. 
+      Die Sicherheit wird dadurch gew\"ahrleistet das Capabilities f\"alschungssicher sind und Prozesse nur Capabilities durch
+      autorisierte Schnittstellen erhalten. D.h es werden Capabilities nur an Prozesse gegeben die auch autorisiert sind diese zu halten.
         
-      Eine \textit{protection domain} wie bereits erw\"ahnt ist eine Menge von \textit{capabilities}, welche von einem Subsystem zug\"anglich sind.
-      Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in separate Komponenten, d.h. jede besitzt eigene
+      Eine \textit{protection domain} wie bereits erw\"ahnt ist eine Menge von Capabilities, welche von einem Subsystem zug\"anglich sind.
+      Die Idee eines Capability Systems ist die Unterteilung von Anwendungen und Betriebssystem in separate Komponenten, d.h. jede besitzt eigene
       \textit{protection domains}.
         
       EROS erstellt periodisch st\"andig Checkpoints vom System, um ein Konsistentes System sicherzustellen. Bei einem System mit 256 MB physikalischem Speicher
       dauert der Snapshot um die 50 ms. Was bei heutigen Systemen um einiges l\"anger dauern w\"urde.
       Die EROS Architektur ist in Kernel und Kernel Services eingeteilt, zudem beinhaltet die Architektur eine Menge von Systemservices
       die von nicht privilegierten Anwendungen implementiert sind.
-      Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware via \textit{capability} gesch\"utzten Abstraktion dar.
-      Daten und \textit{capabilities} werden in Seiten, deren Gr\"osse bei der Hardware bestimmt ist, gespeichert. 
-      \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert, wobei ein \textit{node} 32 \textit{capabilities} speichern kann.
-      Die Adressr\"aume werden in B\"aume aufgebaut, d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter sind Daten- und \textit{capability}-Pages.
+      Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware via Capability gesch\"utzten Abstraktion dar.
+      Daten und Capabilities werden in Seiten, deren Gr\"osse bei der Hardware bestimmt ist, gespeichert. 
+      Capabilities werden zudem auch in sogenannten \textit{nodes} gespeichert, wobei ein \textit{node} 32 Capabilities speichern kann.
+      Die Adressr\"aume werden in B\"aume aufgebaut, d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter sind Daten- und Capability-Pages.
       Durch die Nutzung eines Baumes f\"ur das Adressraummapping ist es m\"oglich eine fein gradige Spezifikation von fault Handlern vorzunehmen.
       Das traversieren des Baumes ist aber ziemlich teuer, weshalb einige Optimierungen notwendig sind. 
         
-      Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von \textit{capabilities}:
+      Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von Capabilities:
       \begin{itemize}
-        \item \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern 
-        \item \textit{Entry capabilities} welche dem Halter das aufrufen der Dienste eines Programms, innerhalb eines bestimmten Prozesses, erlaubt.
+        \item \textit{Process Capabilities} welche die Operationen zum Manipulieren des Prozesses liefern 
+        \item \textit{Entry Capabilities} welche dem Halter das aufrufen der Dienste eines Programms, innerhalb eines bestimmten Prozesses, erlaubt.
       \end{itemize}
         
       EROS unterscheidet nicht zwischen Prozessen und Threads. Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl. einen Adressraum sich teilen,
-      jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. Jeder Prozess ist eine \textit{protection domain}.
-      Jeder Ressourcenzugriff in EROS wird via einer \textit{capability invocation} vollbracht. Wenn es bei der \textit{capability} autorisiert ist,
+      jedoch k\"onnen beide verschiedene Capabilities besitzen. Jeder Prozess ist eine \textit{protection domain}.
+      Jeder Ressourcenzugriff in EROS wird via einer \textit{Capability invocation} vollbracht. Wenn es bei der Capability autorisiert ist,
       l\"ost jeder Aufruf bei dem genannten Objekt eine Objekt definierte Operation, die vom Aufrufer spezifiziert wurde, aus. 
-      Es existiert ein einheitliches Interface, was bedeutet das alle \textit{capabilities} die selben Argumente annehmen,
+      Es existiert ein einheitliches Interface, was bedeutet das alle Capabilities die selben Argumente annehmen,
       was ein Vorteil bei der Performanz bringt.
         
       Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden  
@@ -492,8 +492,8 @@
       Die EROS IPC Implementierung wurde stark von L3 und Mach 4 beeinflusst. Zudem besitzt L3 auch ein Persistierungsmechanismus der aber nicht so ausgereift 
       ist wie der von EROS.
         
-      Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine 
-      \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion, da sie keine Objekte benennen oder direkt Zugriff autorisieren.
+      Laut den Autoren \cite{inproc:eros} handelt es sich bei den Capabilities vom Exokernel um keine 
+      Capabilities sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion, da sie keine Objekte benennen oder direkt Zugriff autorisieren.
       
       Die Forschung an dem EROS Betriebssystem wurde bereits eingestellt. Ein Ableger des EROS Betriebssystems
       existiert und nennt sich CapROS, welches die Codebasis benutzt \cite{Url:capros}. An der Johns Hopkins Unversit\"at wird zudem an einem 
@@ -518,7 +518,7 @@
       Asbestos Labels k\"onnen zudem den Informationsfluss in System- und Anwendungskomponenten verfolgen und limitieren.
       Sie unterst\"utzen dezentralisierte Abteilungen, die jeder Prozess dynamisch erstellen und manipulieren kann.
       Asbestos gibt einen Programm das eine neue Abteilung erstellt ein willk\"urliches Recht, um die Daten in der Abteilung freizugeben.
-      Das Programm kann dieses Recht weggeben, welches das Recht \"ahnlich einer \textit{capability} macht.
+      Das Programm kann dieses Recht weggeben, welches das Recht \"ahnlich einer Capability macht.
       
       Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion, welche f\"ur Serveranwendungen 
       effizient viele gleichzeitige Nutzer unterst\"utzt und isoliert.
@@ -534,7 +534,7 @@
       siehe Abschnitt \ref{sec:secure:access:plan9}.      
       
       Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert sondern die Semantik von
-      \textit{capability} basierende Senderechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche Senderechte.
+      Capability basierende Senderechten erreicht. Das Resultierende Port-Label System unterst\"utzt also Capability \"ahnliche Senderechte.
       Genauso wie bei den Prozessen beschr\"ankt der Kernel die Privilegien der Event Prozesse, w\"ahrend diese die ankommenden Nachrichten f\"ur den Nutzer
       behandeln und isoliert verschiedene Event Prozesszust\"ande.
       Jeder Event Prozess ist einem konventionellen \textit{base} Prozess assoziiert. Der Kernelzustand der Event Prozesse besteht aus einem \textit{send}, 
