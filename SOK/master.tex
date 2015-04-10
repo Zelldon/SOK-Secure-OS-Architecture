@@ -6,7 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
-\title{SOK - Eine sichere Betriebssystemarchitektur}% A secure operating system architecture}
+\title{SOK - Sichere Betriebssystemarchitekturen}% A secure operating system architecture}
 \author{Christopher Zell\\
         zell.christopher@fu-berlin.de}  
 %\emergencystrech=2em
@@ -15,19 +15,19 @@
 \maketitle
 
   \begin{abstract}
-    Sichere Systeme bestehen aus verschiedenen Schichten, zum einen aus User Interface, Dateisysteme, trusted computer base (TCB)
+    Sichere Systeme bestehen aus verschiedenen Schichten, zum einen aus User Interface, Dateisysteme, trusted computing base (TCB)
     z.B. Kernel aber auch grundlegende Sicherheitsmechanismen. Die richtige Kombination f\"ur ein sicheres System ist dabei sehr wichtig.
     
     Auf Kernel, Sicherheitsmechanismen sowie einige Kombinationen bzw. sichere Betriebssysteme soll in diesem
     Systematization of Knowledge (SOK) eingegangen werden.
     Es werden dabei Mirco-, Exokernel sowie Hybride Systeme und Zugriffsmechanismen
-    wie Protection Rings, Access bits und Capabilities vorgestellt und erl\"autert.
+    wie Protection Rings, Access Bits und Capabilities vorgestellt und erl\"autert.
     Es wird versucht bei den einzelnen Konzepten Bezug auf die heutigen Systeme und die Verwendung von Mechanismen zu nehmen,
     dies soll vor allem zeigen welche Konzepte sich durchgesetzt haben.
   \end{abstract}
   
   \section{Einleitung} \label{sec:intro} 
-    Sichere Systeme bestehen aus verschiedenen Schichten zum einen aus User Interface, Dateisysteme, trusted computer base (TCB)
+    Sichere Systeme bestehen aus verschiedenen Schichten zum einen aus User Interface, Dateisysteme, trusted computing base (TCB)
     z.B. Kernel aber auch grundlegende Sicherheitsmechanismen. Die richtige Kombination f\"ur ein sicheres System ist dabei sehr wichtig.
     
     Auf Kernel, Dateisysteme, Sicherheitsmechanismen sowie einige Kombination bzw. sichere Betriebssysteme soll in diesem
@@ -40,82 +40,82 @@
     erkannt haben ist, das viele Dinge die bereits in der Vergangenheit entwickelt oder
     erforscht wurden in Vergessenheit geraten \cite{Url:sok}.
     
-    Deshalb werden in diesem SOK einige historische Paper verwendet und deren Arbeit
+    Deshalb werden in diesem SOK einige historische Paper verwendet, deren Arbeit
     zusammengefasst und auf den Punkt gebracht.
     So werden z.B. Mikro-, Exokernel sowie andere Hybride Systeme aus den folgenden Papers 
     \cite{inproc:micro, inproc:exo, inproc:spin, inproc:eros, inproc:asbestos} vorgestellt.
-    Des Weiteren werden Zugriffsmechanismen wie Access bits, Protection Rings und auch Capabilities erl\"autert
+    Des Weiteren werden Zugriffsmechanismen wie Access Bits, Protection Rings und auch Capabilities erl\"autert
     und anhand von Beispiel Systemen aufgezeigt. Die folgenden Papers wurden dabei verwendet:
     \cite{inproc:multics, inproc:protec-rings, inproc:unix, inproc:plan9, inproc:cap}.
     
     \subsection{Motivation}
-     Seitdem die Idee existiert Mehrbenutzersysteme zu Entwickeln wurde auch dar\"uber nachgedacht wie man die einzelnen Benutzer isolieren kann.
+     Seitdem die Idee der Entwicklung von Mehrbenutzersysteme existiert wurde auch dar\"uber nachgedacht wie man die einzelnen Benutzer isolieren kann.
      Aber nicht nur \"uber die Isolierung wurde nachgedacht sondern auch grundlegend wie man die Daten 
      der jeweiligen Nutzer vor unberechtigten Zugriffen sch\"utzen kann.
      Die Entwicklung der Betriebssysteme hat gezeigt das es verschieden und gute L\"osungen gibt um ein sicheres Betriebssystem zu entwickeln.
      Jedoch scheiterte es oft entweder an der Umsetzung, Performanz oder an der Nutzbarkeit. 
-     In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen zusammengetragen.
-     Falls m\"oglich wird versucht die Mechanismen zu vergleichen und zu zeigen welche sich evtl. sogar durchgesetzt haben.
+     In dieser Arbeit werden die Ideen f\"ur die verschiedenen Sicherheitsmechanismen zusammengetragen,
+     falls m\"oglich wird versucht diese zu vergleichen und zu zeigen welche sich evtl. sogar durchgesetzt haben.
      
   \section{Sicherheitsmechanismen} \label{sec:secure}
     In diesem Abschnitt werden zum einen Protection Rings (siehe Abschnitt \ref{sec:secure:protectrings}), Access Bits bzw. Access Matrix 
     (siehe Abschnitt \ref{sec:secure:access}) und Capability Systeme (siehe Abschnitt \ref{sec:secure:capability}) erkl\"art und 
     auf die bereits erstellten Arbeiten verwiesen.
     \subsection{Protection Rings} \label{sec:secure:protectrings}
-      Im folgendem Abschnitt wird kurz auf das Multiplexed Information and Computing Service (Multics) Betriebssystem
+      In folgendem Abschnitt wird kurz auf das Multiplexed Information and Computing Service (Multics) Betriebssystem
       aus \cite{inproc:multics} eingegangen und dieses erl\"autert, danach werden mithilfe von Multics die Protection Rings erkl\"art.
       \subsubsection{Multics}  
         In Multics werden Informationen in Segmente gespeichert und k\"onnen geteilt 
-				werden sie beinhalten eigene Attribute \"uber deren Gr\"o\ss e sowie die Zugriffsrechte.
-				Segmentierung liefert eine allgemeine Basis f\"ur den direkten Zugriff und das Teilen von online Informationen durch erf\"ullen zweier Design Ziele.
+				werden, sie beinhalten eigene Attribute \"uber deren Gr\"o\ss e sowie die Zugriffsrechte.
+				Segmentierung liefert eine allgemeine Basis f\"ur den direkten Zugriff und das teilen von online Informationen durch erf\"ullen zweier Design Ziele.
 		    \begin{enumerate}
 		      \item direkter Zugriff
 		      \item Zugriffskontrolle
         \end{enumerate}
 		    Vorteil der direkten Adressierung ist das die Informationen nicht mehr kopiert werden m\"ussen, da alle Instruktionen und Daten
-		    im System vom Prozessor adressierbar sind. D.h. Duplizierung von Prozeduren und Daten ist unn\"otig soll hei\ss en Abbilder von Prozessen m\"ussen
+		    im System vom Prozessor adressierbar sind. D.h. Duplizierung von Prozeduren und Daten ist unn\"otig, Abbilder von Prozessen m\"ussen
 		    nicht vorher geladen werden die originalen Prozeduren k\"onnen direkt adressiert werden.
-		    Dies soll dem Programmierer eine attraktive Reduktion der Programm Komplexit\"at versprechen.
+		    Dies soll dem Programmierer eine attraktive Reduktion der Programm-Komplexit\"at versprechen.
 		  
-		    Multics Segmente sind Pakete von Informationen welche direkt Adressiert und Kontrolliert Zugegriffen werden k\"onnen.
-		    Mit jedem Segment sind Zugriffsattribute f\"ur jeden User der auf dieses Segment evtl. zugreifen will assoziiert.
-		    Diese Attribute werden von der Hardware \"uberpr\"uft. Jede Information kann direkt als Segment referenziert werden
-		    in anderen Systemen meist online Informationen als Dateien referenziert werden. (unix, plan9 etc.)
+		    Multics Segmente sind Pakete von Informationen welche direkt adressiert und auf die kontrolliert zugegriffen werden k\"onnen.
+		    Mit jedem Segment sind Zugriffsattribute f\"ur jeden User, der auf dieses Segment evtl. zugreifen will, assoziiert.
+		    Diese Attribute werden von der Hardware \"uberpr\"uft. Jede Information kann direkt als Segment referenziert werden.
+		    In anderen Systemen, meist online Informationen, werden diese als Dateien referenziert. (Unix, Plan 9 etc.)
 		  
 		  %S. 31
-		    In den meisten Systemen die Informationsteilung zur Verfuegung stellen sind die genannten beiden Kriterien nicht erfuellt.
+		    In den meisten Systemen, die Informationsteilung zur Verf\"ugung stellen, sind die genannten beiden Kriterien nicht erf\"ullt.
 		    Als Beispiel wird im Paper \cite{inproc:multics} das CTSS System genannt, welches Informationen die geteilt werden sollen in Dateien vorh\"alt.
-		    Das bedeutet das eine Kopie in den buffer des Users kopiert werden muss damit der Benutzer darauf Zugreifen kann. (Benoetigt IO - Request)
+		    Das bedeutet das eine Kopie in den Buffer des Users kopiert werden muss damit der Benutzer darauf zugreifen kann. (Ben\"otigt IO - Request)
 		  
-		    In nicht segmentierten Systemen macht das Benutzen von Kern Abbildern es so gut wie unm\"oglich die Zugriffskontrolle durchzusetzen.
+		    In nicht segmentierten Systemen macht das benutzen von Kern Abbildern es so gut wie unm\"oglich die Zugriffskontrolle durchzusetzen.
 		  
-        Die Hardware hat auf jedes Segment Zugriff mithilfe eines Segmentdeskriptors, der die Attribute beinhaltet.
+        Die Hardware hat auf jedes Segment mithilfe eines Segmentdeskriptors, der die Attribute beinhaltet, Zugriff.
 		    Name und Attribute eines Segments sind mit einem Katalog assoziiert. Im Grunde existiert eine Tabelle mit je einem Eintrag f\"ur ein Segment. 
 		    Ein Eintrag beinhaltet den Namen sowie die Segmentattribute. In Multics ist dieser Katalog als mehrere
-		    Segmente Implementiert und wird Verzeichnis bzw. Directory genannt. Das Verzeichnis wird in einem Baum Strukturiert.
+		    Segmente implementiert und wird Verzeichnis bzw. Directory genannt. Das Verzeichnis wird in einem Baum strukturiert.
 		    D.h. ein Segmentname besteht aus einer Liste von einzelnen Subnamen die die Position des Eintrags im Baum reflektieren.
 		    (Subname = Entryname, Liste = Pfadname)
-		    Der Pfadname ist in der ganzen Hierarchie einzigartig und der Entryname nur im gegeben Directory.
+		    Der Pfadname ist in der ganzen Hierarchie einzigartig und der Entryname nur im gegebenen Directory.
 		     
-		    Multics gibt dem Nutzer gro\ss e Menge an Segmentdeskriptoren sodass das Zwischenspeichern der Informationen nicht mehr notwendig ist und 
-		    die Informationen nicht ihre Zugeh\"origkeit verliert. Zudem hei\ss t das ein Multics Nutzer keine Dateien benutzt sondern alle Informationen
-		    als Segmente referenziert., welche direkt vom Programm erreichbar sind.
+		    Multics gibt dem Nutzer eine gro\ss e Menge an Segmentdeskriptoren, sodass das Zwischenspeichern der Informationen nicht mehr notwendig ist und 
+		    die Informationen nicht ihre Zugeh\"origkeit verliert. Zudem hei\ss t das, dass ein Multics Nutzer keine Dateien benutzt sondern alle Informationen
+		    als Segmente referenziert, welche direkt vom Programm erreichbar sind.
 		 
-        F\"ur Multics Nutzer erscheint der Speicher als eingeschlossen gro\ss er unabh\"angiger linearer Kernspeicher,
+        F\"ur Multics Nutzer erscheint der Speicher als eingeschlosser gro\ss er unabh\"angiger linearer Kernspeicher,
         jeder assoziiert mit einem eigenen Deskriptor. 
-        Der Zugriff erfolgt durch [\textit{Name}, \textit{i}] wobei \textit{Name} der symbolische Name des Segments und \textit{i} ist die Wort Zahl
-        im Linearen Speicher. Jeder Nutzer kann auf [\textit{Name}, \textit{i}] referenzieren jedoch hat er nur die Zugriffsrechte die er auch vom Ersteller
+        Der Zugriff erfolgt durch [\textit{Name}, \textit{i}] wobei \textit{Name} der symbolische Name des Segments und \textit{i} das Wort
+        im linearen Speicher ist. Jeder Nutzer kann auf [\textit{Name}, \textit{i}] referenzieren, jedoch hat er nur die Zugriffsrechte die er auch vom Ersteller
 	      des Segments zugewiesen bekommen hat und die im Segmentdeskriptor eingetragen sind.
 	      Kombinationen von den folgenden Zugriffsrechten ''read'', ''write'', ''execute'' und ''append'' sind m\"oglich.
 	 
-	      Segmente k\"onnen zudem in gleich gro\ss e Teile geteilt werden sogenannten Pages. Dieser Ansatz der Segmentierung
+	      Segmente k\"onnen zudem in gleich gro\ss e Teile geteilt werden, sogenannten Pages. Dieser Ansatz der Segmentierung
 	      und des Paging wird auch in heutigen Systemen noch verwendet.
 	     
 	      Im Paper \cite{inproc:multics} wird auf die Vorteile hingewiesen das die Allokierung durch das Paging sehr vereinfacht wird,
 	      sowie das nur die Pages, welche auch ben\"otigt werden, im Speicher sein m\"ussen. 
 	      Das bedeutet das Segmentgr\"ossen keine Einschr\"ankungen mehr besitzen.
 	     
-	      Sie weisen auch darauf hin das die Pages, die gebraucht werden, angefordert werden k\"onnen und das keine anderen dann in 
+	      Sie weisen auch darauf hin das die Pages, die gebraucht werden, angefordert werden k\"onnen und das keine anderen in 
 	      den Speicher mit \"ubertragen werden m\"ussen.
 	     
 	      Dies wird auch heutzutage in aktuellen Betriebssystemen noch betrieben, sogenanntes Paging welches mithilfe von
@@ -127,24 +127,24 @@
 	 
 	      In der Multics Implementierung sind alle Segmente in Pages unterteilt und die Page size betr\"agt 1024 W\"orter.
         Prozesse sind Programme in der Ausf\"uhrung (vgl. \cite{inproc:multics}[S. 34]). 
-		    Jeder Prozess in Multics besitzt ein privates Deskriptor Segment welches Segmentnummern in Kernspeicheradressen umwandelt und eine Private Tabelle besitzt   
-		    die die symbolischen Segmentnamen in Segmentnummern abbildet. Wird auch als Known Segment Table (KST) bezeichnet.
+		    Jeder Prozess in Multics besitzt ein privates Deskriptor Segment, welches Segmentnummern in Kernspeicheradressen umwandelt und eine Private Tabelle besitzt   
+		    die die symbolischen Segmentnamen in Segmentnummern abbildet. Diese Tabelle wird auch als Known Segment Table (KST) bezeichnet.
 		    Der Supervisor in Multics ist im Grunde wie der Kernel in heutigen Unix bzw. Linux Systemen.
 		   
-      Nicht wie in anderen Systemen arbeitet er in eigenem Speicherraum oder Prozess sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess
+      Nicht wie in anderen Systemen arbeitet er im eigenem Speicherraum oder Prozess, sondern die Supervisor Prozedur und deren Daten werden mit jedem Prozess
     	  geteilt. Immer wenn ein neuer Prozess erstellt wird, wird das Deskriptor Segment mit den Supervisordeskriptoren initialisiert.
     	  Dadurch m\"ussen aber auch die Supervisor Segmente vor unautorisierten Zugriffen gesch\"utzt werden.
-    	  Multics unterst\"utzt den Benutzer mit einem sogenannten Ring Protection Mechanismen, welches die Segmente in dem Adressraum in einzelne Mengen mit 
+    	  Multics unterst\"utzt den Benutzer mit einem sogenannten Ring Protection Mechanismus, welches die Segmente in dem Adressraum in einzelne Mengen mit 
     		verschiedenen Zugriffsrechten unterteilt. Dieser Mechanismus wird vom Supervisor zum eigenen Schutz verwendet. Siehe dazu n\"achster Abschnitt 
     		\ref{subsubsec:protectrings}
     		
       \subsubsection{Protection Rings} \label{subsubsec:protectrings}
-        In dem folgendem Abschnitt werden die bereits erw\"ahnten Protection Rings anhand von Multics n\"aher erl\"autert.
-        Multics wurde zuerst auf einem Honeywell 645 Computer system ausgef\"uhrt jedoch konnte die Hardware nicht viele Zugriffsmechanismen zur Verf\"ugung stellen.
+        In folgendem Abschnitt werden die bereits erw\"ahnten Protection Rings anhand von Multics n\"aher erl\"autert.
+        Multics wurde zuerst auf einem Honeywell 645 Computersystem ausgef\"uhrt, jedoch konnte die Hardware nicht viele Zugriffsmechanismen zur Verf\"ugung stellen.
         Deshalb wurde eine neue Hardware entwickelt die die Zugriffsmechanismen mehr auf Hardwareebene bringen sollte, sodass das meiste nicht mehr \"uber Software
         gepr\"uft werden muss. Das hei\ss t die sogenannten Protection rings wurden so gut wie vollst\"andig in Hardware umgesetzt. \cite{inproc:protec-rings}
     
-        Schutz soll wie gew\"ahrleistet werden sodass einzelne Benutzer von einander getrennt sind und wenn gew\"unscht aber untereinander Kommunizieren k\"onnen.
+        Schutz soll so gew\"ahrleistet werden dass einzelne Benutzer von einander getrennt sind und wenn gew\"unscht aber untereinander Kommunizieren k\"onnen.
         Vier Kriterien k\"onnen auf Zugriffskontrollmechanismen angewendet werden: 
         \begin{enumerate}
           \item \textit{Funktionale capability}
@@ -152,12 +152,12 @@
           \item \textit{Simplicity}
           \item \textit{Programming generality}
         \end{enumerate}
-        Das erste bedeutet es soll bestimmte Benutzerschtuzbed\"urfnisse tilgen, \textit{economy} befasst sich dabei mit den Kosten der Umsetzung.
+        Das erste bedeutet es soll bestimmte Benutzerschutzbed\"urfnisse tilgen, \textit{economy} befasst sich dabei mit den Kosten der Umsetzung.
         Kosten beinhaltet dabei auch Komplexit\"at des Subsystems, Benutzer Bel\"astigung durch benutzen dieser Zugriffsmechanismen sowie der benutzte
         extra Speicher und die erh\"ohte Laufzeit. Die Kosten sollten Proportional zu den Leistungen sein.
-        \textit{Simplicity} bedeutet Einfachheit, das hei\ss t das die Zugriffsmechanismen so einfach wie m\"oglich sein sollen, oft
+        \textit{Simplicity} bedeutet Einfachheit, das hei\ss t das die Zugriffsmechanismen so einfach wie m\"oglich sein sollen. Oft
         impliziert das fehlen von Einfachheit auch das fehlen von Sicherheit. \textit{Programming generality} besagt einfach das die Prozeduren so allgemein gehalten sind
-        das sie ohne Wissen der internen Struktur verwendet werden k\"onnen und Dinge auch ersetzt werden k\"onnen.
+        das sie ohne Wissen der internen Struktur verwendet und Dinge auch ersetzt werden k\"onnen.
         Es ist schwer ein Zugriffskontrollmechanismus zu entwickeln mit der Erf\"ullung aller Kriterien.
      
         Eine Dom\"ane ist eine Menge von Zugriffsberechtigungen. Ein sehr allgemeiner Zugriffskontrollmechanismus w\"urde kein Beschr\"ankung von der Anzahl an
@@ -167,26 +167,26 @@
         der Dom\"anen aufgezwungen. Das Resultat sind sogenannte Protection rings. (Siehe \cite[S. 160]{inproc:protec-rings}) 
         
         Die Charakterisierung von Ringen als beschr\"ankte Implementierung von Dom\"anen ist das Ergebnis sp\"aterer Einsicht. 
-        Als sie Entwickelt wurden, wurden Ringe als nat\"urliche Verallgemeinerung der Supervisor/User Modi die Schutz in vielen Computern liefern betrachtet.
+        Als sie Entwickelt wurden, wurden Ringe als nat\"urliche Verallgemeinerung der Supervisor/User Modi, die Schutz in vielen Computern liefern, betrachtet.
     
-        Mit jedem Prozess sind eine bestimmte Anzahl von Dom\"anen assoziiert, genannt Protection rings. Diese r Ringe sind mit Zahlen von $0$ bis $r - 1$ benannt.
+        Mit jedem Prozess sind eine bestimmte Anzahl von Dom\"anen assoziiert, genannt Protection Rings. Diese r Ringe sind mit Zahlen von $0$ bis $r - 1$ benannt.
         Die Zugriffsberechtigungen in Ring m sind so beschr\"ankt das sie eine Teilmenge von n sind, wenn gilt: $m > n$. Das bedeutet
         Ring $0$ besitzt die gr\"o\ss te Menge an Berechtigungen und $r-1$ die kleinste. Also hat ein Prozess der im Ring $0$ ausgef\"uhrt wird
         die meisten Zugriffsprivilegien und im Ring $r-1$ die wenigsten. Es existieren sogenannte brackets (engl. Klammern) f\"ur die einzelnen Berechtigungen
         wie \textit{read}, \textit{write} und \textit{execute}. D.h. ein write bracket gibt an in welchem Bereich das write Recht angewendet werden darf. Neben den 
-        Berechtigung werden noch die Ausma\ss e gespeichert und ein Flag f\"ur die jeweilige Berechtigung. Ist das Flag auf \textit{on} gesetzt 
+        Berechtigungen werden noch die Ausma\ss e und ein Flag f\"ur die jeweilige Berechtigung gespeichert. Ist das Flag auf \textit{on} gesetzt 
         so wird die obere Grenze des Bereichs f\"ur die Berechtigung gespeichert, wobei der Ring $r$ kleiner oder gleich der Grenze sein muss.
         Ist das Flag auf \textit{off} gesetzt so gibt es keine Berechtigung in keinem Ring f\"ur diesem Prozess. In Multics wurden 8 Ringe als angemessen 
-        angenommen und umgesetzt jedoch ist das keine Vorgabe und in anderen Systemen k\"onnen andere Anzahlen vorkommen.
+        angenommen und umgesetzt, jedoch ist das keine Vorgabe und in anderen Systemen k\"onnen andere Anzahlen vorkommen.
     
     %gates protection rings
         Eine neue Berechtigung wurde eingef\"uhrt und zwar das \"andern der Ausf\"uhrungsdom\"an eines Prozesses.
-        Durch das\"andern einer Dom\"ane k\"onnen neue Berechtigungen dazu kommen, weshalb es eine Operation ist die gut Kontrolliert werden muss.
-        Mithilfe der Dom\"anen soll es m\"oglicjh sein das bestimmte Zugriffsberechtigungen nur an bestimmten stellen Verf\"ugbar  sind bzw. wenn bestimmte Programmteile 
+        Durch das \"andern einer Dom\"ane k\"onnen neue Berechtigungen dazu kommen, weshalb es eine Operation ist die gut Kontrolliert werden muss.
+        Mithilfe der Dom\"anen soll es m\"oglich sein das bestimmte Zugriffsberechtigungen nur an bestimmten stellen Verf\"ugbar  sind bzw. wenn bestimmte Programmteile 
         ausgef\"uhrt werden. Das hei\ss t an bestimmten Programmpositionen auch \textit{gates} genannt soll es m\"oglich sein die Dom\"ane zu \"andern.
-        Es werden daf\"ur \textit{gate list} und \textit{gate extension} eingef\"uhrt die eine neue bracket definieren in der das Programm die Ringe wechseln kann, diese
+        Es wurden daf\"ur \textit{gate list} und \textit{gate extension} eingef\"uhrt die eine neue bracket definieren in der das Programm die Ringe wechseln kann, diese
         gelten nur f\"ur das herunter wechseln der Ringe, da dort mehr Rechte verf\"ugbar werden. Wechselt man ein Ring nach oben so werden es weniger Rechte deshalb
-        soll das ohne beschr\"ankung m\"oglich sein. 
+        soll das ohne Beschr\"ankung m\"oglich sein. 
     
     %probleme call und return 
     %Wenn calling prozedur im gleichen ring wie caller dann kein problem
@@ -194,50 +194,50 @@
     % caller auch rechte besitzt fuer bestimmte argumente oder ergebnisse die gelesen und geschrieben werden 
     % bei hoeherem wird returned zu niedrigem problem ist das evtl argumente nich referenziert werden koennen von aufgerufener prozedujr
     
-        In Multics wird der Supervisor und die Protection rings so umgesetzt das die Primitiven Operationen wie Zugriffskontrolle, I/O, Speicherverwaltung sowie
-        Prozessverwaltung im Ring 0 ausgef\"uhrt werden, alles andere vom Supervisor in Ring 1.
+        In Multics wird der Supervisor und die Protection Rings so umgesetzt das die Primitiven Operationen wie Zugriffskontrolle, I/O, Speicherverwaltung sowie
+        Prozessverwaltung im Ring 0 ausgef\"uhrt werden, alles andere vom Supervisor im Ring 1.
     
-        Die Hardware Umsetzung der Protection rings die im Paper \cite{inproc:protec-rings} beschrieben wurde erm\"oglicht die drei folgenden dinge:
+        Die Hardware Umsetzung der Protection Rings, die im Paper \cite{inproc:protec-rings} beschrieben wurde, erm\"oglicht die drei folgenden Dinge:
 		    \begin{itemize}
-		      \item Benutzer k\"onnen beliebige gesch\"utzte Subsysteme erstellen die von anderen genutzt werden k\"onnen
-		      \item Der Supervisor kann in Schichten Implementiert werden die aufgezwungen werden.
-		      \item Der Nutzer kann sich selbst sch\"utzen w\"arend er eigene oder andere Programme debugged.
+		      \item Benutzer k\"onnen beliebige gesch\"utzte Subsysteme erstellen, die von anderen genutzt werden k\"onnen
+		      \item Der Supervisor kann in Schichten Implementiert werden, die aufgezwungen werden.
+		      \item Der Nutzer kann sich selbst sch\"utzen w\"ahrend er eigene oder andere Programme debugged.
 		    \end{itemize}
     
-    \subsection{Access bits oder Matrix} \label{sec:secure:access}
-      Im folgendem Abschnitt werden die Access bits bzw. Access Matrizen als Zugriffsmechanismus anhand der Betriebssysteme Unix und Plan 9 beschrieben.
+    \subsection{Access Bits oder Matrix} \label{sec:secure:access}
+      In folgendem Abschnitt werden die Access Bits bzw. Access Matrizen als Zugriffsmechanismus anhand der Betriebssysteme Unix und Plan 9 beschrieben.
       \subsubsection{Unix}
 		    Unix wurde von den bekannten Informatikern Dennis Ritchie (C) und Ken Thompson (Unix, UTF8, Plan9 etc.) an den Bell Labs entwickelt.
-		    Es ist ein Universal-, Mehrbenutzer- und interaktives Betriebssystem. Ein gro\ss er Teil von Unix ist in C geschrieben was vorallem Multiprogramming
-		    und das Teilen von Code erm\"oglicht. Die wichtigste Aufgabe von UNIX ist ein Dateisystem bereitzustellen. Es gibt drei verschiedene Arten von Files:
+		    Es ist ein Universal-, Mehrbenutzer- und interaktives Betriebssystem. Ein gro\ss er Teil von Unix ist in C geschrieben, was vor allem Multiprogramming
+		    und das Teilen von Code erm\"oglicht. Die wichtigste Aufgabe von UNIX ist ein Dateisystem bereitzustellen. Es gibt drei verschiedene Arten von Dateien (o. Files):
 		    gew\"ohnliche Datentr\"agerdateien, Verzeichnisse, und spezielle Dateien. Anders als in Multics ist das ganze System in Dateien aufgeteilt und nicht in
-		    Segmente. Gew\"ohnliche Datentr\"agerdateien beinhalten die Information die der User in diese platziert. Die Struktur wird nicht vom System kontrolliert maximal
+		    Segmente. Gew\"ohnliche Datentr\"agerdateien beinhalten die Information die der User in diese platziert. Die Struktur wird nicht vom System kontrolliert, maximal
 		    von den zu benutzenden Programmen. Verzeichnisse liefern das Mapping zwischen den Dateinamen und den Dateien selber, somit entsteht eine Baumstruktur.
-		    Ein Verzeichnis ist im Grunde wie eine normale Datei nur das sie nicht von unprivilegierten Nutzern beschrieben werden kann. D.h. das System Kontrolliert den
-		    Inhalt der Verzeichnisse. Das System besitzt eigene Verzeichnisse und Unterverzeichnisse ein wichtiges ist \textit{root}.
-		    Alle Dateien im System k\"onnen gefunden werden durch folgen eines Pfades von einer Kette von Verzeichnissen bis die Datei gefunden wurde. 
-		    Der Startpunkt ist oft dabei \textit{root}.(Siehe \cite[S. 366]{inproc:unix})
+		    Ein Verzeichnis ist im Grunde wie eine normale Datei nur das sie nicht von unprivilegierten Nutzern beschrieben werden kann. D.h. das System kontrolliert den
+		    Inhalt der Verzeichnisse. Das System besitzt eigene Verzeichnisse und Unterverzeichnisse, ein wichtiges ist \textit{root}.
+		    Alle Dateien im System k\"onnen, durch folgen eines Pfades von einer Kette von Verzeichnissen, gefunden werden. 
+		    Der Startpunkt ist oft dabei \textit{root}, vgl. \cite[S. 366]{inproc:unix}.
 		    
 		    Das Zugriffskontrollschema ist in UNIX relativ simpel. Jeder Nutzer besitzt eine eigene ID, wird eine Datei vom Nutzer erstellt  erh\"alt diese die ID, sodass der Ersteller immer
-		    erfasst werden kann. Zudem gibt es 7 Bits f\"ur die Dateien die den Zugriff kontrollieren. 
+		    erfasst werden kann. Zudem gibt es 7 Bits, f\"ur die Dateien, die den Zugriff kontrollieren. 
 		    Die ersten drei geben f\"ur den Eigent\"umer die Rechte: \textit{read}, \textit{write} und \textit{execute} an.
 		    Die n\"achsten drei f\"ur alle anderen Nutzer die Rechte und das letzte Bit ist das sogenannte S-Bit. Ist dieses Bit gesetzt so wird die User ID tempor\"ar
 		    mit der des Datei Eigent\"umers ersetzt bzw. das Programm mit der User ID des Eigent\"umers ausgef\"uhrt.
-		    D.h. es werden deren Rechte benutzt f\"ur den Zeitraum der Programmausf\"uhrung. Dieses sollte erm\"oglichen das Programme
+		    D.h. es werden deren Rechte benutzt f\"ur den Zeitraum der Programmausf\"uhrung. Dies sollte erm\"oglichen das Programme
 		    auf Dateien zugreifen k\"onnen f\"ur die der Nutzer im Normalfall keine Rechte besitzt. (Siehe \cite[S. 367]{inproc:unix}    
 		    Mithilfe des S-Bits konnten jedoch einige Exploits geschrieben werden die es unautorisierten Nutzern erm\"oglichten
 		    die Kontrolle \"uber das System zu erlangen. 
 		    
 		    UNIX wurde laut den Autoren auch von Multics beeinflusst vor allem in dem Bereich I/O, Shell und deren Funktionalit\"at. (Siehe \cite[S. 374]{inproc:unix})
-		    UNIX hat sich bis heute stark durch gesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
+		    UNIX hat sich bis heute stark durchgesetzt bzw. basieren viele heutige Systeme auf dem UNIX System.
 	    \subsubsection{Plan 9} \label{sec:secure:access:plan9}
         Laut den Autoren von Plan 9, hatte UNIX einige Probleme die zu tief lagen und somit nicht einfach gel\"ost werden konnten.
-        Es gab jedoch auch einige Ideen die in dem neuen System von Bell Labs \"ubernommen werden konnten.
+        Es gab jedoch auch einige Ideen die in dem neuen Bell Labs System \"ubernommen werden konnten.
         Das war zum einem das Dateisystem um Ressourcen erreichbar zu machen und zu benennen.
     
         Die Sicht auf das System ist auf drei Prinzipien gebaut.
         Erstens die Ressourcen werden benannt und sind erreichbar genauso wie Dateien in einem Hierarchischem Dateisystem. 
-        Zweitens es existiert ein Standard Protokoll namens \textit{9P} um auf die 
+        Zweitens es existiert ein Standard Protokoll namens \textit{9P}, um auf die 
         Ressourcen zuzugreifen. Drittens die unterschiedlichen Hierarchien die von den verschiedenen Services geliefert
         werden sind verbunden zu einem einzelnen Privaten Hierarchischem Dateinamensraum. 
         D.h. es existieren sogenannte lokale Namensr\"aume auf den nur die jeweiligen Nutzer Zugriff haben.
@@ -246,14 +246,14 @@
         
         9P ist ein Netzwerkprotokoll welches Maschinenzugriff auf entfernten Dateien erm\"oglicht.
         Es ist als Menge von Transaktionen strukturiert das Anfragen von einem Client zu einem Server und die Antwort zur\"uck sendet.
-        9P kontrolliert das Dateisystem nicht nur die Dateien, es beinhaltet Prozeduren um Dateinamen aufzul\"osen und die Namenshierarchie
-        vom Dateisystem des Servers zum traversieren.
+        9P kontrolliert das Dateisystem nicht nur die Dateien. Es beinhaltet Prozeduren um Dateinamen aufzul\"osen und um die Namenshierarchie
+        vom Dateisystem eines Servers zu traversieren.
         Dateizugriff ist auf Byte und nicht auf Blockebene, nicht wie bei \textit{NFS} und \textit{RFS}.
         
         Eine gro\ss e Plan 9 Installation besitzt eine Anzahl von Computer die zusammen in einem Netzwerk verbunden sind,
-        jeder liefert eine eigene Klasse von Anwendung. Geteilte Multiprozessorserver stellen
-        Berechnungszyklen bereit andere gro\ss e Maschinen stellen Speicher zur Verf\"ugung. Es existieren sogenannte Workstations welche gleichzusetzen sind mit den 
-        Terminals der alten \textit{time sharing machines}. Wenn jemand das System durch ein Terminal nutzt ist es durch den Benutzer Personalisiert.
+        jeder liefert eine eigene Klasse von Anwendung. Verteilte Multiprozessorserver stellen
+        Berechnungszyklen bereit, andere gro\ss e Maschinen stellen Speicher zur Verf\"ugung. Es existieren sogenannte Workstations welche gleichzusetzen sind mit den 
+        Terminals der alten \textit{time sharing machines}. Wenn jemand das System durch ein Terminal nutzt ist es durch den Benutzer personalisiert.
     
         Das Dateisystemmodel ist gut verstanden bei Systementwicklern aber auch bei allgemeinen Nutzern. 
         D.h. Services die Datei \"ahnliches Interface bereitstellen sind leicht zu bauen, leicht zu verstehen
@@ -263,11 +263,11 @@
         Der Dateiserver hat drei Speicherlevel, erstens den \textit{Memory Buffer}, zweitens die \textit{Disk} und drittens den \textit{Massenspeicher}
         in einem \textit{write-once-read-many} (WORM) Ger\"at. 
         Die \textit{Disk} ist dabei der Cache f\"ur den WORM und der \textit{Memory Buffer} ist der Cache der \textit{Disk}.
-        Ein weiteres Feature existiert das es erm\"oglicht zu bestimmten Zeitpunkten einen \textit{dump} vom
-        Dateisystem zu erstellen. Das Dateisystem wird dabei eingefroren und alle modifizierten Bl\"ocke seitdem letztem dump werden in ein Warteschlange geschrieben
-        die dann nach und nach auf dem WORM geschrieben werden. Auf die \textit{dumps} hat man direkten Zugriff sodass man z.B. alte Compiler Versionen
+        Ein weiteres Feature existiert, welches es erm\"oglicht zu bestimmten Zeitpunkten einen \textit{dump} vom
+        Dateisystem zu erstellen. Das Dateisystem wird dabei eingefroren und alle modifizierten Bl\"ocke seitdem letztem dump werden in ein Warteschlange geschrieben,
+        die dann nach und nach auf dem WORM geschrieben werden. Auf die \textit{dumps} hat man direkten Zugriff, sodass man z.B. alte Compiler Versionen
         und vieles weitere testen kann.
-        Zudem kann auch ein kompletter Systembackup erfolgen, was aber einige Tage dauert da der Cache vom WORM erst wieder eingelesen werden muss etc.
+        Zudem kann auch ein komplettes Systembackup erfolgen was aber einige Tage dauert, da der Cache vom WORM erst wieder eingelesen werden muss etc.
         Die Zugriffsrechte der \textit{dump} Files sind die selben wie zuvor, jedoch ist das Dateisystem nur \textit{read-only}.
         D.h. Dateien k\"onnen nicht im \textit{dump} geschrieben werden, egal was f\"ur Zugriffsbits gesetzt sind.
         
@@ -275,7 +275,7 @@
         
         Authentifizierung wird f\"ur den Benutzerzugriff auf eine Ressource verwendet. Der Nutzer der die Ressource Anfragt wird Client genannt und der
         Nutzer der den Zugriff gew\"ahrt wird Server genannt. Jeder Plan 9 User hat ein assoziierten DES Authentifikationsschl\"ussel. Die Identit\"at
-        des Nutzers wird verifiziert durch die M\"oglichkeit bestimmte Nachrichten \textit{challenges} zu Ver- und Entschl\"usseln.
+        des Nutzers wird verifiziert durch die M\"oglichkeit bestimmte Nachrichten \textit{challenges} zu ver- und entschl\"usseln.
         
         Die Authentifizierung wird wie folgt durchgef\"uhrt: Nachdem die \textit{challenges} ausgetauscht wurden, 
         Kontaktiert eine Partei den Authentifizierungsserver um verschl\"usselte Berechtigungstickets, 
@@ -291,38 +291,38 @@
         Diesem ist es immer erlaubt sich zu verbinden. None besitzt nur eingeschr\"ankte Nutzungsrechte. Die Idee hinter diesem Nutzer ist die selbe
         wie hinter dem anonymen Nutzer in FTP.
        
-        \"Ahnlich wie in UNIX besitzen die Dateien sogenannte Zugriffsbits welche die \textit{read}, \textit{write} und \textit{execute} Rechte anzeigen. 
-         Zum einen f\"ur den Besitzer der Datei, f\"ur eine bestimmte Gruppe und vor allen restlichen.
+        \"Ahnlich wie in UNIX besitzen die Dateien sogenannte Zugriffsbits, welche die \textit{read}, \textit{write} und \textit{execute} Rechte anzeigen. 
+         Zum einen f\"ur den Besitzer der Datei, f\"ur eine bestimmte Gruppe und f\"ur alle restlichen.
          Die Gruppen sind ein neues Feature in Plan 9 welches auch heute noch in Linux verwendet wird. Gruppen sind nichts anderes
-         als ein Nutzer mit einer Liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren diese k\"onnen die
+         als ein Nutzer mit einer Liste von anderen Nutzern in dieser Gruppe. F\"ur Gruppen k\"onnen sogenannte \textit{group leader} existieren, diese k\"onnen die
          besagte Gruppe dann Verwalten. Normalerweise geh\"ort eine Datei zu dem Nutzer der diese erstellt hat. 
-         Der Gruppenname wird vererbt von dem Verzeichnis in dem die neue Datei liegt. In Linux ist es \"ahnlich nur der der Unterschied liegt darin
+         Der Gruppenname wird von dem Verzeichnis in dem die neue Datei liegt vererbt. In Linux ist es \"ahnlich, nur der Unterschied liegt darin
          das eine Datei die default Gruppe des Nutzers erbt und nur \textit{root} eine Gruppe ver\"andern darf \cite{Url:linux:groups} \cite{Url:linux:groupmod}.
     \subsection{Capabilities} \label{sec:secure:capability}
-      Im folgenden Abschnitt werden Capabilities Zugriffsmechanismen anhand vom Cambridge CAP Computersystem erkl\"art.
+      In folgendem Abschnitt werden Capability Zugriffsmechanismen anhand vom Cambridge CAP Computersystem erkl\"art.
       \subsubsection{CAP}
 		     CAP wurde entwickelt um detaillierten Speicherschutz zu gew\"ahrleisten. Die Intention ist das jedes Modul eines Programms,
 		     welches auf dem CAP ausgef\"uhrt wird, nur Zugriff auf genau die und nur die Daten besitzen soll,
 		     welche sie auch wirklich f\"ur korrekte Funktionalit\"at ben\"otigt.
 		     
 		     Capabilities werden benutzt um in CAP den Zugang zu Segmenten zu gew\"ahrleisten.
-		     Capabilities besitzen \textit{base} und \textit{limit} des Segments sowie sogenannten \textit{access status}. Dieser Status
-		     besteht aus 5 bits, drei davon sind f\"ur den Datenzugriff also \textit{read}, \textit{write} und \textit{execute}.
-		     Die anderen beiden sind f\"ur den capability Zugriff, d.h.\textit{read capability} und \textit{write capability}.
-		     Es wird zwischen \textit{data typ} und \textit{capability type} capabilities unterschieden. Der erste Typ besitzt gesetzte bits in den ersten drei bits 
-		     und der zweite Typ in den letzten. Es existiert keine capability mit gesetzten \textit{data} und \textit{capability access bits}.
+		     Capabilities besitzen \textit{base} und \textit{limit} des Segments, sowie sogenannten \textit{access status}. Dieser Status
+		     besteht aus 5 Bits, drei davon sind f\"ur den Datenzugriff also \textit{read}, \textit{write} und \textit{execute}.
+		     Die anderen beiden sind f\"ur den Capability Zugriff, d.h.\textit{read capability} und \textit{write capability}.
+		     Es wird zwischen \textit{data typ} und \textit{capability type} Capabilities unterschieden. Der erste Typ besitzt gesetzte Bits in den ersten drei Bits 
+		     und der zweite Typ in den letzten. Es existiert keine Capability mit gesetzten \textit{data} und \textit{capability access bits}.
 		     Capabilities werden in Segmenten gespeichert die \textit{capability type access} besitzen.
-		     Zu jeder Lebenszeit eines Prozesses sind nur die Ressourcen erreichbar die von den capabilities definiert wurden.
+		     Zu jeder Lebenszeit eines Prozesses sind nur die Ressourcen erreichbar die von den Capabilities definiert wurden.
 		     Mit jedem Prozess ist ein fundamentales Segment assoziiert, genannt Process Resource List (PRL). 
 		     Im CAP Betriebssystem existiert eine Prozesshierarchie. Als Wurzel der Hierarchie steht ein einzelner Prozess deren PRL wird auch Master Ressource List 
 		     genannt. Das Programm welches in diesem Prozess l\"auft ist Verantwortlich f\"ur die Erstellung und Verwaltung von Level 2 
 		     Prozessen es wird Master Coordinator genannt (MC).
 		     Die PRL eines Level 2 Prozesses ist ein normales Datensegment vom MC. Es ist m\"oglich die Hierarchie zur erweitern und weitere Junior
-		     bzw. Subprozesse zu erzeugen. Diese ben\"otigen nur eine capability f\"ur ein Segment um dies als PRL zu nutzen.
+		     bzw. Subprozesse zu erzeugen. Diese ben\"otigen nur eine Capability f\"ur ein Segment um dies als PRL zu nutzen.
 		     
 		     In heutigen Linux Systemen werden auch sogenannte Prozesshierarchien verwendet, siehe z.B. die Shell die bei jedem
 		     Kommando, bis auf built-in Funktionen, ein neuen Kind-Prozess erzeugt und dieses Kind das Kommando ausf\"uhren l\"asst. Weiteres Beispiel
-		     ist das nachdem Boot ein sogenannter init Prozess erzeugt wird der als Wurzel der Prozesshierarchie hierbei steht, \"ahnlich wie 
+		     ist das nachdem Boot ein sogenannter init Prozess erzeugt wird, der als Wurzel der Prozesshierarchie hierbei steht, \"ahnlich wie 
 		     im CAP System \cite{Url:linux:processes}.
 		     
   \section{Weitere sichere Systeme} \label{sec:other}
@@ -345,23 +345,23 @@
 	    von Prozessor unabh\"angigen Abstraktionen, zu erzeugen.\cite[S. 248]{inproc:micro}
    
     \subsection{Exokernel}       
-      Betriebssysteme definieren die Schnittstelle zwischen den Anwendungen und den Physikalischen Ressourcen.
+      Betriebssysteme definieren die Schnittstelle zwischen den Anwendungen und den physikalischen Ressourcen.
       Ungl\"ucklicherweise kann diese Schnittstelle die Performanz sowie die Implementierung von Anwendungen einschr\"anken. \"Ublicherweise
       abstrahieren Betriebssysteme Informationen \"uber die Hardware in Prozessen, Dateien, Adressr\"aumen und IPC. Diese Abstraktionen definieren eine 
-      Virtuelle Maschine in der die Anwendungen ausgef\"uhrt werden. Deren Implementierung kann \textbf{nicht} durch nicht vertrauensw\"urdige Anwendungen
+      virtuelle Maschine in der die Anwendungen ausgef\"uhrt werden. Deren Implementierung kann \textbf{nicht} durch nicht vertrauensw\"urdige Anwendungen
       ersetzt werden. Das f\"uhrt zu einigen Problemen: Es verweigert Anwendungen den Vorteil von Dom\"anen spezifischen Optimierungen.
       Es schr\"ankt zudem die Flexibilit\"at von Anwendungsentwicklern ein, da neue Abstraktionen nur durch sonderbare Emulationen zum
       System hinzugef\"ugt werden k\"onnen.
         
       Diese Probleme wollten die Entwickler des Exokernels bek\"ampfen, deren Ziel es war ein minimalistischen Kernel genannt Exokernel zu erstellen.
-      Dieser Kernel vielf\"alltigt sicher die verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht Vertrauensw\"urdigen Anwendungen die
+      Dieser Kernel vielf\"alltigt sicher die verf\"ugbaren Ressourcen. Der Rest des Systems besteht aus nicht vertrauensw\"urdigen Anwendungen, die
       z.B. IPC oder Ressource Management umsetzen. D.h. sogenannte \textit{library operating systems} arbeiten \"uber der Exokernel Schnittstelle. 
       Diese Implementieren die Schnittstelle des h\"oheren Levels. Das erm\"oglicht Anwendungen bestimmte Bibliotheken auszuw\"ahlen bzw.
       deren Implementierung direkt auf deren Notwendigkeiten anzupassen. Z.B. kann es verschiedene Arten von page-table Implementierungen
       in einem System geben. Eine Anwendung kann dann eine Bibliothek mit einer bestimmten Implementierung, welche am besten passt, ausw\"ahlen.
         
       Um Anwendungen die Kontrolle \"uber die Hardware zu erm\"oglichen definiert der Exokernel ein Low-Level Interface.
-      Der Exokernel exportiert Hardware Ressourcen was eine effiziente und einfache Implementierung erm\"oglicht.
+      Der Exokernel exportiert Hardware Ressourcen, was eine effiziente und einfache Implementierung erm\"oglicht.
       Mithilfe von drei Techniken wird das Exportieren sicher umgesetzt. Zum einen mit sogenannten \textit{secure bindings}, 
       mit \textit{visible resource revocation} und durch ein \textit{abort protocol}. 
         
@@ -378,12 +378,12 @@
       bzw. deren \textit{secure binding} brechen. Normalerweise setzen Betriebssysteme diese \textit{revocation} invisible durch. 
       D.h. sie allozieren oder deallozieren Speicher oder Ressourcen ohne die Anwendungen zu informieren.
       Diese sichtbare \textit{resource revocation} erm\"oglicht das \textit{library operating systems} darauf reagieren k\"onnen und
-      z.B. den ben\"otigten Prozessorzustand speichern. Jedoch einige dinge wie Prozessorkontextbezeichner werden sehr oft zur\"uckgeholt wodurch
+      z.B. den ben\"otigten Prozessorzustand speichern. Jedoch einige Dinge wie Prozessorkontextbezeichner werden sehr oft zur\"uckgeholt wodurch
       es besser ist die nicht sichtbare \textit{resource revocation} zu nutzen.
         
-      Das \textit{Abort protocol} erm\"oglicht es die Ressource indem Fall zur\"uck zu holen, wenn die Anwendung auf die
-      Anfrage der \textit{revocation} nicht zufriedenstellend reagiert hat.
-      Anstatt die Anwendungen, die nicht in bestimmter Zeit antworte,n einfach zu killen werden einfach die
+      Das \textit{abort protocol} erm\"oglicht es, indem Fall das die Anwendung auf die
+      Anfrage der \textit{revocation} nicht zufriedenstellend reagiert hat, die Ressource zur\"uck zu holen.
+      Anstatt die Anwendungen, die nicht in bestimmter Zeit antworten einfach zu beenden werden die
       \textit{secure bindings} aufgel\"ost und die \textit{library operating systems} bzw. Anwendungen informiert.
         
       Die Referenz Implementierung Aegis (Exokernel) mit dem ExOS (library operting system) gibt den Anwendungen gr\"o\ss ere flexiblit\"at 
@@ -393,14 +393,14 @@
         
     \subsection{Spin} \label{sec:other:spin}
       Spin ist ein Betriebssystem welches dynamisch spezialisiert werden kann, um sicher die Bed\"urfnisse von Performanz und Funktionilt\"at f\"ur
-      Anwendungen anzupassen. \"Ahnlich dem Exokernel versucht Spin es zu erm\"oglichen das die Betriebssystemschnittstelle angepasst werden kann
-      sodass die Bedingungen f\"ur Anwendungen verbessert werden k\"onnen. Soll hei\ss en das bei normalen Betriebssystemen die Anwendungen nur 
-      schlecht oder gar nicht laufen k\"onnen in Spin die Schnittstellen des Betriebssystem auf die Notwendigkeiten angepasst werden.
+      Anwendungen anzupassen. \"Ahnlich dem Exokernel versucht Spin es zu erm\"oglichen das die Betriebssystemschnittstelle angepasst werden kann,
+      sodass die Bedingungen f\"ur Anwendungen verbessert werden k\"onnen. Soll hei\ss en das bei normalen Betriebssystemen Anwendungen die nur 
+      schlecht oder gar nicht laufen in Spin die Schnittstellen des Betriebssystem auf die Notwendigkeiten angepasst werden k\"onnen.
       
       Spin und seine Erweiterungen sind in der typsicheren Sprache Modula-3 geschrieben. Modula-3 besitzt folgende Kernmerkmale: 
       Interfaces, Typsicherheit, automatisches Speichermanagement, Objekte, generische Interfaces, Threads und Exceptions.
       Durch die Typsicherheit ist, lauten den Autoren von \cite{inproc:spin}, gew\"ahrleistet das der Code nicht auf beliebigen Speicher zugreift,
-      Pointer nur auf die Objekte des Zeigertyps verweisen etc..
+      Pointer nur auf die Objekte des Zeigertyps verweisen etc.
       Das Spin Betriebssystem beruht auf vier Techniken die auf Sprach- oder Laufzeitebene implementiert sind.
       Die erste ist die \textit{co-location}, d.h. die Erweiterungen werden dynamisch in den virtuellen Adressraum des Kernel verlinkt.
       \textit{Co-location} erm\"oglicht Kommunikation zwischen System und Erweiterungscode mit niedrigen Kosten.
@@ -452,17 +452,17 @@
       Lauten den Autoren ist auch ein UNIX File Deskriptor eine \textit{capability}. In einem \textit{capability system} 
       h\"alt jeder Prozess \textit{capabilities} und kann diese Operationen ausf\"uhren welche durch die \textit{capabilities} autorisiert sind. 
       Die Sicherheit wird dadurch gew\"ahrleistet das \textit{capabilities} f\"alschungssicher sind und Prozesse nur \textit{capabilities} durch
-      Autorisierte Schnittstellen erhalten. D.h es werden \textit{capabilities} nur an Prozesse gegeben die auch autorisiert sind diese zu halten.
+      autorisierte Schnittstellen erhalten. D.h es werden \textit{capabilities} nur an Prozesse gegeben die auch autorisiert sind diese zu halten.
         
-      Eine \textit{protection domain} wie bereits auch schon erw\"ahnt ist eine Menge von \textit{capabilities}, welche von einem Subsystem zug\"anglich sind.
+      Eine \textit{protection domain} wie bereits erw\"ahnt ist eine Menge von \textit{capabilities}, welche von einem Subsystem zug\"anglich sind.
       Die Idee eines \textit{capability systems} ist die Unterteilung von Anwendungen und Betriebssystem in separate Komponenten, d.h. jede besitzt eigene
       \textit{protection domains}.
         
-      EROS erstellt periodisch st\"andig Checkpoints vom System um ein Konsistentes System sicherzustellen. Bei einem System mit 256 MB physikalischem Speicher
+      EROS erstellt periodisch st\"andig Checkpoints vom System, um ein Konsistentes System sicherzustellen. Bei einem System mit 256 MB physikalischem Speicher
       dauert der Snapshot um die 50 ms. Was bei heutigen Systemen um einiges l\"anger dauern w\"urde.
       Die EROS Architektur ist in Kernel und Kernel Services eingeteilt, zudem beinhaltet die Architektur eine Menge von Systemservices
       die von nicht privilegierten Anwendungen implementiert sind.
-      Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware, via \textit{capability} gesch\"utzten Abstraktion dar.
+      Der Kernel stellt eine ziemlich direkte Virtualisierung der unterliegenden Hardware via \textit{capability} gesch\"utzten Abstraktion dar.
       Daten und \textit{capabilities} werden in Seiten, deren Gr\"osse bei der Hardware bestimmt ist, gespeichert. 
       \textit{Capabilities} werden zudem auch in sogenannten \textit{nodes} gespeichert, wobei ein \textit{node} 32 \textit{capabilities} speichern kann.
       Die Adressr\"aume werden in B\"aume aufgebaut, d.h. sie bestehen aus den zuvor genannten nodes. Deren Bl\"atter sind Daten- und \textit{capability}-Pages.
@@ -472,19 +472,19 @@
       Der Kernel exportiert die Prozessabstraktion in Anwendungscode via zwei Typen von \textit{capabilities}:
       \begin{itemize}
         \item \textit{Process capabilities} welche die Operationen zum Manipulieren des Prozesses liefern 
-        \item \textit{Entry capabilities} welche dem Halter das Aufrufen der Dienste eines Programms, innerhalb eines bestimmten Prozess, erlaubt.
+        \item \textit{Entry capabilities} welche dem Halter das aufrufen der Dienste eines Programms, innerhalb eines bestimmten Prozesses, erlaubt.
       \end{itemize}
         
-      EROS unterscheidet nicht zwischen Prozessen und Threads. Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl. einen Adressraum sich teilen
+      EROS unterscheidet nicht zwischen Prozessen und Threads. Alle Prozesse sind single-threaded. Zwei Prozesse k\"onnen evtl. einen Adressraum sich teilen,
       jedoch k\"onnen beide verschiedene \textit{capabilities} besitzen. Jeder Prozess ist eine \textit{protection domain}.
       Jeder Ressourcenzugriff in EROS wird via einer \textit{capability invocation} vollbracht. Wenn es bei der \textit{capability} autorisiert ist,
       l\"ost jeder Aufruf bei dem genannten Objekt eine Objekt definierte Operation, die vom Aufrufer spezifiziert wurde, aus. 
-      Es existiert ein einheitliches Interface, was bedeutet das alle \textit{capabilities} die selben Argumente an nehmen,
+      Es existiert ein einheitliches Interface, was bedeutet das alle \textit{capabilities} die selben Argumente annehmen,
       was ein Vorteil bei der Performanz bringt.
         
       Die Korrektheit des EROS Betriebssystem liegt in dem Fakt das Operationen die vom Kernel ausgef\"uhrt werden  
       in einem korrekten Systemzustand resultieren, solange der Initialzustand korrekt war. Die Herausforderung in der Kausalen-Ordnung ist
-      zu Garantieren das das Wiedererlangen eines korrekten Systemzustands, nachdem das System ungeplant Heruntergefahren ist z.B. durch ein crash, m\"oglich ist.
+      zu garantieren das das wiedererlangen eines korrekten Systemzustands, nachdem das System ungeplant Heruntergefahren ist z.B. durch ein crash, m\"oglich ist.
       Um das zu erreichen muss wie bereits erw\"ahnt ein konsistentes Abbild des Systems erstellt werden.
       EROS Snapshot-Mechanismus f\"uhrt zuvor einen Konsistenz Check durch, bevor der Snapshot durchgef\"uhrt wird, 
       anders als bei z.B. L3. Falls der Test fehlschl\"agt wird das System neu gestartet ohne den derzeitigen Checkpoint zu speichern. 
@@ -495,19 +495,19 @@
       Laut den Autoren \cite{inproc:eros} handelt es sich bei den \textit{capabilities} vom Exokernel um keine 
       \textit{capabilities} sondern eher \"ahnlich zu dem erweiterbaren uid/gid Abstraktion, da sie keine Objekte benennen oder direkt Zugriff autorisieren.
       
-      Die Forschung an dem EROS Betriebssystem wurde jedoch bereits wieder eingestellt. Ein Ableger des EROS Betriebssystems
+      Die Forschung an dem EROS Betriebssystem wurde bereits eingestellt. Ein Ableger des EROS Betriebssystems
       existiert und nennt sich CapROS, welches die Codebasis benutzt \cite{Url:capros}. An der Johns Hopkins Unversit\"at wird zudem an einem 
-      Nachfolge Projekt geforscht genannt Coyotos. Dieses versucht einige Architekturdefizite von EROS zu beseitigen \cite{Url:coyotos}.
+      nachfolge Projekt geforscht genannt Coyotos. Dieses versucht einige Architekturdefizite von EROS zu beseitigen \cite{Url:coyotos}.
       
     \subsection{Asbestos}        
-      Asbestos ist ein neuer Prototyp eines Betriebssystems welches neuartige Kennzeichnungs- und Isolierungsmechanismen 
-      liefert, die helfen \textit{exploitable} Software einzugrenzen.
+      Asbestos ist ein neuer Prototyp eines Betriebssystems, welches neuartige Kennzeichnungs- und Isolierungsmechanismen 
+      liefert die helfen \textit{exploitable} Software einzugrenzen.
 
       Ein m\"achtiges Werkzeug um \textit{exploits} einzugrenzen ist das Prinzip des geringsten Rechts.
       D.h. das jede Systemkomponente die minimale Anzahl an Rechten besitzen soll die es ben\"otigt um seine Aufgabe auszuf\"uhren.
       Siehe dazu auch den Ansatz von CAP in Abschnitt \ref{sec:secure:capability}. Ungl\"ucklicherweise k\"onnen derzeitige Betriebssysteme 
       nicht das Prinzip des geringsten Recht erf\"ullen. Asbestos Beitr\"age sind zweif\"alltig, zum einen benutzen alle Zugriffskontrollen die Asbestos labels. 
-      Es handelt sich dabei um eine Primitive die die Vorteile von discretionary (DAC) und mandatory (MAC) Zugriffskontrolle kombiniert.
+      Es handelt sich dabei um eine Primitive die die Vorteile von der discretionary (DAC) und mandatory (MAC) Zugriffskontrolle kombiniert.
       
       Bei DAC wird die Entscheidung, ob auf eine Ressource zugegriffen werden darf, allein auf der Basis der Identität des Akteurs getroffen \cite{Url:dac}.      
       Im Gegensatz zu MAC wo die Entscheidungen über Zugriffsberechtigungen nicht nur auf der Basis der Identität des Akteurs 
@@ -520,21 +520,21 @@
       Asbestos gibt einen Programm das eine neue Abteilung erstellt ein willk\"urliches Recht, um die Daten in der Abteilung freizugeben.
       Das Programm kann dieses Recht weggeben, welches das Recht \"ahnlich einer \textit{capability} macht.
       
-      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion welche f\"ur Serveranwendungen 
+      Der zweite Beitrag Asbestos ist die \textit{event process} Abstraktion, welche f\"ur Serveranwendungen 
       effizient viele gleichzeitige Nutzer unterst\"utzt und isoliert.
       In normalen Label-Systemen w\"urden Serverprozesse schnell, durch Daten die zu mehreren Benutzern geh\"oren, Kontaminiert werden und die 
       M\"oglichkeit verlieren auf jeden zu antworten. Event Prozesse erlauben es, einen einzelnen Prozesszustand privat f\"ur mehrere Benutzer zu behalten.
-      Aber diesen Zustand so isoliert sodass ein \textit{exploit} nur die Daten des Nutzers beeinflussen w\"urden.
+      Aber diesen Zustand so zu isolieren, sodass ein \textit{exploit} nur die Daten des Nutzers beeinflussen w\"urde.
       Eine Gruppe von Event Prozessen ist genauso effizient als ein einzelner gew\"ohnlicher Prozess \cite[S. 1]{inproc:asbestos}.
       
       Asbestos IPC \"ahnelt dem Mikrokernel IPC wie z.B. von Mach. Prozesse kommunizieren mithilfe von Nachrichten die an Ports gesendet werden. Ein Prozess kann
       beliebig viele Ports erstellen. Nachrichten gesendet an Ports werden an ein einzelnen Prozess gesendet mit Empfangsrechten f\"ur diesen Port. 
       Initial hat der Prozess
-      die Empfangsrechte der den Port erstellt, aber diese Rechte sind \"ubertragbar. Das Nachrichtenprotokoll von Asbestos wurde von 9P (Plan 9) inspiriert
+      die Empfangsrechte der den Port erstellt, aber diese Rechte sind \"ubertragbar. Das Nachrichtenprotokoll von Asbestos wurde von 9P (Plan 9) inspiriert,
       siehe Abschnitt \ref{sec:secure:access:plan9}.      
       
-      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert, sondern die Semantik von
-      \textit{capability} basierende sende Rechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche sende Rechte.
+      Durch die Integrierung der Kommunikationsports mit dem Label System wird nicht nur die unerw\"unschte Kontamination verhindert sondern die Semantik von
+      \textit{capability} basierende Senderechten erreicht. Das Resultierende Port-Label System unterst\"utzt also \textit{capability} \"ahnliche Senderechte.
       Genauso wie bei den Prozessen beschr\"ankt der Kernel die Privilegien der Event Prozesse, w\"ahrend diese die ankommenden Nachrichten f\"ur den Nutzer
       behandeln und isoliert verschiedene Event Prozesszust\"ande.
       Jeder Event Prozess ist einem konventionellen \textit{base} Prozess assoziiert. Der Kernelzustand der Event Prozesse besteht aus einem \textit{send}, 
@@ -544,22 +544,22 @@
       Der \textit{base} Prozess wird nachdem aufrufen des sogenannten \textit{ep\_checkpoints} de-scheduled bis eine Nachricht auf einem Port ankommt 
       an dem der \textit{base} Prozess oder einer der Event Prozesse \textit{recieve} Rechte besitzt.
       Die Nachricht wird dann behandelt und danach wird der Event Prozess wieder suspendiert. Diese Prozessvariante verursacht weniger Overhead als wenn der
-      Adressraum aufgeteilt wird, somit k\"onnen viele tausende von Event Prozess theoretisch Co-existieren.
+      Adressraum aufgeteilt wird somit k\"onnen viele tausende Event Prozesse theoretisch Co-existieren.
       
      
   \section{Fazit}
-    Viel Arbeit ist in sichere System bereits geflossen, vor allem wurde schon sehr fr\"uh \"uber Sicherheitsmechanismen nachgedacht.
-    Jedoch sind sie oft an der Umsetzung oder Nutzbarkeit gescheitert. Denn zusammenfassend ist zu sagen das einzig die Ans\"atze von Unix bzw. Plan
+    Viel Arbeit ist in sichere System bereits geflossen, vor allem wurde schon sehr fr\"uh \"uber Sicherheitsmechanismen nachgedacht,
+    jedoch sind sie oft an der Umsetzung oder Nutzbarkeit gescheitert. Zusammenfassend ist zu sagen das einzig die Ans\"atze von Unix bzw. Plan
     9 und Mikrokernel sich wirklich in die heutigen Systeme durchgesetzt haben. Betrachten wir die heutigen Zugriffsmechanismen so werden in Linux 
-    und deren Variationen weiterhin access bits verwendet und in Windows oder Mac OS X sogenannte \textit{access control lists} (ACL)
+    und deren Variationen weiterhin Access Bits und in Windows oder Mac OS X sogenannte \textit{access control lists} (ACL) verwendet
     \cite{Url:windows:acl, Url:macosx:acl}. In Linux k\"onnen zudem ACLs benutzt werden, sodass sp\"ater ein Datenaustausch mit Windows \"uber
     Samba vollzogen werden kann \cite{Url:linux:acl}.    
     
     Das die anderen Systeme sich nicht durchgesetzt haben hei\ss t jedoch nicht das deren Ans\"atze schlecht waren.
     Das Problem was oft sichere Systeme besitzen ist wie bereits erw\"ahnt die Performanz oder Nutzbarkeit. Was f\"ur 
     viele normale Nutzer ein absolutes K.O. Kriterium ist, da die meisten nicht besonders viel auf Sicherheit setzen.
-    Jedenfalls nicht soviel das sie einige Defizite annehmen. Dies ist durch aus Wahrscheinlich einer der Gr\"unde warum sich solche
-    Forschungssysteme nicht durch setzen k\"onnten, davon abgesehen das andere Systeme heutzutage den Markt beherrschen und
+    Jedenfalls nicht soviel das sie einige Defizite annehmen. Dies ist durch aus wahrscheinlich eines der Gr\"unde warum sich solche
+    Forschungssysteme nicht durch setzen konnten, davon abgesehen das andere Systeme heutzutage den Markt beherrschen und
     die Unterst\"utzung f\"ur sichere Systeme nicht gro\ss\ genug ist.   
     
     
